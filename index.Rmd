@@ -13,7 +13,7 @@ output:
 library(tidyverse)
 ```
 
-<h6 style="text-align: left;" markdown="1">By: Zachary Katz |  Jimmy Kelliher |  Tucker Morgan |  Tanvir Khan |  Hun Lee </h6>
+<h6 style="text-align: left;" markdown="1">By: Zachary Katz |  Jimmy Kelliher |  Tanvir Khan |  Hun Lee |  Tucker Morgan </h6>
 
 <br></br>
 
