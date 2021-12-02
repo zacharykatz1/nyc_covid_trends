@@ -6,4 +6,25 @@ output:
     toc_float: true
 ---
 
+```{r message = FALSE, echo = FALSE}
+library(tidyverse)
+library(plotly)
+```
+
+# Hospitalization rates across PUMAs, colored by borough
+```{r}
+puma_level_data %>% 
+  plot_ly(y = ~covid_vax_rate, 
+          x = ~fct_reorder(puma, covid_vax_rate), 
+          color = ~borough, 
+          type = "scatter") %>% 
+  layout(title = "Hospitalization rates across PUMAs",
+         xaxis = list(title = "PUMA",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         yaxis = list(title = "% Hospitalized",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
+```
 
