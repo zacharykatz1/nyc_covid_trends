@@ -15,7 +15,7 @@ library(plotly)
 *CREATING THE PLOTLY WITH THE EXPLORATORY ANALYSIS FILE, NOT FINAL, STILL NEED TO ADD AND EDIT* 
 
 
-**General Trend for each puma in each borough: Vaccination Rate, Death Rate, Hospitalization Rate**
+**General Trend for each PUMA in each borough: Vaccination Rate, Death Rate, Hospitalization Rate for each PUMA in each Borough**
 
 # Hospitalization rates across PUMAs, colored by borough
 ```{r include = FALSE}
@@ -155,4 +155,80 @@ puma_level_data %>%
 **Which PUMAs has the lowest Hospitalization Rate, Death Rate, Vaccination Rate**
 
 
+# PUMAs with lowest hospitalization rates
+```{r}
+puma_level_data %>% 
+  arrange(covid_hosp_rate) %>% 
+  mutate(rank 
+         = rank(desc(covid_hosp_rate))) %>% 
+  filter(rank < 11) %>% 
+  mutate(puma = 
+           fct_reorder(puma, covid_hosp_rate)) %>%
+  plot_ly(x = ~puma,
+          y = ~covid_hosp_rate, 
+          color = ~borough, 
+          type = "bar",
+          colors = "viridis") %>%
+  layout(title = "Top 10 Puma with the Lowest Hospitalization Rate",
+         xaxis = list(title = "PUMA",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         yaxis = list(title = "% Hospitalized (Lowest)",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
+```
+
+
+# PUMAs with lowest death rates
+```{r}
+puma_level_data %>% 
+  arrange(covid_death_rate) %>% 
+  mutate(
+    rank = rank(desc(covid_death_rate))
+  ) %>% 
+  filter(rank < 11) %>% 
+  mutate(puma = 
+           fct_reorder(puma, covid_death_rate)) %>%
+  plot_ly(x = ~puma,
+          y = ~covid_death_rate, 
+          color = ~borough, 
+          type = "bar",
+          colors = "viridis") %>%
+  layout(title = "Top 10 Puma with the Lowest Death Rate",
+         xaxis = list(title = "PUMA",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         yaxis = list(title = "% Deceased (Lowest)",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
+```
+
+
+
+# PUMAs with the lowest Vaccination rates
+```{r}
+puma_level_data %>% 
+  arrange(covid_vax_rate) %>% 
+  mutate(
+    rank = rank(desc(covid_vax_rate))
+  ) %>% 
+  filter(rank < 11) %>% 
+  mutate(puma = 
+           fct_reorder(puma, covid_vax_rate)) %>%
+  plot_ly(x = ~puma, 
+          y = ~covid_vax_rate, 
+          color = ~borough, 
+          type = "bar",
+          colors = "viridis") %>%
+  layout(title = "Top 10 Puma with the Lowest Vaccination Rate",
+         xaxis = list(title = "PUMA",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         yaxis = list(title = "% Vaccinated (Lowest)",
+                      zerolinecolor = '#ffff',
+                      gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
+```
 
