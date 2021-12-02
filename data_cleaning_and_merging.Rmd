@@ -7,5 +7,3 @@ output:
     code_folding: hide
     always_allow_html: true
 ---
-
-## TO BE UPDATED

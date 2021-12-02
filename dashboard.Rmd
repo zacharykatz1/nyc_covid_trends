@@ -1,0 +1,37 @@
+---
+title: "COVID Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(flexdashboard)
+```
+
+## THERE WILL BE MORE THAN THREE GRAPHS, playing around with 
+*Want to first showcase the broad and general information and the put the plot with specific information later* 
+
+
+Column {data-width = 300}
+-----------------------------------------------------------------------
+
+### Hospitalization across Puma in each Borough 
+
+
+
+Column {data-width = 300}
+-----------------------------------------------------------------------
+
+### Death Across Puma in Each Borough 
+
+
+
+### Vaccination Across Puma in Each Borough 
+
+
+

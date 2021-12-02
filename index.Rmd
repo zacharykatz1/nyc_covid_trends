@@ -6,7 +6,6 @@ output:
     toc: true
     toc_float: true
     code_folding: hide
-  always_allow_html: true
 ---
 
 ```{r, include = FALSE}

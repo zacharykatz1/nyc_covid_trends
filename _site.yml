@@ -20,6 +20,8 @@ navbar:
         href: regression_modeling.html
       - text: "Prediction Modeling"
         href: prediction_modeling.html
+      - text: "Plotly"
+        href: ploty.html
     - icon: fa-envelope fa-lg
       href: mailto:<zak2132@cumc.columbia.edu>
     - icon: fa-github fa-lg
