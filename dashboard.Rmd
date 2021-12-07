@@ -2,9 +2,12 @@
 title: "COVID Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-    source: embed
+    orientation: rows
+    vertical-layout: scroll
+    navbar:
+      - { title: "Home", href: index.html, align: right }
+      - { icon: fa-github, href: "https://github.com/jimmymkelliher/p8105_final", align: right }
+    theme: bootstrap
 ---
 
 ```{r setup, include=FALSE}
@@ -34,4 +37,7 @@ Column {data-width = 300}
 ### Vaccination Across Puma in Each Borough 
 
 
+```{r}
+getwd()
+```
 
