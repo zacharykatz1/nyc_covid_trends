@@ -1,0 +1,110 @@
+---
+title: "Ploty"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r message = FALSE, echo = FALSE}
+library(tidyverse)
+library(plotly)
+```
+
+*CREATING THE PLOTLY WITH THE EXPLORATORY ANALYSIS FILE, NOT FINAL, STILL NEED TO ADD AND EDIT* 
+
+
+**General Trend for each PUMA in each borough: Vaccination Rate, Death Rate, Hospitalization Rate for each PUMA in each Borough**
+
+# Hospitalization rates across PUMAs, colored by borough
+```{r eval = FALSE}
+puma_hosp_highest10 <-
+  puma_level_data %>% 
+  mutate(puma = fct_reorder(puma, covid_hosp_rate)) %>% 
+  mutate(text_label = str_c("PUMA: ", puma, 
+                            "\n% Hospitalization: ", covid_hosp_rate)) %>%
+  plot_ly(y = ~covid_hosp_rate, 
+          x = ~puma, 
+          color = ~borough, 
+          type = "scatter",
+          mode = "markers", 
+          colors = "viridis",
+          text = ~ text_label) %>% 
+  config(scrollZoom = FALSE,
+         modeBarButtonsToAdd = list('drawline', 
+                                 'drawopenpath', 
+                                 'drawclosedpath', 
+                                 'drawcircle', 
+                                 'drawrect', 
+                                 'eraseshape'),
+         displayModeBar = TRUE) %>%
+  layout(plot_bgcolor = '#e5ecf6',
+          title = "Hospitalization rates across PUMAs", 
+          xaxis = list(
+            title = "PUMA", 
+            tickangle = 60,
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+          yaxis = list(
+            title = "% Hospitalized", 
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
+```
+
+
+# Death rates across PUMAs, colored by borough
+```{r include = FALSE}
+
+```
+
+
+# Vax rates across PUMAs, colored by borough
+```{r include = FALSE}
+
+```
+
+**Which PUMAs have the highest Hospitalization Rate, Death Rate, Vaccination Rate**
+
+# Puma with the highest hospitalization rate 
+```{r include = FALSE}
+
+```
+
+
+# Puma with the highest Death rate 
+```{r include = FALSE}
+
+```
+
+
+# Puma with the highest Vaccination rate 
+```{r include = FALSE}
+
+```
+
+
+**Which PUMAs has the lowest Hospitalization Rate, Death Rate, Vaccination Rate**
+
+
+# PUMAs with lowest hospitalization rates
+```{r include = FALSE}
+
+```
+
+
+# PUMAs with lowest death rates
+```{r include = FALSE}
+
+```
+
+
+
+# PUMAs with the lowest Vaccination rates
+```{r include = FALSE}
+
+```
+
