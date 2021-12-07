@@ -3,29 +3,24 @@ output_dir: "."
 navbar:
   title: "Home"
   left:
-  - text: About
-    menu:
-    - text: "Our Project"
-      href: project_report.html
-    - text: "The Team"
-      href: about_us.html
+
   right:
     - text: Sections
       menu:
-      - text: "Cleaning and Merging the Data"
+      - text: "Home"
+        href: index.html    
+      - text: "Data Cleaning/Merging"
         href: data_cleaning_and_merging.html
       - text: "Exploratory Analysis"
         href: exploratory_analysis.html
-      - text: "Regression Modeling"
-        href: regression_modeling.html
       - text: "Prediction Modeling"
         href: prediction_modeling.html
+      - text: "Interactive Map"
+        href: https://datasciencetk.shinyapps.io/NYC-covid19-trends/
       - text: "Plotly"
-        href: ploty.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<zak2132@cumc.columbia.edu>
-    - icon: fa-github fa-lg
-      href: https://github.com/zacharykatz1/nyc_covid_trends
+        href: plotly.html
+      - text: "Dashboard"
+        href: dashboard.html
 output:
   html_document:
     theme: journal
