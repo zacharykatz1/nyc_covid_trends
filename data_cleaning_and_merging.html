@@ -299,8 +299,6 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Data Cleaning and Merging</h1>
-<h3 class="subtitle">TBD</h3>
-<h4 class="date">12/1/2021</h4>
 
 </div>
 
@@ -350,7 +348,7 @@ head(zcta_puma_cross)</code></pre>
 \sum_{i = 1}^{n} \text{zcta_outcome_data}_{i} \cdot \text{per_in_puma}_{i} \cdot \text{per_of_puma}_{i} = \text{puma_outcome_data}
 \]</span></p>
 <p>This resulted in one cumulative incidence measure per PUMA (per 100,000 people for hospitalizations and deaths, a percentage for vaccinations).</p>
-<p>The demographic dataset from IPUMS originally contained over 350,000 interviews from the NYC area, each coded to a PUMA and given a ‘perwt’ - person weight and ‘hhwt’- household weight. First, predictor variables were renamed and recoded according to the data dictionary <a href="zacharykatz1.github.io/nyc_covid_trends/census_documentation.html">(see data dictionary)</a> such that the following predictor variables were obtained for each interview along with ‘borough’ and ‘puma’ coding:</p>
+<p>The demographic dataset from IPUMS originally contained over 350,000 interviews from the NYC area, each coded to a PUMA and given a ‘perwt’ - person weight and ‘hhwt’- household weight. First, predictor variables were renamed and recoded according to the data dictionary <a href="census_documentation.html">(see data dictionary)</a> such that the following predictor variables were obtained for each interview along with ‘borough’ and ‘puma’ coding:</p>
 <ul>
 <li><span style="background-color: #e8e8e8">rent</span>: monthly rent (numeric)</li>
 <li><span style="background-color: #e8e8e8">household_income</span>: annual household income (numeric)</li>

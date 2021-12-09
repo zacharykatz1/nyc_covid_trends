@@ -1,7 +1,5 @@
 ---
 title: "Data Cleaning and Merging"
-subtitle: "TBD"
-date: "12/1/2021"
 output: 
   html_document:
     code_folding: hide
@@ -55,7 +53,7 @@ $$
 
 This resulted in one cumulative incidence measure per PUMA (per 100,000 people for hospitalizations and deaths, a percentage for vaccinations).
 
-The demographic dataset from IPUMS originally contained over 350,000 interviews from the NYC area, each coded to a PUMA and given a ‘perwt’ - person weight and ‘hhwt’- household weight. First, predictor variables were renamed and recoded according to the data dictionary [(see data dictionary)](zacharykatz1.github.io/nyc_covid_trends/census_documentation.html) such that the following predictor variables were obtained for each interview along with ‘borough’ and ‘puma’ coding:
+The demographic dataset from IPUMS originally contained over 350,000 interviews from the NYC area, each coded to a PUMA and given a ‘perwt’ - person weight and ‘hhwt’- household weight. First, predictor variables were renamed and recoded according to the data dictionary [(see data dictionary)](census_documentation.html) such that the following predictor variables were obtained for each interview along with ‘borough’ and ‘puma’ coding:
 
   * <span style="background-color: #e8e8e8">rent</span>: monthly rent (numeric)
   * <span style="background-color: #e8e8e8">household_income</span>: annual household income (numeric)
