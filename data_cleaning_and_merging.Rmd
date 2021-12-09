@@ -1,7 +1,5 @@
 ---
 title: "Data Cleaning and Merging"
-subtitle: "TBD"
-date: "12/1/2021"
 output: 
   html_document:
     code_folding: hide
