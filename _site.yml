@@ -18,7 +18,7 @@ navbar:
       - text: "Additional Prediction"
         href: additional_prediction.html   
       - text: "Interactive Map"
-        href: https://datasciencetk.shinyapps.io/NYC-covid19-trends/
+        href: https://datasciencetk.shinyapps.io/COVID19-NYC-trends/
       - text: "Dashboard"
         href: dashboard.html
       - text: "Project Code"
