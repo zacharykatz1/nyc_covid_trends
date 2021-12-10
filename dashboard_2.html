@@ -11,7 +11,7 @@
 
 
 
-<title>Ploty</title>
+<title>Untitled</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,11 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -219,73 +215,7 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
 
 
 
@@ -295,16 +225,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -335,16 +255,19 @@ div.tocify {
       <a href="index.html">Home</a>
     </li>
     <li>
-      <a href="data_cleaning_and_merging.html">Data Pre-processing</a>
+      <a href="data_cleaning_and_merging.html">Data Pre-Processing</a>
     </li>
     <li>
       <a href="exploratory_analysis.html">Exploratory Analysis</a>
     </li>
     <li>
-      <a href="prediction_modeling.html">Statistical Analysis</a>
+      <a href="statistical_analysis.html">Statistical Analysis</a>
     </li>
     <li>
-      <a href="https://datasciencetk.shinyapps.io/NYC-covid19-trends/">Interactive Map</a>
+      <a href="additional_prediction.html">Additional Prediction</a>
+    </li>
+    <li>
+      <a href="https://datasciencetk.shinyapps.io/COVID19-NYC-trends/">Interactive Map</a>
     </li>
     <li>
       <a href="dashboard.html">Dashboard</a>
@@ -361,91 +284,31 @@ div.tocify {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
 
 
-
-<h1 class="title toc-ignore">Ploty</h1>
+<h1 class="title toc-ignore">Untitled</h1>
 
 </div>
 
 
-<p><em>CREATING THE PLOTLY WITH THE EXPLORATORY ANALYSIS FILE, NOT FINAL, STILL NEED TO ADD AND EDIT</em></p>
-<p><strong>General Trend for each PUMA in each borough: Vaccination Rate, Death Rate, Hospitalization Rate for each PUMA in each Borough</strong></p>
-<div id="hospitalization-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Hospitalization rates across PUMAs, colored by borough</h1>
-<pre class="r"><code>puma_hosp_highest10 &lt;-
-  puma_level_data %&gt;% 
-  mutate(puma = fct_reorder(puma, covid_hosp_rate)) %&gt;% 
-  mutate(text_label = str_c(&quot;PUMA: &quot;, puma, 
-                            &quot;\n% Hospitalization: &quot;, covid_hosp_rate)) %&gt;%
-  plot_ly(y = ~covid_hosp_rate, 
-          x = ~puma, 
-          color = ~borough, 
-          type = &quot;scatter&quot;,
-          mode = &quot;markers&quot;, 
-          colors = &quot;viridis&quot;,
-          text = ~ text_label) %&gt;% 
-  config(scrollZoom = FALSE,
-         modeBarButtonsToAdd = list(&#39;drawline&#39;, 
-                                 &#39;drawopenpath&#39;, 
-                                 &#39;drawclosedpath&#39;, 
-                                 &#39;drawcircle&#39;, 
-                                 &#39;drawrect&#39;, 
-                                 &#39;eraseshape&#39;),
-         displayModeBar = TRUE) %&gt;%
-  layout(plot_bgcolor = &#39;#e5ecf6&#39;,
-          title = &quot;Hospitalization rates across PUMAs&quot;, 
-          xaxis = list(
-            title = &quot;PUMA&quot;, 
-            tickangle = 60,
-            zerolinecolor = &#39;#ffff&#39;,
-            zerolinewidth = 2,
-            gridcolor = &#39;ffff&#39;),
-          yaxis = list(
-            title = &quot;% Hospitalized&quot;, 
-            zerolinecolor = &#39;#ffff&#39;,
-            zerolinewidth = 2,
-            gridcolor = &#39;ffff&#39;),
-         legend = list(title = list(text = &#39;Borough&#39;)))</code></pre>
+<div id="column" class="section level2" data-width="650">
+<h2 data-width="650">Column</h2>
+<div id="chart-a" class="section level3">
+<h3>Chart A</h3>
 </div>
-<div id="death-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Death rates across PUMAs, colored by borough</h1>
 </div>
-<div id="vax-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Vax rates across PUMAs, colored by borough</h1>
-<p><strong>Which PUMAs have the highest Hospitalization Rate, Death Rate, Vaccination Rate</strong></p>
+<div id="column-1" class="section level2" data-width="350">
+<h2 data-width="350">Column</h2>
+<div id="chart-b" class="section level3">
+<h3>Chart B</h3>
 </div>
-<div id="puma-with-the-highest-hospitalization-rate" class="section level1">
-<h1>Puma with the highest hospitalization rate</h1>
+<div id="chart-c" class="section level3">
+<h3>Chart C</h3>
 </div>
-<div id="puma-with-the-highest-death-rate" class="section level1">
-<h1>Puma with the highest Death rate</h1>
-</div>
-<div id="puma-with-the-highest-vaccination-rate" class="section level1">
-<h1>Puma with the highest Vaccination rate</h1>
-<p><strong>Which PUMAs has the lowest Hospitalization Rate, Death Rate, Vaccination Rate</strong></p>
-</div>
-<div id="pumas-with-lowest-hospitalization-rates" class="section level1">
-<h1>PUMAs with lowest hospitalization rates</h1>
-</div>
-<div id="pumas-with-lowest-death-rates" class="section level1">
-<h1>PUMAs with lowest death rates</h1>
-</div>
-<div id="pumas-with-the-lowest-vaccination-rates" class="section level1">
-<h1>PUMAs with the lowest Vaccination rates</h1>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -477,41 +340,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

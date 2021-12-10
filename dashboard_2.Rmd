@@ -1,29 +1,24 @@
 ---
-title: "COVID Dashboard"
+title: "NYC COVID-19 Trend Analysis Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    navbar:
-      - { title: "Home", href: index.html, align: right }
-      - { icon: fa-github, href: "https://github.com/jimmymkelliher/p8105_final", align: right }
     source: embed
-    theme: bootstrap
+    theme: sandstone
 ---
 
-```{r}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(nycgeo)
 library(plotly)
 library(lubridate)
 library(flexdashboard)
 library(janitor)
-```
-
-```{r setup, include=FALSE}
 hosp_by_month <- read_csv("./data/nyc_hosp_rate_zcta.csv")
 death_by_month <- read_csv("./data/nyc_death_rate_zcta.csv")
 ```
+
 
 Column {data-width=500}
 -----------------------------------------------------------------------
