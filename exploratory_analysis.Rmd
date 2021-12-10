@@ -845,7 +845,7 @@ borough_cat_comparisons = function(predict, outcome) {
 
 ### Outcomes by PUMA
 
-We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a 5x difference)** by PUMA, **death rates range from just over 0.05% all the way to above 0.6% (a 30x difference!)**, and **vaccination rates range from as low as ~30% to above 100%** in one PUMA (as an artifact of migration between PUMA -- a known issue in NYC DOHMH data). Excluding this vaccination outlier, the PUMAs with higher vaccination rates tend to have 75-85% of their residents vaccinated.
+We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a 5x difference)** by PUMA, **death rates range from just over 0.05% all the way to above 0.6% (a 12x difference!)**, and **vaccination rates range from as low as ~30% to above 100%** in one PUMA (as an artifact of migration between PUMA -- a known issue in NYC DOHMH data). Excluding this vaccination outlier, the PUMAs with higher vaccination rates tend to have 75-85% of their residents vaccinated.
 
 ```{r outcomes all PUMAs, echo = FALSE, message = FALSE, warning = FALSE}
 
