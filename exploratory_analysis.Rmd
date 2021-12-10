@@ -251,8 +251,6 @@ nyc_puma_summary = cleaned_data %>%
   )
 ```
 
-# Exploratory Analysis
-
 On this page, we'll explore overall trends for our key outcomes -- hospitalizations, deaths, and vaccinations -- across PUMAs and boroughs in New York City, as well as high-level trends for how these outcomes correlate with census predictors, including major demographic variables like age, race, and sex.
 
 ```{r data set prep, echo = FALSE, message = FALSE, warning = FALSE}
