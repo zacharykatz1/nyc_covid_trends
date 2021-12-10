@@ -24,7 +24,7 @@ While data from IPUMS is recorded at the individual-level, each interview is cod
 
 The New York City Department of Health and Mental Hygiene (NYC DOHMH) is one of the oldest public health agencies in the United States. Among other responsibilities, the DOHMH monitors the spread of infectious disease in NYC. The Department of Health classified the beginning of the COVID-19 pandemic as February 29, 2020, the date of the first laboratory-confirmed case. Since then, the DOHMH has recorded and reported COVID-19 data on a daily, weekly, or monthly basis. These data include cases, hospitalizations, and deaths by borough, modified Zip Code tabulation area (ZCTA), and demographic factors. As NYC has administered vaccinations for COVID-19, these data have been recorded and made available by borough, ZCTA, and demography. This project uses COVID-19 hospitalization rates, death rates, and vaccination rates by ZCTA in NYC.
 
-### [Baruch College, City University of New York - Geoportal](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies)
+### Baruch College, City University of New York - Geoportal [(Baruch, CUNY)](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies)
 
 The Baruch Geoportal, maintained by the Newman Library at Baruch College, is a repository of geospatial resources including tabular data sets, tutorials, maps, and crosswalks. This project uses a crosswalk data set from Baruch Geoportal to apportion NYC ZCTAs to PUMAs, which allows PUMA-coded data from IPUMS to be analyzed alongside COVID-19 outcome data from DOHMH.
 
@@ -102,9 +102,6 @@ nyc_hh_summary = cleaned_data %>%
     covid_vax_rate = median(puma_vacc_rate),
     covid_death_rate = median(puma_death_rate)
   )
-
-# View first few rows of PUMA-summarized data frame
-nyc_hh_summary %>% head()
 ```
 
 This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of the exploratory analysis that follows.
