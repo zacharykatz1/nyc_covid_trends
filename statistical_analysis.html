@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -379,7 +381,345 @@ div.tocify {
 </div>
 
 
-
+<div id="regression-methodology" class="section level2">
+<h2>Regression Methodology</h2>
+<p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
+<p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
+<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let $ _{}$ and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix.</p>
+</div>
+<div id="regression-dianostics" class="section level2">
+<h2>Regression Dianostics</h2>
+<p><img src="statistical_analysis_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
+<p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
+<p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
+<p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
+<p>Residuals are uncorrelated: On the basis of the autocorrelation plot, it is to be observed that the lags do not have significant effect because they are within the bounds.</p>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+model
+</th>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+Best Model
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.6690404
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5938223
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+139.5090
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+8.894674
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000001
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+10
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+44
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+55
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+Full Model
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.7976532
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5797413
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+141.9066
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+3.660439
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0006785
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+28
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+26
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: black !important;">
+55
+</td>
+</tr>
+</tbody>
+</table>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Mallows’ Cp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+9.525754
+</td>
+</tr>
+</tbody>
+</table>
+<p>Adjusted R-squared: We compared our model to the full model which includes all main effects of our model with all possible second-order interaction terms of main effects. It is obvious that the full model has higher R-squared (0.797) than that of our model (0.669). However, our model has a higher adjusted R-squared (0.593) than that of the full model (0.579).</p>
+<p>Mallows’ Cp: Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp) from our model and the full model. The Cp value is 9.5 and it is less than the number of our model parameters (11). Therefore, we claim that our regression model has little or no bias.</p>
+</div>
+<div id="model-summary" class="section level2">
+<h2>Model Summary</h2>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+(Intercept)
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+220.2133509
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+617.7947374
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.3564507
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.7232067
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+language_spanish
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+1446.4493296
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+282.5600256
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+5.1190869
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+education_bachelors_degree
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-1385.5187502
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+1203.7289731
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-1.1510222
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.2559398
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+birthplace_us
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-2324.3753968
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+550.8204008
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-4.2198426
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0001203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+health_insurance_public
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-3613.9699118
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+759.9559804
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-4.7554990
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+language_english
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-365.2360915
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+538.8169036
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-0.6778482
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5014171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-0.0266398
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0080444
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-3.3116091
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0018597
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+employment_not_in_labor_force
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4344.6354192
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+956.3880935
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4.5427536
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+health_insurance_public:personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0812034
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0192287
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4.2230234
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0001191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+education_bachelors_degree:personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0554423
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0186699
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2.9696115
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0048135
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+birthplace_us:language_english
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2145.2515921
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+907.5966218
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2.3636619
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0225765
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
 
