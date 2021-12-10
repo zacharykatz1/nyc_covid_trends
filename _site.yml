@@ -9,9 +9,9 @@ navbar:
       menu:
       - text: "Home"
         href: index.html    
-      - text: "Data Cleaning/Merging"
+      - text: "Data Pre-processing"
         href: data_cleaning_and_merging.html
-      - text: "Exploratory Analysis"
+      - text: "Statistical Analysis"
         href: exploratory_analysis.html
       - text: "Prediction Modeling"
         href: prediction_modeling.html
