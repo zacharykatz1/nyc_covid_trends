@@ -33,8 +33,6 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -247,21 +245,7 @@ $(document).ready(function () {
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    About
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="project_report.html">Our Project</a>
-    </li>
-    <li>
-      <a href="about_us.html">The Team</a>
-    </li>
-  </ul>
-</li>
+        
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -272,30 +256,30 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="data_cleaning_and_merging.html">Cleaning and Merging the Data</a>
+      <a href="index.html">Home</a>
+    </li>
+    <li>
+      <a href="data_cleaning_and_merging.html">Data Cleaning/Merging</a>
     </li>
     <li>
       <a href="exploratory_analysis.html">Exploratory Analysis</a>
     </li>
     <li>
-      <a href="regression_modeling.html">Regression Modeling</a>
-    </li>
-    <li>
       <a href="prediction_modeling.html">Prediction Modeling</a>
     </li>
+    <li>
+      <a href="https://datasciencetk.shinyapps.io/NYC-covid19-trends/">Interactive Map</a>
+    </li>
+    <li>
+      <a href="plotly.html">Plotly</a>
+    </li>
+    <li>
+      <a href="dashboard.html">Dashboard</a>
+    </li>
+    <li>
+      <a href="ProjectCode.html">Project Code</a>
+    </li>
   </ul>
-</li>
-<li>
-  <a href="mailto:&lt;zak2132@cumc.columbia.edu&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://github.com/zacharykatz1/nyc_covid_trends">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -321,8 +305,692 @@ $(document).ready(function () {
 </div>
 
 
-<div id="to-be-updated" class="section level2">
-<h2>TO BE UPDATED</h2>
+<p>The following code chunks are replicated from our <code>cleaning_merged_data.Rmd</code> file to generate the data set from which exploratory analyses can be conducted.</p>
+<pre class="r"><code>jimzip &lt;- function(csv_file, path) {
+  # create full path to csv file
+  full_csv &lt;- paste0(path, &quot;/&quot;, csv_file)
+  # append &quot;.zip&quot; to csv file
+  zip_file &lt;- paste0(full_csv, &quot;.zip&quot;)
+  # unzip file
+  unzip(zip_file)
+  # read csv
+  data_extract &lt;- read_csv(csv_file)
+  # be sure to remove file once unzipped (it will live in working directory)
+  on.exit(file.remove(csv_file))
+  # output data
+  data_extract
+}
+
+# Apply function to filtered census data CSV
+census_data &lt;- jimzip(&quot;census_filtered.csv&quot;, &quot;./data&quot;)</code></pre>
+<pre class="r"><code># Read in PUMA outcomes data
+health_data &lt;-
+  read_csv(&quot;./data/outcome_puma.csv&quot;)
+
+# Merge census data with PUMA outcomes data
+merged_data &lt;- merge(census_data, health_data, by = &quot;puma&quot;)
+
+# Deprecate census data alone
+rm(census_data)</code></pre>
+<pre class="r"><code># Clean the merged census and outcomes data
+# Each row represents one 
+cleaned_data = 
+  merged_data %&gt;% 
+  # Remove variables less useful for analysis or redundant (high probability of collinearity with remaining variables)
+  select(-serial, -cluster, -strata, -multyear, -ancestr1, -ancestr2, -labforce, -occ, -ind, -incwage, -occscore, -pwpuma00, -ftotinc, -hcovpub) %&gt;% 
+  # Remove duplicate rows, if any
+  distinct() %&gt;% 
+  # Rename variables
+  rename(
+    borough = countyfip,
+    has_broadband = cihispeed,
+    birthplace = bpl,
+    education = educd,
+    employment = empstat,
+    personal_income = inctot,
+    work_transport = tranwork,
+    household_income = hhincome,
+    on_foodstamps = foodstmp,
+    family_size = famsize,
+    num_children = nchild,
+    US_citizen = citizen,
+    puma_vacc_rate = puma_vacc_per,
+    on_welfare = incwelfr,
+    poverty_threshold = poverty
+  ) %&gt;% 
+  # Recode variables according to data dictionary
+  mutate(
+    # Researched mapping for county
+    borough = recode(
+      borough,
+      &quot;5&quot; = &quot;Bronx&quot;,
+      &quot;47&quot; = &quot;Brooklyn&quot;,
+      &quot;61&quot; = &quot;Manhattan&quot;,
+      &quot;81&quot; = &quot;Queens&quot;,
+      &quot;85&quot; = &quot;Staten Island&quot;
+    ),
+    rent = ifelse(
+      rent == 9999, 0,
+      rent
+    ),
+    household_income = ifelse(
+      household_income %in% c(9999998,9999999), NA,
+      household_income
+    ),
+    on_foodstamps = recode(
+      on_foodstamps,
+      &quot;1&quot; = &quot;No&quot;,
+      &quot;2&quot; = &quot;Yes&quot;
+    ),
+    has_broadband = case_when(
+      has_broadband == &quot;20&quot; ~ &quot;No&quot;,
+      has_broadband != &quot;20&quot; ~ &quot;Yes&quot;
+    ),
+    sex = recode(
+      sex,
+      &quot;1&quot; = &quot;Male&quot;,
+      &quot;2&quot; = &quot;Female&quot;
+    ),
+    # Collapse Hispanic observation into race observation
+    race = case_when(
+      race == &quot;1&quot; ~ &quot;White&quot;,
+      race == &quot;2&quot; ~ &quot;Black&quot;,
+      race == &quot;3&quot; ~ &quot;American Indian&quot;,
+      race %in% c(4,5,6) ~ &quot;Asian and Pacific Islander&quot;,
+      race == 7 &amp; hispan %in% c(1,2,3,4) ~ &quot;Hispanic&quot;,
+      race == 7 &amp; hispan %in% c(0,9) ~ &quot;Other&quot;,
+      race %in% c(8,9) ~ &quot;2+ races&quot;
+    ),
+    birthplace = case_when(
+      birthplace %in% 1:120 ~&quot;US&quot;,
+      birthplace %in% 121:950 ~ &quot;Non-US&quot;,
+      birthplace == 999 ~&quot;Unknown&quot;
+    ),
+    US_citizen = case_when(
+      US_citizen %in% c(1,2) ~ &quot;Yes&quot;,
+      US_citizen %in% 3:8 ~&quot;No&quot;,
+      US_citizen %in% c(0,9) ~ &quot;Unknown&quot;
+    ),
+    # Chose languages based on highest frequency observed
+    language = case_when(
+      language == &quot;1&quot; ~ &quot;English&quot;,
+      language == &quot;12&quot; ~ &quot;Spanish&quot;,
+      language == &quot;43&quot; ~ &quot;Chinese&quot;,
+      language == &quot;0&quot; ~ &quot;Unknown&quot;,
+      language == &quot;31&quot; ~ &quot;Hindi&quot;,
+      !language %in% c(1,12,43,0,31) ~ &quot;Other&quot;
+    ),
+    # Collapse multiple health insurance variables into single variable
+    health_insurance = case_when(
+      hcovany == 1 ~ &quot;None&quot;,
+      hcovany == 2 &amp; hcovpriv == 2 ~ &quot;Private&quot;,
+      hcovany == 2 &amp; hcovpriv == 1 ~ &quot;Public&quot;
+    ),
+    education = case_when(
+      education %in% 2:61 ~ &quot;Less Than HS Graduate&quot;,
+      education %in% 62:64 ~ &quot;HS Graduate&quot;,
+      education %in% 65:100 ~ &quot;Some College&quot;,
+      education %in% 110:113 ~ &quot;Some College&quot;,
+      education == 101 ~ &quot;Bachelor&#39;s Degree&quot;,
+      education %in% 114:116 ~ &quot;Post-Graduate Degree&quot;,
+      education %in% c(0,1,999) ~ &quot;Unknown&quot;
+    ),
+    employment = case_when(
+      employment %in% c(0,3) ~ &quot;Not in labor force&quot;,
+      employment == 1 ~ &quot;Employed&quot;,
+      employment == 2 ~ &quot;Unemployed&quot;
+    ),
+    personal_income = ifelse(
+      personal_income %in% c(9999998,9999999), NA,
+      personal_income
+    ),
+    household_income = ifelse(
+      household_income %in% c(9999998,9999999), NA,
+      household_income
+    ),
+    on_welfare = case_when(
+      on_welfare &gt; 0 ~ &quot;Yes&quot;,
+      on_welfare == 0 ~ &quot;No&quot;
+    ), 
+    poverty_threshold = case_when(
+      poverty_threshold &gt;= 100 ~ &quot;Above&quot;,
+      poverty_threshold &lt; 100 ~ &quot;Below&quot;
+    ),
+    work_transport = case_when(
+      work_transport %in% c(31:37, 39) ~ &quot;Public Transit&quot;,
+      work_transport %in% c(10:20, 38) ~ &quot;Private Vehicle&quot;,
+      work_transport == 50 ~ &quot;Bicycle&quot;,
+      work_transport == 60 ~ &quot;Walking&quot;,
+      work_transport == 80 ~ &quot;Worked From Home&quot;,
+      work_transport %in% c(0, 70) ~ &quot;Other&quot;
+    )
+  ) %&gt;% 
+  # Eliminate columns no longer needed after transformation
+  select(-hispan, -hcovany, -hcovpriv) %&gt;% 
+  # Relocate new columns
+  relocate(health_insurance, .before = personal_income) %&gt;% 
+  relocate(poverty_threshold, .before = work_transport) %&gt;% 
+  relocate(on_welfare, .before = poverty_threshold) %&gt;% 
+  relocate(perwt, .before = hhwt) %&gt;% 
+  # Create factor variables where applicable
+  mutate(across(.cols = c(puma, borough, on_foodstamps, has_broadband, sex, race, birthplace, US_citizen, language, health_insurance, education, employment, on_welfare, poverty_threshold, work_transport), as.factor))</code></pre>
+<div id="exploratory-analysis" class="section level1">
+<h1>Exploratory Analysis</h1>
+<p>To accommodate our exploratory analysis, we develop a few particular kinds of data frames from the primary cleaned data frame, as well as functions to run quick, replicable analysis upon certain sets of variables from particular data frames.</p>
+<div id="overview-of-outcome-variables" class="section level2">
+<h2>Overview of Outcome Variables</h2>
+<div id="outcomes-by-puma" class="section level3">
+<h3>Outcomes by PUMA</h3>
+<p>How are key outcomes distributed across PUMAs?</p>
+<p><img src="exploratory_analysis_files/figure-html/outcomes%20all%20PUMAs-1.png" width="672" /></p>
+<p>Which PUMAs have the worst and best outcomes?</p>
+<p><img src="exploratory_analysis_files/figure-html/worst%20PUMA%20outcomes-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/best%20PUMA%20outcomes-1.png" width="672" /></p>
+<p>What about with PUMAs in the same order?</p>
+<p>How do key outcomes associate with each other at the PUMA level?</p>
+<p><img src="exploratory_analysis_files/figure-html/key%20outcome%20associations-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/outcome%20correlations-1.png" width="672" /></p>
+<pre class="r"><code># ggpairs correlations between key pairs, faceted by borough
+puma_level_data %&gt;% 
+  select(covid_hosp_rate, covid_death_rate, covid_vax_rate, borough) %&gt;% 
+  mutate(
+    covid_hosp_rate = covid_hosp_rate,
+    covid_death_rate = covid_death_rate
+  ) %&gt;% 
+  rename(
+    &quot;Hospitalized&quot; = covid_hosp_rate,
+    &quot;Deceased&quot; = covid_death_rate,
+    &quot;Vaccinated&quot; = covid_vax_rate,
+    &quot;Borough&quot; = borough
+  ) %&gt;% 
+  ggpairs(
+    title = &quot;Correlations Between Key Outcomes&quot;,
+    subtitle = &quot;By Borough&quot;,
+    ggplot2::aes(color = Borough, alpha = 0.3)
+  ) + 
+  scale_fill_discrete() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))</code></pre>
+</div>
+<div id="outcomes-by-borough" class="section level3">
+<h3>Outcomes by Borough</h3>
+<p>Within each borough, how are PUMAs distributed on each key outcome?</p>
+<p><img src="exploratory_analysis_files/figure-html/hospitalizations%20by%20borough-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/deaths%20by%20borough-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/vax%20by%20borough-1.png" width="672" /></p>
+<p>What proportion of PUMAs in a given borough were above or below the citywide median on a given outcome?</p>
+<table>
+<caption>% of PUMAs in Each Borough Above Citywide PUMA Median</caption>
+<colgroup>
+<col width="16%" />
+<col width="13%" />
+<col width="23%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Borough</th>
+<th align="right">Total PUMAs</th>
+<th align="right">% Above Hosp Median</th>
+<th align="right">% Above Death Median</th>
+<th align="right">% Above Vax Median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bronx</td>
+<td align="right">10</td>
+<td align="right">70.0</td>
+<td align="right">50.0</td>
+<td align="right">20.0</td>
+</tr>
+<tr class="even">
+<td align="left">Brooklyn</td>
+<td align="right">18</td>
+<td align="right">22.2</td>
+<td align="right">38.9</td>
+<td align="right">16.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Manhattan</td>
+<td align="right">10</td>
+<td align="right">30.0</td>
+<td align="right">30.0</td>
+<td align="right">80.0</td>
+</tr>
+<tr class="even">
+<td align="left">Queens</td>
+<td align="right">14</td>
+<td align="right">85.7</td>
+<td align="right">78.6</td>
+<td align="right">85.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Staten Island</td>
+<td align="right">3</td>
+<td align="right">33.3</td>
+<td align="right">33.3</td>
+<td align="right">66.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="outcomes-by-demographic-combos" class="section level3">
+<h3>Outcomes by Demographic Combos</h3>
+<p>Can we determine which age/sex/race combos perform best and worst on each outcome?</p>
+<pre class="r"><code># Lowest hospitalization rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;hosp_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate / 1000
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest hospitalization rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Hospitalized&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Lowest hospitalization rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Hospitalized</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">21-30</td>
+<td align="left">Female</td>
+<td align="right">0.88</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">31-40</td>
+<td align="left">Male</td>
+<td align="right">0.89</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">31-40</td>
+<td align="left">Female</td>
+<td align="right">0.89</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">21-30</td>
+<td align="left">Male</td>
+<td align="right">0.90</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">41-50</td>
+<td align="left">Male</td>
+<td align="right">0.93</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">41-50</td>
+<td align="left">Female</td>
+<td align="right">0.93</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest hospitalization rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;hosp_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate / 1000
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest hospitalization rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Hospitalized&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Highest hospitalization rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Hospitalized</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">American Indian</td>
+<td align="left">81-90</td>
+<td align="left">Male</td>
+<td align="right">1.27</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">61-70</td>
+<td align="left">Male</td>
+<td align="right">1.22</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">11-20</td>
+<td align="left">Male</td>
+<td align="right">1.21</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">41-50</td>
+<td align="left">Male</td>
+<td align="right">1.20</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">61-70</td>
+<td align="left">Female</td>
+<td align="right">1.19</td>
+</tr>
+<tr class="even">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">91-100</td>
+<td align="left">Male</td>
+<td align="right">1.17</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lowest death rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;death_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate / 1000
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest death rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Deceased&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Lowest death rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Deceased</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">21-30</td>
+<td align="left">Female</td>
+<td align="right">0.24</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">31-40</td>
+<td align="left">Male</td>
+<td align="right">0.24</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">21-30</td>
+<td align="left">Male</td>
+<td align="right">0.24</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">31-40</td>
+<td align="left">Female</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">81-90</td>
+<td align="left">Male</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">41-50</td>
+<td align="left">Male</td>
+<td align="right">0.26</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest death rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;death_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate / 1000
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest death rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Deceased&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Highest death rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Deceased</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2+ races</td>
+<td align="left">91-100</td>
+<td align="left">Male</td>
+<td align="right">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">91-100</td>
+<td align="left">Male</td>
+<td align="right">0.34</td>
+</tr>
+<tr class="odd">
+<td align="left">American Indian</td>
+<td align="left">81-90</td>
+<td align="left">Male</td>
+<td align="right">0.32</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">11-20</td>
+<td align="left">Male</td>
+<td align="right">0.32</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="left">41-50</td>
+<td align="left">Male</td>
+<td align="right">0.32</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">71-80</td>
+<td align="left">Male</td>
+<td align="right">0.32</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lowest vax rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;vax_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest vaccination rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Vaccinated&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Lowest vaccination rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Vaccinated</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">American Indian</td>
+<td align="left">71-80</td>
+<td align="left">Male</td>
+<td align="right">49.32</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="left">11-20</td>
+<td align="left">Female</td>
+<td align="right">49.35</td>
+</tr>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="left">&lt;11</td>
+<td align="left">Male</td>
+<td align="right">49.48</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="left">11-20</td>
+<td align="left">Male</td>
+<td align="right">49.48</td>
+</tr>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="left">31-40</td>
+<td align="left">Female</td>
+<td align="right">49.49</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="left">&lt;11</td>
+<td align="left">Female</td>
+<td align="right">49.52</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest vax rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;vax_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest vaccination rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Vaccinated&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>Highest vaccination rates</caption>
+<thead>
+<tr class="header">
+<th align="left">Race</th>
+<th align="left">Age</th>
+<th align="left">Sex</th>
+<th align="right">% Vaccinated</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">91-100</td>
+<td align="left">Female</td>
+<td align="right">66.14</td>
+</tr>
+<tr class="even">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">71-80</td>
+<td align="left">Female</td>
+<td align="right">65.90</td>
+</tr>
+<tr class="odd">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">71-80</td>
+<td align="left">Male</td>
+<td align="right">65.73</td>
+</tr>
+<tr class="even">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">31-40</td>
+<td align="left">Male</td>
+<td align="right">65.62</td>
+</tr>
+<tr class="odd">
+<td align="left">Asian and Pacific Islander</td>
+<td align="left">31-40</td>
+<td align="left">Female</td>
+<td align="right">65.58</td>
+</tr>
+<tr class="even">
+<td align="left">2+ races</td>
+<td align="left">81-90</td>
+<td align="left">Male</td>
+<td align="right">65.48</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="associations-between-predictors-and-outcomes" class="section level2">
+<h2>Associations between Predictors and Outcomes</h2>
+<p>How do key predictors correlate with key outcomes at the PUMA level?</p>
+<p><img src="exploratory_analysis_files/figure-html/correlations%20predictors%20vs%20outcomes-1.png" width="672" /></p>
+<p>For each of the four most correlated variables (excluding obvious redundancies) with each outcome, can we explore more precisely the relationship between outcome and predictor?</p>
+<p>First, across PUMAs:</p>
+<p><img src="exploratory_analysis_files/figure-html/PUMA%20hospitalization%20rate%20vs%20predictor-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/PUMA%20death%20rate%20vs%20predictor-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/PUMA%20vax%20rate%20vs%20predictor-1.png" width="672" /></p>
+<p>Then, across all interviews, for key demographic predictors:</p>
+<p><img src="exploratory_analysis_files/figure-html/hospitalization%20rate%20by%20demo-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/death%20rate%20by%20demo-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/vax%20rate%20by%20demo-1.png" width="672" /></p>
+<p>And finally across all interviews for key socioeconomic predictors:</p>
+<p><img src="exploratory_analysis_files/figure-html/hosp%20rate%20by%20ses-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/death%20rate%20by%20ses-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/vax%20rate%20by%20ses-1.png" width="672" /></p>
+</div>
+<div id="associations-between-predictors-and-outcomes-by-borough" class="section level2">
+<h2>Associations between Predictors and Outcomes by Borough</h2>
+<p>What kinds of disparities occur within each borough on key outcome rates across levels of a predictor?</p>
+<p>First, hospitalizations:</p>
+<p><img src="exploratory_analysis_files/figure-html/hospitalization%20borough%20disparities-1.png" width="672" /><img src="exploratory_analysis_files/figure-html/hospitalization%20borough%20disparities-2.png" width="672" /></p>
+<p>Then, deaths:</p>
+<p><img src="exploratory_analysis_files/figure-html/death%20borough%20disparities-1.png" width="672" /><img src="exploratory_analysis_files/figure-html/death%20borough%20disparities-2.png" width="672" /></p>
+<p>And finally, vaccinations:</p>
+<p><img src="exploratory_analysis_files/figure-html/vax%20borough%20disparities-1.png" width="672" /><img src="exploratory_analysis_files/figure-html/vax%20borough%20disparities-2.png" width="672" /></p>
+<p>A note for later – we could try this for key SES indicators as well, such as:</p>
+<p>And finally, we can visualize outcomes on a given predictor across boroughs in the following way – for simplicity’s sake, only demographic variables and outcomes included here.</p>
+<p><img src="exploratory_analysis_files/figure-html/borough%20predictor%20heatmap%20hosp-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/borough%20predictor%20heatmap%20death-1.png" width="672" /></p>
+<p><img src="exploratory_analysis_files/figure-html/borough%20predictor%20heatmap%20vax-1.png" width="672" height="150%" /></p>
+</div>
 </div>
 
 

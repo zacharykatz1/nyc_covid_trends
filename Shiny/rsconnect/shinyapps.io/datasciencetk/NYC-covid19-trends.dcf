@@ -1,0 +1,13 @@
+name: NYC-covid19-trends
+title: NYC-covid19-trends
+username:
+account: datasciencetk
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5285783
+bundleId: 5341037
+url: https://datasciencetk.shinyapps.io/NYC-covid19-trends/
+when: 1638898397.09714
+lastSyncTime: 1638898397.09715
+asMultiple: FALSE
+asStatic: FALSE
