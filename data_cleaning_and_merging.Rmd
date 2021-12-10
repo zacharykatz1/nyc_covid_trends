@@ -104,4 +104,4 @@ nyc_hh_summary = cleaned_data %>%
   )
 ```
 
-This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of the exploratory analysis that follows.
+This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of our exploratory analysis.
