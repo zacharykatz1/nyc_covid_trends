@@ -9,12 +9,14 @@ navbar:
       menu:
       - text: "Home"
         href: index.html    
-      - text: "Data Pre-processing"
+      - text: "Data Pre-Processing"
         href: data_cleaning_and_merging.html
       - text: "Exploratory Analysis"
         href: exploratory_analysis.html
       - text: "Statistical Analysis"
-        href: prediction_modeling.html
+        href: statistical_analysis.html
+      - text: "Additional Prediction"
+        href: additional_prediction.html   
       - text: "Interactive Map"
         href: https://datasciencetk.shinyapps.io/NYC-covid19-trends/
       - text: "Dashboard"
