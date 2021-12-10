@@ -1,5 +1,5 @@
 ---
-title: "Data Cleaning and Merging"
+title: "Data Pre-Processing"
 output: 
   html_document:
     code_folding: hide
@@ -30,7 +30,7 @@ The Baruch Geoportal, maintained by the Newman Library at Baruch College, is a r
 
 ## Data Cleaning
 
-As mentioned above, monthly outcome data were obtained from the NYC DOHMH with data reported at the ZCTA-level geography. First, these data were summed over the time interval March 2020 - September 2021 to obtain one cumulative incidence measure per ZCTA. However, the predictor variables from IPUMS were coded to the PUMA-level geography. The first step in the cleaning process was to convert these data into a common geography to facilitate further analysis. The Baruch ZCTA-PUMA crosswalk data set was used in this data conversion. Below is a brief excerpt:
+As mentioned above, monthly outcome data were obtained from the NYC DOHMH with data reported at the ZCTA-level geography. First, these data were summed over the time interval March 2020 - September 2021 to obtain one cumulative incidence measure per ZCTA. However, the predictor variables from IPUMS were coded to the PUMA-level geography. The first step in the cleaning process was to convert these data into a [common geography](http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/nyc_zcta10_puma10_areas.pdf) to facilitate further analysis. The Baruch ZCTA-PUMA crosswalk data set was used in this data conversion. Below is a brief excerpt:
 
 ```{r display zcta_puma_cross, message = FALSE}
 zcta_puma_cross <- read_csv("./data/zcta_puma_cross.csv")
@@ -40,10 +40,10 @@ head(zcta_puma_cross)
 
 The following  columns were used to convert ZCTA-level outcome data to PUMA-level data:
 
-  * <span style="background-color: #e8e8e8">zcta10</span> - ZCTA unique identifier
-  * <span style="background-color: #e8e8e8">puma10</span> - PUMA unique identifier
-  * <span style="background-color: #e8e8e8">per_in_puma</span> - percentage of the specified ZCTA that is located within the specified PUMA
-  * <span style="background-color: #e8e8e8">per_of_puma</span> - percentage of the specified PUMA that is occupied by the specified ZCTA
+  * `zcta10` - ZCTA unique identifier
+  * `puma10` - PUMA unique identifier
+  * `per_in_puma` - percentage of the specified ZCTA that is located within the specified PUMA
+  * `per_of_puma` - percentage of the specified PUMA that is occupied by the specified ZCTA
 
 The following shows the mathematical expression used to convert from ZCTA-level outcome data to PUMA-level outcome data:
 
@@ -55,25 +55,25 @@ This resulted in one cumulative incidence measure per PUMA (per 100,000 people f
 
 The demographic dataset from IPUMS originally contained over 350,000 interviews from the NYC area, each coded to a PUMA and given a ‘perwt’ - person weight and ‘hhwt’- household weight. First, predictor variables were renamed and recoded according to the data dictionary [(see data dictionary)](census_documentation.html) such that the following predictor variables were obtained for each interview along with ‘borough’ and ‘puma’ coding:
 
-  * <span style="background-color: #e8e8e8">rent</span>: monthly rent (numeric)
-  * <span style="background-color: #e8e8e8">household_income</span>: annual household income (numeric)
-  * <span style="background-color: #e8e8e8">on_foodstamps</span>: whether a person is on food stamps (binary)
-  * <span style="background-color: #e8e8e8">has_broadband</span>: whether a person has broadband internet (binary)
-  * <span style="background-color: #e8e8e8">family_size</span>: number of individuals in family, including this individual (numeric)
-  * <span style="background-color: #e8e8e8">num_children</span>: number of children in family (numeric)
-  * <span style="background-color: #e8e8e8">sex</span>: sex of individual (binary)
-  * <span style="background-color: #e8e8e8">age</span>: age of individual (numeric)
-  * <span style="background-color: #e8e8e8">race</span>: race of individual (categorical factor)
-  * <span style="background-color: #e8e8e8">birthplace</span>: whether this person was born in US or elsewhere (categorical factor)
-  * <span style="background-color: #e8e8e8">US_citizen</span>: whether this person is a US citizen (categorical factor)
-  * <span style="background-color: #e8e8e8">language</span>: primary language spoken at home (categorical factor)
-  * <span style="background-color: #e8e8e8">education</span>: highest level of education obtained (categorical factor)
-  * <span style="background-color: #e8e8e8">employment</span>: current employment status (categorical factor)
-  * <span style="background-color: #e8e8e8">health_insurance</span>: type of insurance (public or private), if any (categorical factor)
-  * <span style="background-color: #e8e8e8">personal_income</span>: annual personal income (numeric)
-  * <span style="background-color: #e8e8e8">on_welfare</span>: whether person is on welfare (binary)
-  * <span style="background-color: #e8e8e8">poverty_threshold</span>: whether the person is above or below the poverty line (binary)
-  * <span style="background-color: #e8e8e8">work_transport</span>: most commonly used method of transportation to work (categorical factor)
+  * `rent`: monthly rent (numeric)
+  * `household_income`: annual household income (numeric)
+  * `on_foodstamps`: whether a person is on food stamps (binary)
+  * `has_broadband`: whether a person has broadband internet (binary)
+  * `family_size`: number of individuals in family, including this individual (numeric)
+  * `num_children`: number of children in family (numeric)
+  * `sex`: sex of individual (binary)
+  * `age`: age of individual (numeric)
+  * `race`: race of individual (categorical factor)
+  * `birthplace`: whether this person was born in US or elsewhere (categorical factor)
+  * `US_citizen`: whether this person is a US citizen (categorical factor)
+  * `language`: primary language spoken at home (categorical factor)
+  * `education`: highest level of education obtained (categorical factor)
+  * `employment`: current employment status (categorical factor)
+  * `health_insurance`: type of insurance (public or private), if any (categorical factor)
+  * `personal_income`: annual personal income (numeric)
+  * `on_welfare`: whether person is on welfare (binary)
+  * `poverty_threshold`: whether the person is above or below the poverty line (binary)
+  * `work_transport`: most commonly used method of transportation to work (categorical factor)
 
 After cleaning variable names the 350,000+ interviews were summarized to the PUMA-level based on ‘perwt’ and ‘hhwt’. For each interview, the ‘perwt’ value describes the number of persons in the coded geographic area (PUMA) for which the interview is representative. For example, a ‘perwt’ of 34 indicates that there are 34 persons in the PUMA that share the same characteristics as described in the interview data (e.g., similar income, race, family size, etc.). The same is true of the ‘hhwt’ value for households in the coded PUMA. Therefore, the ‘perwt’ and ‘hhwt’ of each interview can be used to aggregate interview-level data to PUMA-level data as follows:
 
