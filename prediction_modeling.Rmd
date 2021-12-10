@@ -8,7 +8,6 @@ output:
 ```{r libraries and set up, message = FALSE, echo = FALSE}
 # load necessary packages
 library(tidyverse)
-library(reshape2)
 library(rstatix)
 library(ggridges)
 library(spatstat)
