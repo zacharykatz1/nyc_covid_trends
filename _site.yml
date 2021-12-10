@@ -11,14 +11,12 @@ navbar:
         href: index.html    
       - text: "Data Pre-processing"
         href: data_cleaning_and_merging.html
-      - text: "Statistical Analysis"
+      - text: "Exploratory Analysis"
         href: exploratory_analysis.html
-      - text: "Prediction Modeling"
+      - text: "Statistical Analysis"
         href: prediction_modeling.html
       - text: "Interactive Map"
         href: https://datasciencetk.shinyapps.io/NYC-covid19-trends/
-      - text: "Plotly"
-        href: plotly.html
       - text: "Dashboard"
         href: dashboard.html
       - text: "Project Code"
