@@ -8,7 +8,6 @@ output:
 ```{r libraries and set up, message = FALSE, echo = FALSE}
 # load necessary packages
 library(tidyverse)
-library(reshape2)
 library(rstatix)
 library(ggridges)
 library(spatstat)
@@ -239,7 +238,6 @@ cleaned_data =
 ```
 
 ```{r cleaned PUMA level data set, message = FALSE, echo = FALSE}
-# Example data frame with weightings for summary stats over each PUMA
 nyc_puma_summary = cleaned_data %>% 
   group_by(puma) %>%
   summarize(
