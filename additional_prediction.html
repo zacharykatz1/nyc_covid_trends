@@ -11,7 +11,7 @@
 
 
 
-<title>Statistical Analysis</title>
+<title>Additional Prediction - Risk Scoring and Clustering</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -259,19 +259,19 @@ $(document).ready(function () {
       <a href="index.html">Home</a>
     </li>
     <li>
-      <a href="data_cleaning_and_merging.html">Data Cleaning/Merging</a>
+      <a href="data_cleaning_and_merging.html">Data Pre-Processing</a>
     </li>
     <li>
       <a href="exploratory_analysis.html">Exploratory Analysis</a>
     </li>
     <li>
-      <a href="prediction_modeling.html">Prediction Modeling</a>
+      <a href="statistical_analysis.html">Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="additional_prediction.html">Additional Prediction</a>
     </li>
     <li>
       <a href="https://datasciencetk.shinyapps.io/NYC-covid19-trends/">Interactive Map</a>
-    </li>
-    <li>
-      <a href="plotly.html">Plotly</a>
     </li>
     <li>
       <a href="dashboard.html">Dashboard</a>
@@ -298,15 +298,11 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Statistical Analysis</h1>
+<h1 class="title toc-ignore">Additional Prediction - Risk Scoring and Clustering</h1>
 
 </div>
 
 
-<div id="regression" class="section level2">
-<h2>Regression</h2>
-<p>To be completed</p>
-</div>
 <div id="predictive-risk-scoring-and-clustering" class="section level2">
 <h2>Predictive Risk Scoring and Clustering</h2>
 <div id="risk-scoring" class="section level3">
@@ -391,7 +387,7 @@ result_plot &lt;- broom::tidy(lasso_model$finalModel) %&gt;%
   labs(y = &quot;Coefficient Estimate&quot;, title = &quot;Coefficient Estimates for Varying Values of Lambda&quot;)
 
 result_plot</code></pre>
-<p><img src="prediction_modeling_files/figure-html/plotting%20predictors%20against%20lambda-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/plotting%20predictors%20against%20lambda-1.png" width="672" /></p>
 <p>Again, we wanted to move beyond binary classification to develop a risk score. Generally, in logistic regression, when a data point is predicted with probability &gt; 0.5 to be a “1,” the model classifies it as a 1, and otherwise as a 0. We obtained risk scores not only by classifying PUMAs as above or below 70% vaccination rate using our prediction model, but by obtaining the exact probability of a given data point being a 1. For instance, if a PUMA has an 85% chance of being below 70% vaccination rate according to our classifier, its risk score would be 85, even though our model would binarily predict it to be a “1” rather than a “0.”</p>
 <pre class="r"><code>lambda &lt;- lasso_model$bestTune$lambda
 lasso_fit = glmnet(x, y, lambda = lambda, family = &quot;binomial&quot;)
@@ -416,7 +412,7 @@ risk_prediction %&gt;%
   labs(title = &quot;Predicting Risk Score of Vaccination Rate across PUMA&quot;,
        x = &quot;PUMA&quot;, y = &quot;Predicted Risk Score&quot;, fill = &quot;Actual Vax Status&quot;) + 
   scale_fill_viridis(discrete = TRUE, labels = c(&quot;Below 70%&quot;, &quot;Above 70%&quot;))</code></pre>
-<p><img src="prediction_modeling_files/figure-html/visualizing%20risk%20scores%20by%20PUMA-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/visualizing%20risk%20scores%20by%20PUMA-1.png" width="672" /></p>
 </div>
 <div id="clustering" class="section level3">
 <h3>Clustering</h3>
@@ -460,7 +456,7 @@ ggplot(data = full_df, aes(x = covid_hosp_rate, y = covid_vax_rate, color = .clu
   geom_point(data = summary_df, aes(x = median_hosp, y = median_vax), color = &quot;black&quot;, size = 4) +
   geom_point(data = summary_df, aes(x = median_hosp, y = median_vax, color = .cluster), size = 2.75) +
   labs(x = &quot;COVID Hospitalization Rate&quot;, y = &quot;COVID Vaccination Rate&quot;, title = &quot;COVID Hospitalization vs Vaccination Rates for each PUMA&quot;, color = &quot;Cluster&quot;)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/initial%20clustering-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/initial%20clustering-1.png" width="672" /></p>
 <p>Generally, our three clusters included:</p>
 <ul>
 <li>One cluster with relatively low hospitalization rate (~5%) and relatively high vaccination rate (~75%)</li>
@@ -476,13 +472,13 @@ for_clustering = predictors %&gt;%
 # Evaluate Euclidean distances between observations
 distance = get_dist(for_clustering)
 fviz_dist(distance, gradient = list(low = &quot;#00AFBB&quot;, mid = &quot;white&quot;, high = &quot;#FC4E07&quot;))</code></pre>
-<p><img src="prediction_modeling_files/figure-html/scaled%20clustering-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/scaled%20clustering-1.png" width="672" /></p>
 <pre class="r"><code># Cluster with three centers
 k_scaled = kmeans(for_clustering, centers = 3)
 
 # Visualize cluster plot with reduction to two dimensions
 fviz_cluster(k_scaled, data = for_clustering)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/scaled%20clustering-2.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/scaled%20clustering-2.png" width="672" /></p>
 <pre class="r"><code># Bind with outcomes and color clusters
 full_df = for_clustering %&gt;% 
   as_tibble() %&gt;% 
@@ -493,14 +489,14 @@ full_df = for_clustering %&gt;%
 <p>Because we settled on setting the number of clusters at three relatively arbitrarily, we decided to evaluate the clustering quality using both WSS, silhouette, and gap methods.</p>
 <pre class="r"><code># Check where elbow occurs using WSS method
 fviz_nbclust(for_clustering, kmeans, method = &quot;wss&quot;)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <pre class="r"><code># Check for optimal number of clusters using silhouette method
 fviz_nbclust(for_clustering, kmeans, method = &quot;silhouette&quot;)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
 <pre class="r"><code># Check number of clusters that minimize gap statistic
 gap_stat = clusGap(for_clustering, FUN = kmeans, nstart = 25, K.max = 20, B = 50)
 fviz_gap_stat(gap_stat)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/unnamed-chunk-1-3.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/unnamed-chunk-1-3.png" width="672" /></p>
 <p>The elbow in our WSS plot indicates that three clusters may be optimal, whereas the silhouette plot shows an average silhouette width optimized at two clusters. Finally, the gap plot shows that clustering is actually optimized when the number of clusters equals 1 – i.e. when no clustering occurs. The relative lack of concordance between these assessments of clustering quality is no surprise given the fact that our model is fit on only 55 predictors. For completeness, we re-modeled our clustering of predictors with only k = 2 clusters, and again tried to visualize where these clusters of PUMAs were distributed on the hospitalization/vaccination rate axes:</p>
 <pre class="r"><code># Scale predictors
 for_clustering = predictors %&gt;% 
@@ -511,13 +507,13 @@ for_clustering = predictors %&gt;%
 # Evaluate Euclidean distances between observations
 distance = get_dist(for_clustering)
 fviz_dist(distance, gradient = list(low = &quot;#00AFBB&quot;, mid = &quot;white&quot;, high = &quot;#FC4E07&quot;))</code></pre>
-<p><img src="prediction_modeling_files/figure-html/scaled%20-%20two%20clusters-1.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/scaled%20-%20two%20clusters-1.png" width="672" /></p>
 <pre class="r"><code># Cluster with two centers
 k_scaled2 = kmeans(for_clustering, centers = 2)
 
 # Visualize cluster plot with reduction to two dimensions
 fviz_cluster(k_scaled2, data = for_clustering)</code></pre>
-<p><img src="prediction_modeling_files/figure-html/scaled%20-%20two%20clusters-2.png" width="672" /></p>
+<p><img src="additional_prediction_files/figure-html/scaled%20-%20two%20clusters-2.png" width="672" /></p>
 <pre class="r"><code># Bind with outcomes and color clusters
 full_df = for_clustering %&gt;% 
   as_tibble() %&gt;% 

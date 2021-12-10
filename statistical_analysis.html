@@ -11,7 +11,7 @@
 
 
 
-<title>Ploty</title>
+<title>Statistical Analysis</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -335,13 +335,16 @@ div.tocify {
       <a href="index.html">Home</a>
     </li>
     <li>
-      <a href="data_cleaning_and_merging.html">Data Pre-processing</a>
+      <a href="data_cleaning_and_merging.html">Data Pre-Processing</a>
     </li>
     <li>
       <a href="exploratory_analysis.html">Exploratory Analysis</a>
     </li>
     <li>
-      <a href="prediction_modeling.html">Statistical Analysis</a>
+      <a href="statistical_analysis.html">Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="additional_prediction.html">Additional Prediction</a>
     </li>
     <li>
       <a href="https://datasciencetk.shinyapps.io/NYC-covid19-trends/">Interactive Map</a>
@@ -371,76 +374,12 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Ploty</h1>
+<h1 class="title toc-ignore">Statistical Analysis</h1>
 
 </div>
 
 
-<p><em>CREATING THE PLOTLY WITH THE EXPLORATORY ANALYSIS FILE, NOT FINAL, STILL NEED TO ADD AND EDIT</em></p>
-<p><strong>General Trend for each PUMA in each borough: Vaccination Rate, Death Rate, Hospitalization Rate for each PUMA in each Borough</strong></p>
-<div id="hospitalization-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Hospitalization rates across PUMAs, colored by borough</h1>
-<pre class="r"><code>puma_hosp_highest10 &lt;-
-  puma_level_data %&gt;% 
-  mutate(puma = fct_reorder(puma, covid_hosp_rate)) %&gt;% 
-  mutate(text_label = str_c(&quot;PUMA: &quot;, puma, 
-                            &quot;\n% Hospitalization: &quot;, covid_hosp_rate)) %&gt;%
-  plot_ly(y = ~covid_hosp_rate, 
-          x = ~puma, 
-          color = ~borough, 
-          type = &quot;scatter&quot;,
-          mode = &quot;markers&quot;, 
-          colors = &quot;viridis&quot;,
-          text = ~ text_label) %&gt;% 
-  config(scrollZoom = FALSE,
-         modeBarButtonsToAdd = list(&#39;drawline&#39;, 
-                                 &#39;drawopenpath&#39;, 
-                                 &#39;drawclosedpath&#39;, 
-                                 &#39;drawcircle&#39;, 
-                                 &#39;drawrect&#39;, 
-                                 &#39;eraseshape&#39;),
-         displayModeBar = TRUE) %&gt;%
-  layout(plot_bgcolor = &#39;#e5ecf6&#39;,
-          title = &quot;Hospitalization rates across PUMAs&quot;, 
-          xaxis = list(
-            title = &quot;PUMA&quot;, 
-            tickangle = 60,
-            zerolinecolor = &#39;#ffff&#39;,
-            zerolinewidth = 2,
-            gridcolor = &#39;ffff&#39;),
-          yaxis = list(
-            title = &quot;% Hospitalized&quot;, 
-            zerolinecolor = &#39;#ffff&#39;,
-            zerolinewidth = 2,
-            gridcolor = &#39;ffff&#39;),
-         legend = list(title = list(text = &#39;Borough&#39;)))</code></pre>
-</div>
-<div id="death-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Death rates across PUMAs, colored by borough</h1>
-</div>
-<div id="vax-rates-across-pumas-colored-by-borough" class="section level1">
-<h1>Vax rates across PUMAs, colored by borough</h1>
-<p><strong>Which PUMAs have the highest Hospitalization Rate, Death Rate, Vaccination Rate</strong></p>
-</div>
-<div id="puma-with-the-highest-hospitalization-rate" class="section level1">
-<h1>Puma with the highest hospitalization rate</h1>
-</div>
-<div id="puma-with-the-highest-death-rate" class="section level1">
-<h1>Puma with the highest Death rate</h1>
-</div>
-<div id="puma-with-the-highest-vaccination-rate" class="section level1">
-<h1>Puma with the highest Vaccination rate</h1>
-<p><strong>Which PUMAs has the lowest Hospitalization Rate, Death Rate, Vaccination Rate</strong></p>
-</div>
-<div id="pumas-with-lowest-hospitalization-rates" class="section level1">
-<h1>PUMAs with lowest hospitalization rates</h1>
-</div>
-<div id="pumas-with-lowest-death-rates" class="section level1">
-<h1>PUMAs with lowest death rates</h1>
-</div>
-<div id="pumas-with-the-lowest-vaccination-rates" class="section level1">
-<h1>PUMAs with the lowest Vaccination rates</h1>
-</div>
+
 
 
 

@@ -259,19 +259,19 @@ $(document).ready(function () {
       <a href="index.html">Home</a>
     </li>
     <li>
-      <a href="data_cleaning_and_merging.html">Data Cleaning/Merging</a>
+      <a href="data_cleaning_and_merging.html">Data Pre-Processing</a>
     </li>
     <li>
       <a href="exploratory_analysis.html">Exploratory Analysis</a>
     </li>
     <li>
-      <a href="prediction_modeling.html">Prediction Modeling</a>
+      <a href="statistical_analysis.html">Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="additional_prediction.html">Additional Prediction</a>
     </li>
     <li>
       <a href="https://datasciencetk.shinyapps.io/NYC-covid19-trends/">Interactive Map</a>
-    </li>
-    <li>
-      <a href="plotly.html">Plotly</a>
     </li>
     <li>
       <a href="dashboard.html">Dashboard</a>
@@ -316,8 +316,8 @@ library(htmltools)</code></pre>
 <h3>New York City Department of Health and Mental Hygiene <a href="https://github.com/nychealth">(NYC DOHMH)</a></h3>
 <p>The New York City Department of Health and Mental Hygiene (NYC DOHMH) is one of the oldest public health agencies in the United States. Among other responsibilities, the DOHMH monitors the spread of infectious disease in NYC. The Department of Health classified the beginning of the COVID-19 pandemic as February 29, 2020, the date of the first laboratory-confirmed case. Since then, the DOHMH has recorded and reported COVID-19 data on a daily, weekly, or monthly basis. These data include cases, hospitalizations, and deaths by borough, modified Zip Code tabulation area (ZCTA), and demographic factors. As NYC has administered vaccinations for COVID-19, these data have been recorded and made available by borough, ZCTA, and demography. This project uses COVID-19 hospitalization rates, death rates, and vaccination rates by ZCTA in NYC.</p>
 </div>
-<div id="baruch-college-city-university-of-new-york---geoportal" class="section level3">
-<h3><a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">Baruch College, City University of New York - Geoportal</a></h3>
+<div id="baruch-college-city-university-of-new-york---geoportal-baruch-cuny" class="section level3">
+<h3>Baruch College, City University of New York - Geoportal <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">(Baruch, CUNY)</a></h3>
 <p>The Baruch Geoportal, maintained by the Newman Library at Baruch College, is a repository of geospatial resources including tabular data sets, tutorials, maps, and crosswalks. This project uses a crosswalk data set from Baruch Geoportal to apportion NYC ZCTAs to PUMAs, which allows PUMA-coded data from IPUMS to be analyzed alongside COVID-19 outcome data from DOHMH.</p>
 </div>
 </div>
@@ -327,15 +327,15 @@ library(htmltools)</code></pre>
 <pre class="r"><code>zcta_puma_cross &lt;- read_csv(&quot;./data/zcta_puma_cross.csv&quot;)
 
 head(zcta_puma_cross)</code></pre>
-<pre><code>## # A tibble: 6 x 8
+<pre><code>## # A tibble: 6 × 8
 ##   zcta10 stateco alloc puma10 pumaname           pop2010 per_in_puma per_of_puma
 ##    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-## 1  10451   36005 x       3710 NYC-Bronx Communi~   22027       0.482       0.141
-## 2  10451   36005 &lt;NA&gt;    3708 NYC-Bronx Communi~   21002       0.459       0.151
-## 3  10451   36005 &lt;NA&gt;    3705 NYC-Bronx Communi~    2684       0.059       0.017
-## 4  10452   36005 x       3708 NYC-Bronx Communi~   71729       0.952       0.515
-## 5  10452   36005 &lt;NA&gt;    3707 NYC-Bronx Communi~    3642       0.048       0.027
-## 6  10453   36005 x       3707 NYC-Bronx Communi~   77074       0.984       0.574</code></pre>
+## 1  10451   36005 x       3710 NYC-Bronx Communi…   22027       0.482       0.141
+## 2  10451   36005 &lt;NA&gt;    3708 NYC-Bronx Communi…   21002       0.459       0.151
+## 3  10451   36005 &lt;NA&gt;    3705 NYC-Bronx Communi…    2684       0.059       0.017
+## 4  10452   36005 x       3708 NYC-Bronx Communi…   71729       0.952       0.515
+## 5  10452   36005 &lt;NA&gt;    3707 NYC-Bronx Communi…    3642       0.048       0.027
+## 6  10453   36005 x       3707 NYC-Bronx Communi…   77074       0.984       0.574</code></pre>
 <p>The following columns were used to convert ZCTA-level outcome data to PUMA-level data:</p>
 <ul>
 <li><code>zcta10</code> - ZCTA unique identifier</li>
@@ -394,11 +394,8 @@ head(zcta_puma_cross)</code></pre>
     covid_hosp_rate = median(puma_hosp_rate),
     covid_vax_rate = median(puma_vacc_rate),
     covid_death_rate = median(puma_death_rate)
-  )
-
-# View first few rows of PUMA-summarized data frame
-nyc_hh_summary %&gt;% head()</code></pre>
-<p>This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of the exploratory analysis that follows.</p>
+  )</code></pre>
+<p>This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of our exploratory analysis.</p>
 </div>
 
 
