@@ -1,5 +1,5 @@
 ---
-title: "Statistical Analysis"
+title: "Additional Prediction - Risk Scoring and Clustering"
 output: 
   html_document:
     code_folding: hide
@@ -263,10 +263,6 @@ nyc_puma_summary = cleaned_data %>%
     covid_death_rate = median(puma_death_rate)
   )
 ```
-
-## Regression
-
-To be completed
 
 ## Predictive Risk Scoring and Clustering
 
