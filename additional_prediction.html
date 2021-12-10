@@ -303,8 +303,6 @@ $(document).ready(function () {
 </div>
 
 
-<div id="predictive-risk-scoring-and-clustering" class="section level2">
-<h2>Predictive Risk Scoring and Clustering</h2>
 <div id="risk-scoring" class="section level3">
 <h3>Risk Scoring</h3>
 <p>Following our regression work, we decided to make our insights more actionable by developing a novel scoring method capable of indicating whether a PUMA is at relatively lower or higher risk of achieving some COVID-19-related outcome. To demonstrate the method, we developed a risk score for whether a PUMA is likely to have achieved or not achieved a vaccination rate of 70% among residents, corresponding to the level of population immunity generally considered requisite to “halt the pandemic.” That said, our method is applicable to other outcomes as well, and one might imagine using it to score a given PUMA on the possibility of a hospitalization rate above X%, or a death rate above Y%.</p>
@@ -522,7 +520,6 @@ full_df = for_clustering %&gt;%
     cluster = k_scaled2$cluster
   )</code></pre>
 <p>With two clusters, our low hospitalization/high vaccination cluster remains, but our two mid-level hospitalization rate clusters are condensed into one cluster.</p>
-</div>
 </div>
 
 
