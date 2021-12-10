@@ -6,6 +6,8 @@ output:
     always_allow_html: true
 ---
 
+<br>
+<center>
 
 ```{r defaults, echo = FALSE, message = FALSE, warning = FALSE}
 # load necessary packages
@@ -18,6 +20,7 @@ library(ggridges)
 library(spatstat)
 library(ggpubr)
 library(GGally)
+library(plotly)
 
 # set knitr defaults
 knitr::opts_chunk$set(
@@ -848,44 +851,91 @@ We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a
 ```{r outcomes all PUMAs, echo = FALSE, message = FALSE, warning = FALSE}
 
 # Hospitalization rates across PUMAs, colored by borough
-PUMA_hosp = puma_level_data %>% 
-  ggplot(aes(x = fct_reorder(puma, covid_hosp_rate), y = covid_hosp_rate)) + 
-  geom_point(aes(color = borough)) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  labs(
-    x = "PUMA",
-    y = "% Hospitalized"
-  )
+puma_level_data  %>% 
+  mutate(puma = fct_reorder(puma, covid_hosp_rate)) %>% 
+  mutate(text_label = str_c("PUMA: ", puma, 
+                            "\n% Hospitalization: ", covid_hosp_rate)) %>%
+  plot_ly(y = ~covid_hosp_rate, 
+          x = ~puma, 
+          color = ~borough, 
+          type = "scatter",
+          mode = "markers", 
+          colors = "viridis",
+          text = ~ text_label) %>% 
+  config(scrollZoom = FALSE,
+         displayModeBar = TRUE) %>%
+  layout(plot_bgcolor = '#e5ecf6',
+          title = "Hospitalization rates across PUMAs", 
+          xaxis = list(
+            title = "PUMA", 
+            tickangle = 60,
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+          yaxis = list(
+            title = "% Hospitalized", 
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
 
 # Death rates across PUMAs, colored by borough
-PUMA_death = puma_level_data %>% 
-  ggplot(aes(x = fct_reorder(puma, covid_death_rate), y = covid_death_rate)) + 
-  geom_point(aes(color = borough)) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  labs(
-    x = "PUMA",
-    y = "% Deceased"
-  )
+puma_level_data  %>% 
+  mutate(puma = fct_reorder(puma, covid_death_rate)) %>% 
+  mutate(text_label = str_c("PUMA: ", puma, 
+                            "\n% Death: ", covid_death_rate)) %>%
+  plot_ly(y = ~covid_death_rate, 
+          x = ~puma, 
+          color = ~borough, 
+          type = "scatter",
+          mode = "markers", 
+          colors = "viridis",
+          text = ~ text_label) %>% 
+  config(scrollZoom = FALSE,
+         displayModeBar = TRUE) %>%
+  layout(plot_bgcolor = '#e5ecf6',
+          title = "Death rates across PUMAs", 
+          xaxis = list(
+            title = "PUMA", 
+            tickangle = 60,
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+          yaxis = list(
+            title = "% Death", 
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
 
 # Vax rates across PUMAs, colored by borough
-PUMA_vax = puma_level_data %>% 
-  ggplot(aes(x = fct_reorder(puma, covid_vax_rate), y = covid_vax_rate)) + 
-  geom_point(aes(color = borough)) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  labs(
-    x = "PUMA",
-    y = "% Vaccinated"
-  )
-
-puma_outcomes = (PUMA_hosp + PUMA_death) / PUMA_vax
-
-puma_outcomes + plot_annotation(
-  title = "Outcomes Across PUMAs",
-  subtitle = "Categorized by Borough" 
-) + 
-  theme(legend.position = "bottom") + 
-  plot_layout(guides = "collect")
-
+puma_level_data %>% 
+  mutate(puma = fct_reorder(puma, covid_vax_rate)) %>% 
+  mutate(text_label = str_c("PUMA: ", puma, 
+                            "\n% Vaccinated: ", covid_vax_rate)) %>%
+  plot_ly(y = ~covid_vax_rate, 
+          x = ~puma, 
+          color = ~borough, 
+          type = "scatter",
+          mode = "markers", 
+          colors = "viridis",
+          text = ~ text_label) %>% 
+  config(scrollZoom = FALSE,
+         displayModeBar = TRUE) %>%
+  layout(plot_bgcolor = '#e5ecf6',
+          title = "Vaccination rates across PUMAs", 
+          xaxis = list(
+            title = "PUMA", 
+            tickangle = 60,
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+          yaxis = list(
+            title = "% Death", 
+            zerolinecolor = '#ffff',
+            zerolinewidth = 2,
+            gridcolor = 'ffff'),
+         legend = list(title = list(text = 'Borough')))
 ```
 
 ``` {r worst PUMA outcomes, echo = FALSE, message = FALSE, warning = FALSE}
