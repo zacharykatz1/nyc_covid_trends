@@ -70,6 +70,8 @@ __A word of caution:__ If the reader is considering such a macro-micro model for
 
 ## Results
 
+Because death rates are relatively unreliable, and because vaccination rates are percentages that often attain their upper bound (i.e., 100%), our primary model employs hospitalization rates by PUMA as its dependent variable. Moreover, because the vaccine changed the dynamic of other health outcomes, we further restrict to hospitalizations up and until December 31, 2020. Below is a summary of our key finding from our optimal linear model.
+
 ```{r fetch_data}
 # pull in health outcomes to be merged
 outcome_by_year <- 
