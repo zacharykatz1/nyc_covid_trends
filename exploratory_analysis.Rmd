@@ -2246,7 +2246,14 @@ borough_cat_comparisons(race, "vax")  + plot_annotation(
   subtitle = "Categorized by Race" 
 )
 
+
+
+
+
 # REMOVED Vax by sex
+
+
+
 
 # Vax by age
 borough_cat_comparisons(age_class, "vax") + plot_annotation(
