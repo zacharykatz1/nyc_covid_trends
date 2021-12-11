@@ -64,7 +64,7 @@ and $I$ denotes the identity matrix. Intuitively, the weight matrix $W_s$ acts a
 
 With our unbiased estimates $\xi_s$ in tow, we then proceed to model selection. Given that there are $|S| = 55$ PUMAs, we must be careful to avoid overfitting our model. As such, we employ a stepwise algorithm with an objective function of minimizing the AIC. In this way, we penalize models subject to overfitting and obtain an appropriately parsimonious selection of predictors. Now that our theoretical concerns have been addressed, we can finally discuss our findings!
 
-__A word of caution:__ If the reader is considering such a macro-micro model for their own research, be advised that _there is a typographical error in the Croon and Veldhoven paper_. When estimating the unbiased between- and within-group covariance matrices, they inadvertently swap the divisors for their MSA and MSE. In large samples, this error can lead to weight matrices $W_s$ that are not positive definite, which in turn leads to a non-convex combination of $\bar{X}$ and $\bar{X}_s$, which further leads to immense woe for the programmer who cannot understand why his unbiased estimates for non-negative random variables are somehow negative.
+__A word of caution:__ If the reader is considering such a macro-micro model for their own research, be advised that _there is a typographical error in the Croon and Veldhoven paper_. When estimating the unbiased between- and within-group covariance matrices, they inadvertently swap the divisors for their MSA and MSE. In large samples, this error can lead to weight matrices $W_s$ that are not positive definite, which in turn leads to a non-convex combination of $\bar{X}$ and $\bar{X}_s$, which further leads to immense woe for the programmer who cannot understand why his or her unbiased estimates for non-negative random variables are somehow negative.
 
 
 
@@ -160,11 +160,11 @@ best_model %>%
 
 For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor $x$, let $s$ denote the sample standard deviation of the predictor. We define the partially standardized predictor to be
   $$ z \equiv \frac{x}{s}. $$
-Note that this is an _unweighted_ standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, not that we do not de-mean our data (i.e., subtract $\bar{x}$), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.
+Note that this is an _unweighted_ standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, note that we do not de-mean our data (i.e., subtract $\bar{x}$), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.
 
 Proceeding to the interpretation of our findings, we consider predictors in order of their featured complexity in the model. For example, only the main effect of `language_spanish` is estimated, whereas `personal_income` is present in two interaction terms.
 
-  * `employment_not_in_labor_force`: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000. As one might expect, the unemployment rate is positively associated with th hospitalization rate.
+  * `employment_not_in_labor_force`: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000. As one might expect, the unemployment rate is positively associated with the hospitalization rate.
 
   * `language_spanish`: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.
 
@@ -234,7 +234,7 @@ check_model(best_model_tidy, check = c("linearity", "outliers", "qq", "normality
 
   * Normality: Finally, we test the normality of our residuals. Outside of one outlier, the bottom-left QQ plot for normality exhibits a strong linear trend, as desired. Moreover, the empirical distribution of the residuals in the bottom-right chart closely follows a normal distribution centered at zero.
 
-We have done our due diligence! In general, our linear model seems to be appropriate for the data. We know turn toward the more exciting statistics related to model performance.
+We have done our due diligence! In general, our linear model seems to be appropriate for the data. We now turn toward the more exciting statistics related to model performance.
 
 ```{r}
 # construct table of statistics to assess performance
