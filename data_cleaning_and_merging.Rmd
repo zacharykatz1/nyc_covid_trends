@@ -47,10 +47,10 @@ The following  columns were used to convert ZCTA-level outcome data to PUMA-leve
   * `per_in_puma` - percentage of the specified ZCTA that is located within the specified PUMA
   * `per_of_puma` - percentage of the specified PUMA that is occupied by the specified ZCTA
 
-The following shows the mathematical expression used to convert from ZCTA-level outcome data to PUMA-level outcome data:
+The following shows the mathematical expression used to convert from ZCTA-level outcome data ($Z_i$) to PUMA-level outcome data ($P_j$):
 
 $$
-\sum_{i = 1}^{n} \text{zcta_outcome_data}_{i} \cdot \text{per_in_puma}_{i} \cdot \text{per_of_puma}_{i} = \text{puma_outcome_data}
+\sum_{i = 1}^{n} \text{Z}_{i} \cdot \text{per_in_puma}_{ij} \cdot \text{per_of_puma}_{ij} = \text{P}_j
 $$
 
 This resulted in one cumulative incidence measure per PUMA (per 100,000 people for hospitalizations and deaths, a percentage for vaccinations).
