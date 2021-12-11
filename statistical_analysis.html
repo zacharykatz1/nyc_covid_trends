@@ -13,8 +13,8 @@
 
 <title>Statistical Analysis</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -893,6 +893,9 @@ Mallows’s Cp
 </table>
 <p>To assess performance, we construct the smallest natural model in which our selected model is nested. In particular, the derived full model contains <em>all</em> possible main effects and interaction terms of the seven predictors of our selected model. Naturally, by the monotonicity of the <span class="math inline">\(R^2\)</span> statistic, the full model has a higher coefficient of determination (0.80) than that of our best model (0.67). However, when it comes to out-of-sample prediction, the adjusted <span class="math inline">\(R^2\)</span> statistic is much more critical. As we can see, the full model - which has nearly three times the predictors as our best model - has a lower adjusted <span class="math inline">\(R^2\)</span> (0.58) than our best model (0.59). This is evidence that our parsimonious model retains predictive power even after adjusting for the overfitting present in the full model.</p>
 <p>We further employ Mallows’s <span class="math inline">\(C_p\)</span> criterion to assess the presence of bias in our model relative to the full model. We have a total of <span class="math inline">\(p = 10\)</span> parameters in our best model, so our Mallows’s test statistic of 9.53 satisfies the criterion <span class="math inline">\(C_p \leq p\)</span>. We went to great lengths to construct our adjusted group means, so it is reassuring that this test provides evidence that our model is not subject to bias.</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
 </div>
 
 
