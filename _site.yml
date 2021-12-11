@@ -23,7 +23,7 @@ navbar:
         href: dashboard.html
       - text: "Full Report"
         href: project_report.html
-      - text: "Project Code"
+      - text: "Contact Us"
         href: ProjectCode.html
 output:
   html_document:
