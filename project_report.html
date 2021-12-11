@@ -359,7 +359,7 @@ div.tocify {
       <a href="project_report.html">Full Report</a>
     </li>
     <li>
-      <a href="ProjectCode.html">Project Code</a>
+      <a href="ProjectCode.html">Contact Us</a>
     </li>
   </ul>
 </li>
@@ -617,578 +617,7 @@ cleaned_data =
   mutate(
     puma_death_rate = puma_death_rate / 1000,
     puma_hosp_rate = puma_hosp_rate / 1000
-  )
-
-# View first few rows
-cleaned_data %&gt;% 
-  head() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-puma
-</th>
-<th style="text-align:right;">
-perwt
-</th>
-<th style="text-align:right;">
-hhwt
-</th>
-<th style="text-align:left;">
-borough
-</th>
-<th style="text-align:right;">
-rent
-</th>
-<th style="text-align:right;">
-household_income
-</th>
-<th style="text-align:left;">
-on_foodstamps
-</th>
-<th style="text-align:left;">
-has_broadband
-</th>
-<th style="text-align:right;">
-family_size
-</th>
-<th style="text-align:right;">
-num_children
-</th>
-<th style="text-align:left;">
-sex
-</th>
-<th style="text-align:right;">
-age
-</th>
-<th style="text-align:left;">
-race
-</th>
-<th style="text-align:left;">
-birthplace
-</th>
-<th style="text-align:left;">
-US_citizen
-</th>
-<th style="text-align:left;">
-language
-</th>
-<th style="text-align:left;">
-education
-</th>
-<th style="text-align:left;">
-employment
-</th>
-<th style="text-align:left;">
-health_insurance
-</th>
-<th style="text-align:right;">
-personal_income
-</th>
-<th style="text-align:left;">
-on_welfare
-</th>
-<th style="text-align:left;">
-poverty_threshold
-</th>
-<th style="text-align:left;">
-work_transport
-</th>
-<th style="text-align:right;">
-puma_death_rate
-</th>
-<th style="text-align:right;">
-puma_hosp_rate
-</th>
-<th style="text-align:right;">
-puma_vacc_rate
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-166870
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-58
-</td>
-<td style="text-align:left;">
-White
-</td>
-<td style="text-align:left;">
-Non-US
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-English
-</td>
-<td style="text-align:left;">
-Post-Graduate Degree
-</td>
-<td style="text-align:left;">
-Employed
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-83435
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Public Transit
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-1018
-</td>
-<td style="text-align:right;">
-123192
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-52
-</td>
-<td style="text-align:left;">
-Black
-</td>
-<td style="text-align:left;">
-Non-US
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-Other
-</td>
-<td style="text-align:left;">
-Some College
-</td>
-<td style="text-align:left;">
-Employed
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-107920
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Private Vehicle
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-2000
-</td>
-<td style="text-align:right;">
-125000
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:left;">
-White
-</td>
-<td style="text-align:left;">
-US
-</td>
-<td style="text-align:left;">
-Unknown
-</td>
-<td style="text-align:left;">
-Spanish
-</td>
-<td style="text-align:left;">
-Some College
-</td>
-<td style="text-align:left;">
-Employed
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-125000
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Public Transit
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-140588
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-6
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-64
-</td>
-<td style="text-align:left;">
-Asian and Pacific Islander
-</td>
-<td style="text-align:left;">
-Non-US
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-Chinese
-</td>
-<td style="text-align:left;">
-Post-Graduate Degree
-</td>
-<td style="text-align:left;">
-Not in labor force
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-11264
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Other
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-1058
-</td>
-<td style="text-align:right;">
-52876
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:right;">
-44
-</td>
-<td style="text-align:left;">
-White
-</td>
-<td style="text-align:left;">
-Non-US
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-Spanish
-</td>
-<td style="text-align:left;">
-Some College
-</td>
-<td style="text-align:left;">
-Employed
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-32373
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Public Transit
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:left;">
-Bronx
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-26101
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:right;">
-64
-</td>
-<td style="text-align:left;">
-White
-</td>
-<td style="text-align:left;">
-US
-</td>
-<td style="text-align:left;">
-Unknown
-</td>
-<td style="text-align:left;">
-English
-</td>
-<td style="text-align:left;">
-Post-Graduate Degree
-</td>
-<td style="text-align:left;">
-Employed
-</td>
-<td style="text-align:left;">
-Private
-</td>
-<td style="text-align:right;">
-26101
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-Above
-</td>
-<td style="text-align:left;">
-Private Vehicle
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-<td style="text-align:right;">
-1.064625
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-</tr>
-</tbody>
-</table>
+  )</code></pre>
 <p>Because our outcomes data was minimially aggregated at the PUMA level and could not be disaggregated further, we decided it would be prudent to create a second cleaned data set for which each observation corresponded to a given PUMA, rather than a given census observation. To do so, we needed to use <code>perwt</code> (person weight, describing the number of persons in the coded area for whom the interview was representative) and <code>hhwt</code> (household weight, which plays a similar role but by household rather than by person in each geographic area) to weight our key census variables at the aggregated PUMA level.</p>
 <pre class="r"><code># Example data frame with weightings for summary stats over each PUMA
 nyc_puma_summary = cleaned_data %&gt;% 
@@ -1215,473 +644,7 @@ nyc_puma_summary = cleaned_data %&gt;%
     covid_hosp_rate = median(puma_hosp_rate),
     covid_vax_rate = median(puma_vacc_rate),
     covid_death_rate = median(puma_death_rate)
-  )
-
-# View first few rows of PUMA-summarized data frame
-nyc_puma_summary %&gt;% 
-  head() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-puma
-</th>
-<th style="text-align:right;">
-total_people
-</th>
-<th style="text-align:right;">
-median_household_income
-</th>
-<th style="text-align:right;">
-perc_foodstamps
-</th>
-<th style="text-align:right;">
-perc_broadband
-</th>
-<th style="text-align:right;">
-perc_male
-</th>
-<th style="text-align:right;">
-median_age
-</th>
-<th style="text-align:right;">
-perc_white
-</th>
-<th style="text-align:right;">
-perc_foreign_born
-</th>
-<th style="text-align:right;">
-perc_citizen
-</th>
-<th style="text-align:right;">
-perc_english
-</th>
-<th style="text-align:right;">
-perc_college
-</th>
-<th style="text-align:right;">
-perc_unemployed
-</th>
-<th style="text-align:right;">
-perc_insured
-</th>
-<th style="text-align:right;">
-median_personal_income
-</th>
-<th style="text-align:right;">
-perc_welfare
-</th>
-<th style="text-align:right;">
-perc_poverty
-</th>
-<th style="text-align:right;">
-perc_public_transit
-</th>
-<th style="text-align:right;">
-covid_hosp_rate
-</th>
-<th style="text-align:right;">
-covid_vax_rate
-</th>
-<th style="text-align:right;">
-covid_death_rate
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-3701
-</td>
-<td style="text-align:right;">
-110016
-</td>
-<td style="text-align:right;">
-69000
-</td>
-<td style="text-align:right;">
-24.49306
-</td>
-<td style="text-align:right;">
-89.50725
-</td>
-<td style="text-align:right;">
-46.88500
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-46.53050
-</td>
-<td style="text-align:right;">
-34.50407
-</td>
-<td style="text-align:right;">
-20.26887
-</td>
-<td style="text-align:right;">
-41.74120
-</td>
-<td style="text-align:right;">
-47.96393
-</td>
-<td style="text-align:right;">
-3.449498
-</td>
-<td style="text-align:right;">
-93.91725
-</td>
-<td style="text-align:right;">
-22357.09
-</td>
-<td style="text-align:right;">
-20.21706
-</td>
-<td style="text-align:right;">
-22.66943
-</td>
-<td style="text-align:right;">
-24.79821
-</td>
-<td style="text-align:right;">
-1.0646245
-</td>
-<td style="text-align:right;">
-55.79213
-</td>
-<td style="text-align:right;">
-0.3982366
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3702
-</td>
-<td style="text-align:right;">
-151067
-</td>
-<td style="text-align:right;">
-68610
-</td>
-<td style="text-align:right;">
-28.24215
-</td>
-<td style="text-align:right;">
-82.93904
-</td>
-<td style="text-align:right;">
-45.12435
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-14.06925
-</td>
-<td style="text-align:right;">
-42.97100
-</td>
-<td style="text-align:right;">
-27.86909
-</td>
-<td style="text-align:right;">
-66.47183
-</td>
-<td style="text-align:right;">
-39.83729
-</td>
-<td style="text-align:right;">
-4.534412
-</td>
-<td style="text-align:right;">
-92.58276
-</td>
-<td style="text-align:right;">
-20859.00
-</td>
-<td style="text-align:right;">
-22.08623
-</td>
-<td style="text-align:right;">
-18.60036
-</td>
-<td style="text-align:right;">
-21.55732
-</td>
-<td style="text-align:right;">
-1.1782180
-</td>
-<td style="text-align:right;">
-47.19203
-</td>
-<td style="text-align:right;">
-0.2688261
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3703
-</td>
-<td style="text-align:right;">
-119529
-</td>
-<td style="text-align:right;">
-77588
-</td>
-<td style="text-align:right;">
-15.90074
-</td>
-<td style="text-align:right;">
-86.60915
-</td>
-<td style="text-align:right;">
-46.66734
-</td>
-<td style="text-align:right;">
-43
-</td>
-<td style="text-align:right;">
-41.20088
-</td>
-<td style="text-align:right;">
-22.69324
-</td>
-<td style="text-align:right;">
-16.91138
-</td>
-<td style="text-align:right;">
-58.42432
-</td>
-<td style="text-align:right;">
-45.13131
-</td>
-<td style="text-align:right;">
-3.577374
-</td>
-<td style="text-align:right;">
-94.11273
-</td>
-<td style="text-align:right;">
-25030.00
-</td>
-<td style="text-align:right;">
-16.73067
-</td>
-<td style="text-align:right;">
-16.28140
-</td>
-<td style="text-align:right;">
-19.85292
-</td>
-<td style="text-align:right;">
-1.3040106
-</td>
-<td style="text-align:right;">
-58.33806
-</td>
-<td style="text-align:right;">
-0.4052719
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3704
-</td>
-<td style="text-align:right;">
-126664
-</td>
-<td style="text-align:right;">
-64662
-</td>
-<td style="text-align:right;">
-23.88688
-</td>
-<td style="text-align:right;">
-81.56041
-</td>
-<td style="text-align:right;">
-47.66311
-</td>
-<td style="text-align:right;">
-37
-</td>
-<td style="text-align:right;">
-32.72911
-</td>
-<td style="text-align:right;">
-37.88685
-</td>
-<td style="text-align:right;">
-23.03812
-</td>
-<td style="text-align:right;">
-41.10165
-</td>
-<td style="text-align:right;">
-40.30664
-</td>
-<td style="text-align:right;">
-4.141666
-</td>
-<td style="text-align:right;">
-92.33879
-</td>
-<td style="text-align:right;">
-20362.00
-</td>
-<td style="text-align:right;">
-20.17700
-</td>
-<td style="text-align:right;">
-18.97698
-</td>
-<td style="text-align:right;">
-23.55681
-</td>
-<td style="text-align:right;">
-0.6861973
-</td>
-<td style="text-align:right;">
-29.38498
-</td>
-<td style="text-align:right;">
-0.2092428
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3705
-</td>
-<td style="text-align:right;">
-171016
-</td>
-<td style="text-align:right;">
-36500
-</td>
-<td style="text-align:right;">
-50.66455
-</td>
-<td style="text-align:right;">
-87.59563
-</td>
-<td style="text-align:right;">
-46.19509
-</td>
-<td style="text-align:right;">
-30
-</td>
-<td style="text-align:right;">
-15.45177
-</td>
-<td style="text-align:right;">
-33.49043
-</td>
-<td style="text-align:right;">
-16.46103
-</td>
-<td style="text-align:right;">
-33.31033
-</td>
-<td style="text-align:right;">
-28.35290
-</td>
-<td style="text-align:right;">
-5.289563
-</td>
-<td style="text-align:right;">
-91.41484
-</td>
-<td style="text-align:right;">
-11264.00
-</td>
-<td style="text-align:right;">
-29.20428
-</td>
-<td style="text-align:right;">
-39.26943
-</td>
-<td style="text-align:right;">
-23.03995
-</td>
-<td style="text-align:right;">
-0.8255382
-</td>
-<td style="text-align:right;">
-33.17926
-</td>
-<td style="text-align:right;">
-0.2018467
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3706
-</td>
-<td style="text-align:right;">
-131986
-</td>
-<td style="text-align:right;">
-43490
-</td>
-<td style="text-align:right;">
-46.18132
-</td>
-<td style="text-align:right;">
-82.15610
-</td>
-<td style="text-align:right;">
-48.26724
-</td>
-<td style="text-align:right;">
-32
-</td>
-<td style="text-align:right;">
-19.37099
-</td>
-<td style="text-align:right;">
-46.80496
-</td>
-<td style="text-align:right;">
-20.58855
-</td>
-<td style="text-align:right;">
-20.86812
-</td>
-<td style="text-align:right;">
-29.15536
-</td>
-<td style="text-align:right;">
-5.606655
-</td>
-<td style="text-align:right;">
-89.18219
-</td>
-<td style="text-align:right;">
-15000.00
-</td>
-<td style="text-align:right;">
-25.09812
-</td>
-<td style="text-align:right;">
-32.16402
-</td>
-<td style="text-align:right;">
-28.97883
-</td>
-<td style="text-align:right;">
-0.7723878
-</td>
-<td style="text-align:right;">
-32.95661
-</td>
-<td style="text-align:right;">
-0.1812561
-</td>
-</tr>
-</tbody>
-</table>
+  )</code></pre>
 <p>This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis for much of the exploratory analysis that follows.</p>
 </div>
 </div>
@@ -1716,7 +679,7 @@ covid_death_rate
 race_age_sex %&gt;% 
   filter(outcome == &quot;hosp_rate&quot;) %&gt;% 
   mutate(
-    outcome_rate = outcome_rate
+    outcome_rate = outcome_rate / 1000
   ) %&gt;% 
   arrange(outcome_rate) %&gt;% 
   select(race, age_class, sex, outcome_rate) %&gt;% 
@@ -1758,7 +721,7 @@ White
 Female
 </td>
 <td style="text-align:right;">
-0.88
+0
 </td>
 </tr>
 <tr>
@@ -1772,7 +735,7 @@ White
 Male
 </td>
 <td style="text-align:right;">
-0.89
+0
 </td>
 </tr>
 <tr>
@@ -1786,7 +749,7 @@ White
 Female
 </td>
 <td style="text-align:right;">
-0.89
+0
 </td>
 </tr>
 <tr>
@@ -1800,7 +763,7 @@ White
 Male
 </td>
 <td style="text-align:right;">
-0.90
+0
 </td>
 </tr>
 <tr>
@@ -1814,7 +777,7 @@ White
 Male
 </td>
 <td style="text-align:right;">
-0.93
+0
 </td>
 </tr>
 <tr>
@@ -1828,7 +791,7 @@ White
 Female
 </td>
 <td style="text-align:right;">
-0.93
+0
 </td>
 </tr>
 </tbody>
@@ -2487,408 +1450,521 @@ Male
 <p>The most interesting finding here is that Manhattan seems to have the most significant racial disparities on hospitalization rate and death rate, along with age disparities on hospitalization rate, and racial and age disparities in vaccination rate. In general, the level of inequality on key outcomes across demographics in Manhattan tends to be higher than in other boroughs.</p>
 </div>
 </div>
-<div id="regression-methodology" class="section level2">
-<h2>Regression Methodology</h2>
-<pre class="r"><code>outcome_by_year &lt;- 
+<div id="regression" class="section level2">
+<h2>Regression</h2>
+<div id="methodology" class="section level3">
+<h3>Methodology</h3>
+<p>For our statistical analysis, we consider a linear regression. In particular, let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC, and let <span class="math inline">\(y_s\)</span> denote our outcome of interest for PUMA <span class="math inline">\(s \in S\)</span>. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> is a vector of PUMA-level means of data from the census and <span class="math inline">\(\beta\)</span> is a vector of parameters. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
+<p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
+<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in <a href="https://psycnet.apa.org/fulltext/2007-03329-003.pdf">Croon and Veldhoven</a> (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let <span class="math inline">\(\hat{\Sigma}_{\xi \xi}\)</span> and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix. Intuitively, the weight matrix <span class="math inline">\(W_s\)</span> acts as a shrinkage estimator, shrinking the observed group mean <span class="math inline">\(\bar{X}_s\)</span> in the direction of the citywide mean <span class="math inline">\(\bar{X}\)</span>. Observe that as the between-group variation dominates relative to the within-group variation, <span class="math inline">\(W_s\)</span> converges to the identity matrix <span class="math inline">\(I\)</span>, and hence the adjusted group mean <span class="math inline">\(\tilde{X}_s\)</span> converges to the observed group mean <span class="math inline">\(\bar{X}_s\)</span>. That is, the better we can see the neighborhood signals through the noise, the less we need to penalize the observed means.</p>
+<p>With our unbiased estimates <span class="math inline">\(\xi_s\)</span> in tow, we then proceed to model selection. Given that there are <span class="math inline">\(|S| = 55\)</span> PUMAs, we must be careful to avoid overfitting our model. As such, we employ a stepwise algorithm with an objective function of minimizing the AIC. In this way, we penalize models subject to overfitting and obtain an appropriately parsimonious selection of predictors. Now that our theoretical concerns have been addressed, we can finally discuss our findings!</p>
+<p><strong>A word of caution:</strong> If the reader is considering such a macro-micro model for their own research, be advised that <em>there is a typographical error in the Croon and Veldhoven paper</em>. When estimating the unbiased between- and within-group covariance matrices, they inadvertently swap the divisors for their MSA and MSE. In large samples, this error can lead to weight matrices <span class="math inline">\(W_s\)</span> that are not positive definite, which in turn leads to a non-convex combination of <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(\bar{X}_s\)</span>, which further leads to immense woe for the programmer who cannot understand why his or her unbiased estimates for non-negative random variables are somehow negative.</p>
+</div>
+<div id="results" class="section level3">
+<h3>Results</h3>
+<p>Because death rates are relatively unreliable, and because vaccination rates are percentages that often attain their upper bound (i.e., 100%), our primary model employs hospitalization rates by PUMA as its dependent variable. Moreover, because the vaccine changed the dynamic of other health outcomes, we further restrict to hospitalizations up and until December 31, 2020. Below is a summary of our key finding from our optimal linear model.</p>
+<pre class="r"><code># pull in health outcomes to be merged
+outcome_by_year &lt;- 
+  # read in health outcomes by year
   read_csv(&quot;./data/outcome_puma_by_year.csv&quot;) %&gt;%
+  # harmonize puma variable for merge
   rename(puma = puma10)
 
-unbiased_data &lt;- read_csv(&quot;./data/unbiased_group_means.csv&quot;) %&gt;%
+# standardize inputs for consistent interpretation
+standardized_data &lt;-
+  # read in unbiased group means for inputs
+  read_csv(&quot;./data/unbiased_group_means.csv&quot;) %&gt;%
+  # apply the scale function to appropriate columns
+  mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %&gt;%
+  # merge with health outcomes
   merge(outcome_by_year, by = &quot;puma&quot;)
 
-best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force +
-                   health_insurance_public:personal_income +
-                   education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
+# store optimal linear model
+best_model &lt;- lm(
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income +
+    # language-birthplace interaction
+    language_english:birthplace_us + 
+    # education-income interaction
+    education_bachelors_degree:personal_income +
+    # insurance-income interaction
+    health_insurance_public:personal_income
+  , data = standardized_data
+)
 
-full_model &lt;-  lm(puma_hosp_rate_2020  ~ 
-                   (language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force)^2, 
-                  data = unbiased_data)</code></pre>
-<p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
-<p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
-<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let <span class="math inline">\(\hat{\Sigma}_{\xi \xi}\)</span> and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix.</p>
-</div>
-<div id="regression-diagnostics" class="section level2">
-<h2>Regression Diagnostics</h2>
-<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;%
-  set_mode(&quot;regression&quot;) %&gt;%
-  set_engine(&quot;lm&quot;)
+# store full model to compute mallow&#39;s cp
+full_model &lt;- lm(
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    (employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income)^2
+  , data = standardized_data
+)
 
-best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force +
-                   health_insurance_public:personal_income +
-                   education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
-
-
-check_model(best_model_tidy, 
-            check = c(&quot;linearity&quot;, &quot;qq&quot;, &quot;normality&quot;, &quot;outliers&quot;, &quot;homogeneity&quot;))</code></pre>
-<p><img src="project_report_files/figure-html/regression%20diagnostics-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
-<p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
-<p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
-<p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
-<pre class="r"><code>model_summary &lt;-
-  summary(best_model) %&gt;% 
-  broom::glance() %&gt;%
-  bind_rows(summary(full_model) %&gt;% broom::glance()) %&gt;%
-  mutate(model = c(&quot;Best Model&quot;, &quot;Full Model&quot;)) %&gt;%
-  relocate(model)
-
-Cp &lt;- ols_mallows_cp(best_model, full_model)
-
-Cp &lt;- as.tibble(Cp)
-
-names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
-
-kbl(model_summary) %&gt;%
+# create professional table for regression output
+best_model %&gt;%
+  # summarize regression output
+  summary() %&gt;%
+  # tidy regression output
+  broom::tidy() %&gt;%
+  # map to a kable table
+  kbl(
+      caption     = &quot;Effect of Selected Predictors on the 2020 Hospitalization Rate&quot;
+    , col.names   = c(&quot;Predictor&quot;, &quot;Estimate&quot;, &quot;SE&quot;, &quot;t-statistic&quot;, &quot;p-value&quot;)
+    , digits      = c(1, rep(0, 2), 2, 4)
+    , format.args = list(big.mark = &#39;,&#39;)
+  ) %&gt;%
+  # further map to a more professional-looking table
   kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
-  column_spec(1:9, bold = T) %&gt;%
-  row_spec(1:2, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+  # make variable names bold
+  column_spec(1, bold = T)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Effect of Selected Predictors on the 2020 Hospitalization Rate
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
-model
+Predictor
 </th>
 <th style="text-align:right;">
-r.squared
+Estimate
 </th>
 <th style="text-align:right;">
-adj.r.squared
+SE
 </th>
 <th style="text-align:right;">
-sigma
+t-statistic
 </th>
 <th style="text-align:right;">
-statistic
+p-value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+220
+</td>
+<td style="text-align:right;">
+618
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+<td style="text-align:right;">
+0.7232
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+employment_not_in_labor_force
+</td>
+<td style="text-align:right;">
+2,141
+</td>
+<td style="text-align:right;">
+471
+</td>
+<td style="text-align:right;">
+4.54
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+language_spanish
+</td>
+<td style="text-align:right;">
+426
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+5.12
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+language_english
+</td>
+<td style="text-align:right;">
+-191
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+-0.68
+</td>
+<td style="text-align:right;">
+0.5014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+birthplace_us
+</td>
+<td style="text-align:right;">
+-1,481
+</td>
+<td style="text-align:right;">
+351
+</td>
+<td style="text-align:right;">
+-4.22
+</td>
+<td style="text-align:right;">
+0.0001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+education_bachelors_degree
+</td>
+<td style="text-align:right;">
+-271
+</td>
+<td style="text-align:right;">
+235
+</td>
+<td style="text-align:right;">
+-1.15
+</td>
+<td style="text-align:right;">
+0.2559
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+health_insurance_public
+</td>
+<td style="text-align:right;">
+-1,374
+</td>
+<td style="text-align:right;">
+289
+</td>
+<td style="text-align:right;">
+-4.76
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+personal_income
+</td>
+<td style="text-align:right;">
+-1,418
+</td>
+<td style="text-align:right;">
+428
+</td>
+<td style="text-align:right;">
+-3.31
+</td>
+<td style="text-align:right;">
+0.0019
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+language_english:birthplace_us
+</td>
+<td style="text-align:right;">
+714
+</td>
+<td style="text-align:right;">
+302
+</td>
+<td style="text-align:right;">
+2.36
+</td>
+<td style="text-align:right;">
+0.0226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+education_bachelors_degree:personal_income
+</td>
+<td style="text-align:right;">
+577
+</td>
+<td style="text-align:right;">
+194
+</td>
+<td style="text-align:right;">
+2.97
+</td>
+<td style="text-align:right;">
+0.0048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+health_insurance_public:personal_income
+</td>
+<td style="text-align:right;">
+1,643
+</td>
+<td style="text-align:right;">
+389
+</td>
+<td style="text-align:right;">
+4.22
+</td>
+<td style="text-align:right;">
+0.0001
+</td>
+</tr>
+</tbody>
+</table>
+<p>For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor <span class="math inline">\(x\)</span>, let <span class="math inline">\(s\)</span> denote the sample standard deviation of the predictor. We define the partially standardized predictor to be <span class="math display">\[ z \equiv \frac{x}{s}. \]</span> Note that this is an <em>unweighted</em> standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, note that we do not de-mean our data (i.e., subtract <span class="math inline">\(\bar{x}\)</span>), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.</p>
+<p>Proceeding to the interpretation of our findings, we consider predictors in order of their featured complexity in the model. For example, only the main effect of <code>language_spanish</code> is estimated, whereas <code>personal_income</code> is present in two interaction terms.</p>
+<ul>
+<li><p><code>employment_not_in_labor_force</code>: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000. As one might expect, the unemployment rate is positively associated with the hospitalization rate.</p></li>
+<li><p><code>language_spanish</code>: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.</p></li>
+<li><p><code>birthplace_us</code>: given some realization of <code>language_english</code>, the estimated effect of being born in the US on the hospitalization rate is given by <span class="math display">\[ -1,481 + 714 \times \text{language_english}. \]</span> That is, an increase in one standard deviation of the fraction of residents born in the US predicts a decrease in the hospitalization rate of 1,481 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods where the primary spoken language is English. That is, this predictor is less important in neighborhoods where most of the residents speak English, which is intuitive.</p></li>
+<li><p><code>health_insurance_public</code>: given some realization of <code>personal_income</code>, the estimated effect of being born in the US on the hospitalization rate is given by <span class="math display">\[ -1,374 + 1,643 \times \text{personal_income}. \]</span> That is, an increase in one standard deviation of the fraction of residents with public health insurance predicts a decrease in the hospitalization rate of 1,374 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods with higher average personal income. That is, while access to public health insurance is important, those with high income have the privilege of being able to seek care regardless of their insurance status.</p></li>
+<li><p><code>personal_income</code>: given some realization of <code>health_insurance_public</code> and <code>education_bachelors</code>, the estimated effect of personal income on the hospitalization rate is given by <span class="math display">\[ -1,418 + 1,643 \times \text{health_insurance_public} + 577 \times \text{education_bachelors}. \]</span> That is, an increase in one standard deviation of personal income predicts a decrease in the hospitalization rate of 1,418 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods with higher rates of public health insurance and bachelors degrees. It is most likely that in neighborhoods with lower average personal incomes, access to public health insurance and education are better predictors of the hospitalization rate than personal income.</p></li>
+</ul>
+<p><strong>Note:</strong> the main effect for both <code>language_english</code> and <code>education_bachelors_degree</code> are not statistically significant, and hence they should only be interpreted in the context of their interactions.</p>
+</div>
+<div id="diagnostics" class="section level3">
+<h3>Diagnostics</h3>
+<p>We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extent our model satisfies the assumptions of OLS. Note that our choice to standardize our predictors does not effect our analysis of residuals, which are invariant to linear transformations of the data.</p>
+<pre class="r"><code># prepare model for regression diagnostics
+lm_spec &lt;- linear_reg() %&gt;%
+  set_mode(&quot;regression&quot;) %&gt;%
+  set_engine(&quot;lm&quot;)
+
+# store optimal linear model
+best_model_tidy &lt;- fit(lm_spec,
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income +
+    # language-birthplace interaction
+    language_english:birthplace_us + 
+    # education-income interaction
+    education_bachelors_degree:personal_income +
+    # insurance-income interaction
+    health_insurance_public:personal_income
+  , data = standardized_data
+)
+
+# run regression diagnostics
+check_model(best_model_tidy, check = c(&quot;linearity&quot;, &quot;outliers&quot;, &quot;qq&quot;, &quot;normality&quot;))</code></pre>
+<p><img src="project_report_files/figure-html/regression_diagnostics-1.png" width="768" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>Linearity: If a linear model has been properly specified, the residuals <span class="math inline">\(\hat{\varepsilon}_s\)</span> should be mean zero and uncorrelated with the fitted values <span class="math inline">\(\hat{y}_s\)</span>. Together, these imply that the best fit line of the residuals regressed on the fitted values should have an intercept and slope of zero. As we can see in the top-left chart, the data satisfy this condition.</p></li>
+<li><p>Homoscedasticity: We further expect that the covariance matrix of vector <span class="math inline">\(\hat{\varepsilon}\)</span> assumes the form <span class="math inline">\(\sigma^2 I\)</span> for some <span class="math inline">\(\sigma^2 &gt; 0\)</span>. That is, the variance of our residuals should be constant across all fitted values. Again referring to the top-left chart, we can see that - save three outliers - the residuals tend to be evenly dispersed about the reference line.</p></li>
+<li><p>Preclusion of Outliers: Though outliers can always exist in small samples, we require that no single outlier contributes too much variation by itself. Because all of the points in the top-right chart fall within the dashed curves, we can conclude that this assumption is satisfied.</p></li>
+<li><p>Normality: Finally, we test the normality of our residuals. Outside of one outlier, the bottom-left QQ plot for normality exhibits a strong linear trend, as desired. Moreover, the empirical distribution of the residuals in the bottom-right chart closely follows a normal distribution centered at zero.</p></li>
+</ul>
+<p>We have done our due diligence! In general, our linear model seems to be appropriate for the data. We now turn toward the more exciting statistics related to model performance.</p>
+<pre class="r"><code># construct table of statistics to assess performance
+best_model %&gt;%
+  # summarize model output
+  summary() %&gt;% 
+  # extract key statistics
+  broom::glance() %&gt;%
+  # bind rows for each model
+  bind_rows(summary(full_model) %&gt;% broom::glance()) %&gt;%
+  mutate(model = c(&quot;Best Model&quot;, &quot;Full Model&quot;)) %&gt;%
+  # relocate row names to first column
+  relocate(model) %&gt;%
+  # map to a kable table
+  kbl(
+    caption     = &quot;Key Statistics for Model Performance&quot;
+    , col.names = c(
+        &quot;Model&quot;, &quot;R-squared&quot;, &quot;Adj. R-squared&quot;
+      , &quot;Sigma&quot;, &quot;F-statistic&quot;, &quot;p-value&quot;, &quot;df&quot;, &quot;Residual df&quot;, &quot;N&quot;
+    )
+    , digits    = c(1, 2, 2, 0, 2, 5, 0, 0, 0)
+  ) %&gt;%
+  # further map to a more professional-looking table
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  # make variable names bold
+  column_spec(1, bold = T)</code></pre>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Key Statistics for Model Performance
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Model
 </th>
 <th style="text-align:right;">
-p.value
+R-squared
+</th>
+<th style="text-align:right;">
+Adj. R-squared
+</th>
+<th style="text-align:right;">
+Sigma
+</th>
+<th style="text-align:right;">
+F-statistic
+</th>
+<th style="text-align:right;">
+p-value
 </th>
 <th style="text-align:right;">
 df
 </th>
 <th style="text-align:right;">
-df.residual
+Residual df
 </th>
 <th style="text-align:right;">
-nobs
+N
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:left;font-weight: bold;">
 Best Model
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.6690404
+<td style="text-align:right;">
+0.67
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.5938223
+<td style="text-align:right;">
+0.59
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-139.5090
+<td style="text-align:right;">
+140
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-8.894674
+<td style="text-align:right;">
+8.89
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0000001
+<td style="text-align:right;">
+0.00000
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 10
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 44
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 55
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:left;font-weight: bold;">
 Full Model
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.7976532
+<td style="text-align:right;">
+0.80
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.5797413
+<td style="text-align:right;">
+0.58
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-141.9066
+<td style="text-align:right;">
+142
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-3.660439
+<td style="text-align:right;">
+3.66
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0006785
+<td style="text-align:right;">
+0.00068
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 28
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 26
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 55
 </td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>kbl(Cp) %&gt;%
+<pre class="r"><code># output mallows&#39;s cp
+ols_mallows_cp(best_model, full_model) %&gt;%
+  # map to tibble
+  as_tibble() %&gt;%
+  # map to a kable table
+  kbl(col.names = &quot;Mallows&#39;s Cp&quot;, digits = 2) %&gt;%
+  # further map to a more professional-looking table
   kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
-  column_spec(1, bold = T) %&gt;%
-  row_spec(1, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+  # make variable names bold
+  column_spec(1, bold = T)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;">
-Mallows’ Cp
+Mallows’s Cp
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-9.525754
+<td style="text-align:right;font-weight: bold;">
+9.53
 </td>
 </tr>
 </tbody>
 </table>
-<p>Adjusted R-squared: We compared our model to the full model which includes all main effects of our model with all possible second-order interaction terms of main effects. It is obvious that the full model has higher R-squared (0.797) than that of our model (0.669). However, our model has a higher adjusted R-squared (0.593) than that of the full model (0.579).</p>
-<p>Mallows’ Cp: Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp from our model and the full model. The Cp value is 9.5 and it is less than the number of our model parameters (11). Therefore, we claim that our regression model has little or no bias.</p>
+<p>To assess performance, we construct the smallest natural model in which our selected model is nested. In particular, the derived full model contains <em>all</em> possible main effects and interaction terms of the seven predictors of our selected model. Naturally, by the monotonicity of the <span class="math inline">\(R^2\)</span> statistic, the full model has a higher coefficient of determination (0.80) than that of our best model (0.67). However, when it comes to out-of-sample prediction, the adjusted <span class="math inline">\(R^2\)</span> statistic is much more critical. As we can see, the full model - which has nearly three times the predictors as our best model - has a lower adjusted <span class="math inline">\(R^2\)</span> (0.58) than our best model (0.59). This is evidence that our parsimonious model retains predictive power even after adjusting for the overfitting present in the full model.</p>
+<p>We further employ Mallows’s <span class="math inline">\(C_p\)</span> criterion to assess the presence of bias in our model relative to the full model. We have a total of <span class="math inline">\(p = 10\)</span> parameters in our best model, so our Mallows’s test statistic of 9.53 satisfies the criterion <span class="math inline">\(C_p \leq p\)</span>. We went to great lengths to construct our adjusted group means, so it is reassuring that this test provides evidence that our model is not subject to bias.</p>
 </div>
-<div id="model-summary" class="section level2">
-<h2>Model Summary</h2>
-<pre class="r"><code>summary &lt;-
-  summary(best_model) %&gt;%
-  broom::tidy() 
-
-kbl(summary) %&gt;%
-  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
-  column_spec(1:5, bold = T) %&gt;%
-  row_spec(1:11, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
-<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-(Intercept)
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-220.2133509
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-617.7947374
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.3564507
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.7232067
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-language_spanish
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-1446.4493296
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-282.5600256
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-5.1190869
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0000065
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-education_bachelors_degree
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--1385.5187502
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-1203.7289731
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--1.1510222
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.2559398
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-birthplace_us
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--2324.3753968
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-550.8204008
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--4.2198426
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0001203
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-health_insurance_public
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--3613.9699118
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-759.9559804
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--4.7554990
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0000215
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-language_english
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--365.2360915
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-538.8169036
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--0.6778482
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.5014171
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-personal_income
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--0.0266398
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0080444
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--3.3116091
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0018597
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-employment_not_in_labor_force
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-4344.6354192
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-956.3880935
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-4.5427536
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0000429
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-health_insurance_public:personal_income
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0812034
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0192287
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-4.2230234
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0001191
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-education_bachelors_degree:personal_income
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0554423
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0186699
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-2.9696115
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0048135
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-birthplace_us:language_english
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-2145.2515921
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-907.5966218
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-2.3636619
-</td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0225765
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div id="predictive-risk-scoring-clustering" class="section level2">
 <h2>Predictive Risk Scoring &amp; Clustering</h2>
