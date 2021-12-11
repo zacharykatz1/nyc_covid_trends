@@ -121,7 +121,6 @@ We compared our model to the full model which includes all main effects of our m
 Mallows’ Cp: 
 Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp) from our model and the full model.  The Cp value is 9.5 and it is less than the number of our model parameters (11).  Therefore, we claim that our regression model has little or no bias.
 
-
 ## Model Summary
 ```{r, message = FALSE, warning = FALSE}
 summary <-
