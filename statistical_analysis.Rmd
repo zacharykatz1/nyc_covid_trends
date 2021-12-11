@@ -45,44 +45,11 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete   = scale_fill_viridis_d
 ```
 
-```{r fetch_data}
-# pull in health outcomes to be merged
-outcome_by_year <- 
-  # read in health outcomes by year
-  read_csv("./data/outcome_puma_by_year.csv") %>%
-  # harmonize puma variable for merge
-  rename(puma = puma10)
 
-# standardize inputs for consistent interpretation
-standardized_data <-
-  # read in unbiased group means for inputs
-  read_csv("./data/unbiased_group_means.csv") %>%
-  # apply the scale function to appropriate columns
-  mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %>%
-  # merge with health outcomes
-  merge(outcome_by_year, by = "puma")
-```
 
 ## Methodology
 
-```{r, echo = TRUE, message = FALSE, warning = FALSE}
-best_model <- lm(puma_hosp_rate_2020  ~ language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force +
-                   health_insurance_public:personal_income +
-                   education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = standardized_data)
-
-full_model <-  lm(puma_hosp_rate_2020  ~ 
-                   (language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force)^2, 
-                  data = standardized_data)
-```
-
-Let $S$ denote the set of PUMAs in NYC, and let $y_s$ denote our outcome of interest. We consider the latent variable model
+For our statistical analysis, we consider a linear regression. In particular, let $S$ denote the set of PUMAs in NYC, and let $y_s$ denote our outcome of interest. We consider the latent variable model
 	$$ y_s = \xi_s' \beta + \varepsilon_s $$
 for each $s \in S$, where $\xi_s$ is a vector of PUMA-level means of data from the census and $\beta$ is a vector of parameters. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means $\xi_s$.
 
@@ -103,16 +70,89 @@ __A word of caution:__ If the reader is considering such a macro-micro model for
 
 ## Results
 
-```{r, message = FALSE, warning = FALSE}
+```{r fetch_data}
+# pull in health outcomes to be merged
+outcome_by_year <- 
+  # read in health outcomes by year
+  read_csv("./data/outcome_puma_by_year.csv") %>%
+  # harmonize puma variable for merge
+  rename(puma = puma10)
 
-summary <-
-  summary(best_model) %>%
-  broom::tidy() 
+# standardize inputs for consistent interpretation
+standardized_data <-
+  # read in unbiased group means for inputs
+  read_csv("./data/unbiased_group_means.csv") %>%
+  # apply the scale function to appropriate columns
+  mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %>%
+  # merge with health outcomes
+  merge(outcome_by_year, by = "puma")
 
-kbl(summary) %>%
+# store optimal linear model
+best_model <- lm(
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income +
+    # language-birthplace interaction
+    language_english:birthplace_us + 
+    # education-income interaction
+    education_bachelors_degree:personal_income +
+    # insurance-income interaction
+    health_insurance_public:personal_income
+  , data = standardized_data
+)
+
+# store full model to compute mallow's cp
+full_model <- lm(
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    (employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income)^2
+  , data = standardized_data
+)
+
+# create professional table for regression output
+best_model %>%
+  # summarize regression output
+  summary() %>%
+  # tidy regression output
+  broom::tidy() %>%
+  # map to a kable table
+  kbl(
+      col.names   = c("Predictor", "Estimate", "SE", "t-statistic", "p-value")
+    , digits      = c(1, rep(0, 2), 2, 4)
+    , format.args = list(big.mark = ',')
+  ) %>%
+  # further map to a more professional-looking table
   kable_paper("striped", full_width = F) %>%
-  column_spec(1:5, bold = T) %>%
-  row_spec(1:11, bold = T, color = "white", background = "black")
+  # make variable names bold
+  column_spec(1, bold = T)
 ```
 
 For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor $x$, let $s$ denote the sample standard deviation of the predictor. We define the partially standardized predictor to be
@@ -145,9 +185,9 @@ Notes:
 
 
 
-## Dianostics
+## Diagnostics
 
-```{r regression_diagnostics, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
+```{r regression_diagnostics, fig.height=6.2, fig.width= 8}
 
 lm_spec <- linear_reg() %>%
   set_mode("regression") %>%
@@ -182,7 +222,7 @@ Influential points among outliers:
 According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other. 
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 
 model_summary <-
   summary(best_model) %>% 
