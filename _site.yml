@@ -21,6 +21,8 @@ navbar:
         href: https://datasciencetk.shinyapps.io/COVID19-NYC-trends/
       - text: "Trend Over Time (Dashboard)"
         href: dashboard.html
+      - text: "Full Report"
+        href: project_report.html
       - text: "Project Code"
         href: ProjectCode.html
 output:
