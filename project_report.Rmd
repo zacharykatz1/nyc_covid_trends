@@ -69,19 +69,21 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete   = scale_fill_viridis_d
 ```
 
-## Motivation
+## Introduction
+
+### Motivation
 
 It’s difficult to overstate the extent to which the COVID-19 pandemic has tested the world’s public health infrastructure over the past two years. At the same time, the COVID-19 “experience” has manifested unequally -- not just country to country, but city to city, and even borough to borough. As one of the most heterogeneous urban areas in the world, New York City provides a fascinating case study into the ways socioeconomic status may be associated with, or even mediate, disparities in health outcomes. (For instance, it’s already [well-documented](https://www.news-medical.net/news/20210903/Income-race-and-ethnical-mediated-inequities-in-COVID-19-vaccination-across-major-US-cities.aspx) that income and race, along with socioeconomic privilege and political ideology, drive inequities in COVID vaccination rate across US cities.)  
 
 Knowing that socioeconomic factors have historically been associated with health outcomes, we aim to examine relationships between a range of predictors (e.g. race/ethnicity, education, broadband internet access, household income / occupational income score, public vs. private health insurance) and COVID-19 health outcomes -- namely, hospitalizations, deaths, and vaccinations.
 
-## Related Work
+### Related Work
 
 In 2020, the COVID-19 pandemic was only one factor that attracted public attention to structural inequality. A confluence of recent events, from the Black Lives Matter movement to the election of New York City’s second Black mayor, has drawn the gaze of local researchers given the vast demographic and socioeconomic diversity concentrated in just one urban area. Our work builds on pre-existing analyses related to potential socioeconomic predictors and COVID-19 outcomes. For example, [Little et al.’s research](https://link.springer.com/article/10.1007/s10900-020-00944-3) suggests an “unequal socioeconomic gradient in the demographic and clinical presentation of COVID-19 patients,” contributing to [other extant analysis](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0257622) into census tract-level associations with key outcomes like hospitalization. As [COVID-19’s endemicity](https://www.nature.com/articles/d41586-021-00396-2) becomes all but inevitable and globalization increases the likelihood of future pandemics easily spread across borders and continents, a comprehensive understanding of the predictors of hospitalization, death, and vaccination rates for COVID-19 may aid the development of [effective intervention strategies](https://www.albany.edu/communicationsmarketing/covid-19-documents/Racial%20Disparities%20in%20COVID-19%20Bonus%20Briefing%20Paper%5B2%5D.pdf) that limit disparate impact across all disease stages.
 
 While a number of studies have examined [differential outcomes across NYC neighborhoods](https://onlinelibrary.wiley.com/doi/10.1111/irv.12816) (and have even, at times, attempted to approach [causal explanations](https://www.nature.com/articles/s41467-021-24088-7), such as [subway utilization](https://academic.oup.com/aje/article/190/7/1234/6054607), no ecological study to-date has explored the potential for a ~20-variable  set of predictors to explain between-neighborhood variation across multiple COVID outcomes, including vaccination. Although prior work has explored disparities in [testing and positivity](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7316038/), for example – and systemic meta-analyses have demonstrated disparities in COVID-19 outcomes by [race, ethnicity, and socioeconomic status](https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2785980) – our study takes a modeling-forward approach to generate a multivariate regression model that explains outcomes at the PUMA, or census-tract, level. We also contribute a novel method of predictive risk scoring to highlight the possibility of a given PUMA failing to achieve a key outcome target – in this case, 70% vaccination rate. Although further work will be required to better understand the mechanisms by which various contributing factors are associated with key outcomes, this research highlights the diversity of outcomes across a relatively small geographic area, and thus the potential for greater health equity in the future.
 
-## Initial Questions
+### Initial Questions
 
 Our initial questions are centered on how demographic factors in New York City trend with COVID-19 outcomes. Particularly, what are the key demographic correlates (e.g. race/ethnicity, education) of COVID-19 hospitalizations or vaccinations? Do PUMAs with more individuals on public health insurance fair equally well on key outcomes compared to those with more individuals on private health insurance? How does household income fit into the equation? Broadly, we aim to explore the myriad relationships between predictors and COVID-19 outcomes across New York City census tracts and boroughs.
 
@@ -1178,7 +1180,7 @@ For each unique combination of age group, race, and sex, we wanted to determine 
 race_age_sex %>% 
   filter(outcome == "hosp_rate") %>% 
   mutate(
-    outcome_rate = outcome_rate / 1000
+    outcome_rate = outcome_rate
   ) %>% 
   arrange(outcome_rate) %>% 
   select(race, age_class, sex, outcome_rate) %>% 
