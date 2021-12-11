@@ -8,7 +8,8 @@ output:
     toc_float: true
 ---
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r preamble, echo = FALSE, message = FALSE, warning = FALSE}
+# load necessary packages
 library(tidyverse)
 library(glmnet)
 library(tidymodels)
@@ -16,13 +17,45 @@ library(performance)
 library(olsrr)
 library(kableExtra)
 
+# set knitr defaults
+knitr::opts_chunk$set(
+    echo      = TRUE
+  , message   = FALSE
+  , warning   = FALSE
+  , fig.align = "center"
+)
+
+# set theme defaults
+theme_set(
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+    , plot.title    = element_text(hjust = 0.5)
+    , plot.subtitle = element_text(hjust = 0.5)    
+    , plot.caption  = element_text(hjust = 0.0)
+  )
+)
+
+# set color scale defaults
+options(
+    ggplot2.continuous.colour = "viridis"
+  , ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+```{r fetch_data}
+# pull in health outcomes to be merged
 outcome_by_year <- 
+  # read in health outcomes by year
   read_csv("./data/outcome_puma_by_year.csv") %>%
+  # harmonize puma variable for merge
   rename(puma = puma10)
 
 # standardize inputs for consistent interpretation
 standardized_data <-
-  # pull in unbiased group means for inputs
+  # read in unbiased group means for inputs
   read_csv("./data/unbiased_group_means.csv") %>%
   # apply the scale function to appropriate columns
   mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %>%
@@ -30,7 +63,7 @@ standardized_data <-
   merge(outcome_by_year, by = "puma")
 ```
 
-## Regression Methodology
+## Methodology
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 best_model <- lm(puma_hosp_rate_2020  ~ language_spanish + 
@@ -49,9 +82,9 @@ full_model <-  lm(puma_hosp_rate_2020  ~
                   data = standardized_data)
 ```
 
-Let $S$ denote the set of PUMAs in NYC. We consider the latent variable model
+Let $S$ denote the set of PUMAs in NYC, and let $y_s$ denote our outcome of interest. We consider the latent variable model
 	$$ y_s = \xi_s' \beta + \varepsilon_s $$
-for each $s \in S$, where $\xi_s$ a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means $\xi_s$.
+for each $s \in S$, where $\xi_s$ is a vector of PUMA-level means of data from the census and $\beta$ is a vector of parameters. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means $\xi_s$.
 
 In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.
 
@@ -60,7 +93,9 @@ More interesting is the challenge presented in (2). For each $s \in S$, suppose 
 However, as shown in [Croon and Veldhoven](https://psycnet.apa.org/fulltext/2007-03329-003.pdf) (2007), it is generally the case that using the observed group mean $\bar{X}_s$ as an estimator of $\xi_s$ will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means $\tilde{X}_s$. In particular, let $\hat{\Sigma}_{\xi \xi}$ and $\hat{\Sigma}_{\nu \nu}$ denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by
 	$$ \tilde{X}_s \equiv \bar{X}' (I - W_s) + \bar{X}_s' W_s, \quad \text{where} $$
 	$$ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} $$
-and $I$ denotes the identity matrix. Intuitively, the weight matrix $W_s$ acts as a shrinkage estimator, shrinking the observed group mean $\bar{X}_s$ in the direction of the citywide mean $\bar{X}$. Observe that as the between-group variation dominates relative to the within-group variation, $W_s$ converges to the identity matrix $I$, and hence the adjusted group mean $\tilde{X}_s$ converges to the observed group mean $\bar{X}_s$. That is, the better we can see the signal through the noise, the less we need to penalize the observed means.
+and $I$ denotes the identity matrix. Intuitively, the weight matrix $W_s$ acts as a shrinkage estimator, shrinking the observed group mean $\bar{X}_s$ in the direction of the citywide mean $\bar{X}$. Observe that as the between-group variation dominates relative to the within-group variation, $W_s$ converges to the identity matrix $I$, and hence the adjusted group mean $\tilde{X}_s$ converges to the observed group mean $\bar{X}_s$. That is, the better we can see the neighborhood signals through the noise, the less we need to penalize the observed means.
+
+__A word of caution:__ If the reader is considering such a macro-micro model for their own research, be advised that _there is a typographical error in the Croon and Veldhoven paper_. When estimating the unbiased between- and within-group covariance matrices, they inadvertently swap the divisors for their MSA and MSE. In large samples, this error can lead to weight matrices $W_s$ that are not positive definite, which in turn leads to a non-convex combination of $\bar{X}$ and $\bar{X}_s$, which further leads to immense woe for the programmer who cannot understand why his unbiased estimates for non-negative random variables are somehowe negative.
 
 ## Regression Dianostics
 
@@ -171,4 +206,4 @@ Notes:
 
   * `education_bachelors_degree`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).
 
-  * `language_english`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).
+  * `birthplace_us`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).

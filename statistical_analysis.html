@@ -381,8 +381,23 @@ div.tocify {
 </div>
 
 
-<div id="regression-methodology" class="section level2">
-<h2>Regression Methodology</h2>
+<pre class="r"><code># pull in health outcomes to be merged
+outcome_by_year &lt;- 
+  # read in health outcomes by year
+  read_csv(&quot;./data/outcome_puma_by_year.csv&quot;) %&gt;%
+  # harmonize puma variable for merge
+  rename(puma = puma10)
+
+# standardize inputs for consistent interpretation
+standardized_data &lt;-
+  # read in unbiased group means for inputs
+  read_csv(&quot;./data/unbiased_group_means.csv&quot;) %&gt;%
+  # apply the scale function to appropriate columns
+  mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %&gt;%
+  # merge with health outcomes
+  merge(outcome_by_year, by = &quot;puma&quot;)</code></pre>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
 <pre class="r"><code>best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
                    education_bachelors_degree +
                    birthplace_us + health_insurance_public + language_english + 
@@ -397,9 +412,10 @@ full_model &lt;-  lm(puma_hosp_rate_2020  ~
                    birthplace_us + health_insurance_public + language_english + 
                    personal_income + employment_not_in_labor_force)^2, 
                   data = standardized_data)</code></pre>
-<p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
+<p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC, and let <span class="math inline">\(y_s\)</span> denote our outcome of interest. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> is a vector of PUMA-level means of data from the census and <span class="math inline">\(\beta\)</span> is a vector of parameters. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
 <p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
-<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in <a href="https://psycnet.apa.org/fulltext/2007-03329-003.pdf">Croon and Veldhoven</a> (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let <span class="math inline">\(\hat{\Sigma}_{\xi \xi}\)</span> and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix. Intuitively, the weight matrix <span class="math inline">\(W_s\)</span> acts as a shrinkage estimator, shrinking the observed group mean <span class="math inline">\(\bar{X}_s\)</span> in the direction of the citywide mean <span class="math inline">\(\bar{X}\)</span>. Observe that as the between-group variation dominates relative to the within-group variation, <span class="math inline">\(W_s\)</span> converges to the identity matrix <span class="math inline">\(I\)</span>, and hence the adjusted group mean <span class="math inline">\(\tilde{X}_s\)</span> converges to the observed group mean <span class="math inline">\(\bar{X}_s\)</span>. That is, the better we can see the signal through the noise, the less we need to penalize the observed means.</p>
+<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in <a href="https://psycnet.apa.org/fulltext/2007-03329-003.pdf">Croon and Veldhoven</a> (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let <span class="math inline">\(\hat{\Sigma}_{\xi \xi}\)</span> and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix. Intuitively, the weight matrix <span class="math inline">\(W_s\)</span> acts as a shrinkage estimator, shrinking the observed group mean <span class="math inline">\(\bar{X}_s\)</span> in the direction of the citywide mean <span class="math inline">\(\bar{X}\)</span>. Observe that as the between-group variation dominates relative to the within-group variation, <span class="math inline">\(W_s\)</span> converges to the identity matrix <span class="math inline">\(I\)</span>, and hence the adjusted group mean <span class="math inline">\(\tilde{X}_s\)</span> converges to the observed group mean <span class="math inline">\(\bar{X}_s\)</span>. That is, the better we can see the neighborhood signals through the noise, the less we need to penalize the observed means.</p>
+<p><strong>A word of caution:</strong> If the reader is considering such a macro-micro model for their own research, be advised that <em>there is a typographical error in the Croon and Veldhoven paper</em>. When estimating the unbiased between- and within-group covariance matrices, they inadvertently swap the divisors for their MSA and MSE. In large samples, this error can lead to weight matrices <span class="math inline">\(W_s\)</span> that are not positive definite, which in turn leads to a non-convex combination of <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(\bar{X}_s\)</span>, which further leads to immense woe for the programmer who cannot understand why his unbiased estimates for non-negative random variables are somehowe negative.</p>
 </div>
 <div id="regression-dianostics" class="section level2">
 <h2>Regression Dianostics</h2>
@@ -418,7 +434,7 @@ best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish +
 
 check_model(best_model_tidy, 
             check = c(&quot;linearity&quot;, &quot;homogeneity&quot;,&quot;qq&quot;,&quot;normality&quot;, &quot;outliers&quot;))</code></pre>
-<p><img src="statistical_analysis_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p><img src="statistical_analysis_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
 <p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
@@ -788,7 +804,7 @@ birthplace_us:language_english
 <p>Notes:</p>
 <ul>
 <li><p><code>education_bachelors_degree</code>: this predictor’s main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to <code>personal_income</code>).</p></li>
-<li><p><code>language_english</code>: this predictor’s main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to <code>personal_income</code>).</p></li>
+<li><p><code>birthplace_us</code>: this predictor’s main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to <code>personal_income</code>).</p></li>
 </ul>
 </div>
 
