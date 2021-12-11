@@ -22,7 +22,7 @@ death_by_month <- read_csv("./data/nyc_death_rate_zcta.csv")
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart A
+### Chart TESTING 
 ```{r, echo = FALSE, message = FALSE}
 
 hosp_2020 <- hosp_by_month %>%
