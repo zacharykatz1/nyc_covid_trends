@@ -94,7 +94,10 @@ bind_rows(hosp_2020_sum, hosp_2021_sum) %>%
          yaxis = list(title = "Hospitalizaion Rate per 100,000",
                       titlefont = list(size = 8.5)),
          font = list(size = 10)
-         ) 
+         ) %>%
+  animation_opts(
+    1000, easing = "elastic", redraw = FALSE
+  )
 ```
 
 
