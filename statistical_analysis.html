@@ -13,8 +13,8 @@
 
 <title>Statistical Analysis</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -434,7 +434,7 @@ best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish +
 
 check_model(best_model_tidy, 
             check = c(&quot;linearity&quot;, &quot;homogeneity&quot;,&quot;qq&quot;,&quot;normality&quot;, &quot;outliers&quot;))</code></pre>
-<p><img src="statistical_analysis_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="statistical_analysis_files/figure-html/regression_diagnostics-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
 <p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>

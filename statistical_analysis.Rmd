@@ -99,7 +99,7 @@ __A word of caution:__ If the reader is considering such a macro-micro model for
 
 ## Regression Dianostics
 
-```{r, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
+```{r regression_diagnostics, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
 
 lm_spec <- linear_reg() %>%
   set_mode("regression") %>%
