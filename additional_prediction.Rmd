@@ -4,6 +4,8 @@ output:
   html_document:
     code_folding: hide
     always_allow_html: true
+    toc: true
+    toc_float: true
 ---
 ```{r libraries and set up, message = FALSE, echo = FALSE}
 # load necessary packages
@@ -264,7 +266,7 @@ nyc_puma_summary = cleaned_data %>%
   )
 ```
 
-### Risk Scoring
+## Risk Scoring
 
 Following our regression work, we decided to make our insights more actionable by developing a novel scoring method capable of indicating whether a PUMA is at relatively lower or higher risk of achieving some COVID-19-related outcome. To demonstrate the method, we developed a risk score for whether a PUMA is likely to have achieved or not achieved a vaccination rate of 70% among residents, corresponding to the level of population immunity generally considered requisite to “halt the pandemic.” That said, our method is applicable to other outcomes as well, and one might imagine using it to score a given PUMA on the possibility of a hospitalization rate above X%, or a death rate above Y%.
 
@@ -312,6 +314,7 @@ lasso_model <- train(below_herd_vax ~ ., data = logistic_df,
 
 Through our lasso regression, we found an optimal lambda tuning parameter of 0.0102, and generated a model prediction accuracy of 0.886 (~87%). Generally, however, obtaining the kappa value averaged over the simulated confusion matrices is a more useful metric for prediction given unbalanced classes (of our 55 PUMAs, 41 achieve vaccination rate >= 70%, and only 14 do not).
 
+### Confusion Matrix
 ```{r resulting confusion matrix}
 coef <- coef(lasso_model$finalModel, lasso_model$bestTune$lambda)
 
@@ -376,6 +379,7 @@ Our optimal model’s averaged kappa was 0.63, which is considered reasonably de
 
 Notably, feature selection from our lasso regression discovered that the most important predictors of risk for sub-70% vaccination were insurance composition, employment composition, poverty composition, and welfare composition in a given PUMA – largely aligned with key correlates of vaccination noted in our exploratory analysis.
 
+### Feature Selection 
 ```{r plotting predictors against lambda}
 lambda  <- seq(0.0001, 1, length = 100)
 
@@ -396,6 +400,7 @@ result_plot
 
 Again, we wanted to move beyond binary classification to develop a risk score. Generally, in logistic regression, when a data point is predicted with probability > 0.5 to be a “1,” the model classifies it as a 1, and otherwise as a 0. We obtained risk scores not only by classifying PUMAs as above or below 70% vaccination rate using our prediction model, but by obtaining the exact probability of a given data point being a 1. For instance, if a PUMA has an 85% chance of being below 70% vaccination rate according to our classifier, its risk score would be 85, even though our model would binarily predict it to be a “1” rather than a “0.”
 
+### Risk Score Prediction 
 ```{r visualizing risk scores by PUMA, message = FALSE, warning = FALSE}
 lambda <- lasso_model$bestTune$lambda
 lasso_fit = glmnet(x, y, lambda = lambda, family = "binomial")
@@ -422,7 +427,7 @@ risk_prediction %>%
   scale_fill_viridis(discrete = TRUE, labels = c("Below 70%", "Above 70%"))
 ```
 
-### Clustering
+## Clustering
 
 We were also curious how statistical learning techniques would cluster our PUMAs based on predictors, and how those clusters might correspond to performance on key outcomes. We separated our data into a tibble of predictors only and a tibble of outcomes only, then fit three clusters on our predictors alone. We proceeded to plot each PUMA on hospitalization rate vs vaccination rate (choosing to forego death rate, in this case, given its collinearity and likely redundancy of hospitalization rate), then colored each data point by predicted clustering. 
 
