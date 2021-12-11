@@ -1186,7 +1186,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Lowest hospitalization rates",
     col.names = c("Race", "Age", "Sex", "% Hospitalized"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 
 # Highest hospitalization rates
@@ -1201,7 +1202,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Highest hospitalization rates",
     col.names = c("Race", "Age", "Sex", "% Hospitalized"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 
 # Lowest death rates
@@ -1216,7 +1218,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Lowest death rates",
     col.names = c("Race", "Age", "Sex", "% Deceased"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 
 # Highest death rates
@@ -1231,7 +1234,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Highest death rates",
     col.names = c("Race", "Age", "Sex", "% Deceased"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 
 # Lowest vax rates
@@ -1246,7 +1250,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Lowest vaccination rates",
     col.names = c("Race", "Age", "Sex", "% Vaccinated"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 
 # Highest vax rates
@@ -1261,7 +1266,8 @@ race_age_sex %>%
   knitr::kable(
     caption = "Highest vaccination rates",
     col.names = c("Race", "Age", "Sex", "% Vaccinated"),
-    digits = 2
+    digits = 2,
+    format = "simple"
   )
 ```
 
