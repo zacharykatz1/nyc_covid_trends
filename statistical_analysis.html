@@ -383,18 +383,64 @@ div.tocify {
 
 <div id="regression-methodology" class="section level2">
 <h2>Regression Methodology</h2>
+<pre class="r"><code>best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force +
+                   health_insurance_public:personal_income +
+                   education_bachelors_degree:personal_income +
+                   language_english:birthplace_us, data = unbiased_data)
+
+full_model &lt;-  lm(puma_hosp_rate_2020  ~ 
+                   (language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force)^2, 
+                  data = unbiased_data)</code></pre>
 <p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
 <p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
 <p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let $ _{}$ and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix.</p>
 </div>
 <div id="regression-dianostics" class="section level2">
 <h2>Regression Dianostics</h2>
+<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;%
+  set_mode(&quot;regression&quot;) %&gt;%
+  set_engine(&quot;lm&quot;)
+
+best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force +
+                   health_insurance_public:personal_income +
+                   education_bachelors_degree:personal_income +
+                   language_english:birthplace_us, data = unbiased_data)
+
+
+check_model(best_model_tidy, 
+            check = c(&quot;linearity&quot;, &quot;homogeneity&quot;,&quot;qq&quot;,&quot;normality&quot;, &quot;outliers&quot;))</code></pre>
 <p><img src="statistical_analysis_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
 <p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
 <p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
 <p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
 <p>Residuals are uncorrelated: On the basis of the autocorrelation plot, it is to be observed that the lags do not have significant effect because they are within the bounds.</p>
+<pre class="r"><code>model_summary &lt;-
+  summary(best_model) %&gt;% 
+  broom::glance() %&gt;%
+  bind_rows(summary(full_model) %&gt;% broom::glance()) %&gt;%
+  mutate(model = c(&quot;Best Model&quot;, &quot;Full Model&quot;)) %&gt;%
+  relocate(model)
+
+Cp &lt;- ols_mallows_cp(best_model, full_model)
+
+Cp &lt;- as.tibble(Cp)
+
+names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
+
+kbl(model_summary) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1:6, bold = T) %&gt;%
+  row_spec(1:2, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -488,6 +534,10 @@ Full Model
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>kbl(Cp) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1, bold = T) %&gt;%
+  row_spec(1, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -509,6 +559,14 @@ Mallows’ Cp
 </div>
 <div id="model-summary" class="section level2">
 <h2>Model Summary</h2>
+<pre class="r"><code>summary &lt;-
+  summary(best_model) %&gt;%
+  broom::tidy() 
+
+kbl(summary) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1:5, bold = T) %&gt;%
+  row_spec(1:11, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
