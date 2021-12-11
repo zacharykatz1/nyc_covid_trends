@@ -9,25 +9,16 @@ output:
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
-library(spatstat)
 library(glmnet)
-library(workflows)
-library(rstatix)
-library(modelr)
-library(PerformanceAnalytics)
-library(robmed)
 library(tidymodels)
-library(lmtest)
-library(sandwich)
 library(performance)
 library(olsrr)
-library(forecast)
 library(kableExtra)
 ```
 
 ## Regression Methodology
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 outcome_by_year <- 
   read_csv("./data/outcome_puma_by_year.csv") %>%
   rename(puma = puma10)
@@ -65,7 +56,7 @@ However, as shown in Croon and Veldhoven (2007), it is generally the case that u
 and $I$ denotes the identity matrix.
 
 ## Regression Dianostics
-```{r echo=FALSE, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
+```{r, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
 lm_spec <- linear_reg() %>%
   set_mode("regression") %>%
   set_engine("lm")
@@ -98,11 +89,8 @@ According to the normality probability plot, it is to be observed most of the po
 Influential points among outliers: 
 According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other. 
 
-Residuals are uncorrelated: 
-On the basis of the autocorrelation plot, it is to be observed that the lags do not have significant effect because they are within the bounds. 
 
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 model_summary <-
   summary(best_model) %>% 
   broom::glance() %>%
@@ -118,7 +106,7 @@ names(Cp) <- c("Mallows' Cp")
 
 kbl(model_summary) %>%
   kable_paper("striped", full_width = F) %>%
-  column_spec(1:6, bold = T) %>%
+  column_spec(1:9, bold = T) %>%
   row_spec(1:2, bold = T, color = "white", background = "black")
 
 kbl(Cp) %>%
@@ -135,7 +123,7 @@ Based on Mallows’ Cp criterion, we want our model to have Cp value less than o
 
 
 ## Model Summary
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 summary <-
   summary(best_model) %>%
   broom::tidy() 
