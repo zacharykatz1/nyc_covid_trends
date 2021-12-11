@@ -53,9 +53,7 @@ options(
 )
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete   = scale_fill_viridis_d
-```
 
-```{r create cleaned interview level data set, message = FALSE, echo = FALSE}
 # Cleaning
 jimzip <- function(csv_file, path) {
   # create full path to csv file
@@ -237,9 +235,8 @@ cleaned_data =
     puma_death_rate = puma_death_rate / 1000,
     puma_hosp_rate = puma_hosp_rate / 1000
   )
-```
 
-```{r cleaned PUMA level data set, message = FALSE, echo = FALSE}
+# Cleaned summary df
 nyc_puma_summary = cleaned_data %>% 
   group_by(puma) %>%
   summarize(
@@ -268,11 +265,11 @@ nyc_puma_summary = cleaned_data %>%
 
 ## Risk Scoring
 
-Following our regression work, we decided to make our insights more actionable by developing a novel scoring method capable of indicating whether a PUMA is at relatively lower or higher risk of achieving some COVID-19-related outcome. To demonstrate the method, we developed a risk score for whether a PUMA is likely to have achieved or not achieved a vaccination rate of 70% among residents, corresponding to the level of population immunity generally considered requisite to “halt the pandemic.” That said, our method is applicable to other outcomes as well, and one might imagine using it to score a given PUMA on the possibility of a hospitalization rate above X%, or a death rate above Y%.
+Following our regression work, we decided to make our insights more actionable by developing a novel scoring method capable of indicating whether a PUMA is at relatively lower or higher risk of achieving some COVID-19-related outcome. To demonstrate the method, we developed a risk score for whether a PUMA is likely to achieve the 70% resident vaccination rate, which has been [considered by many scientists](https://www.ama-assn.org/delivering-care/public-health/what-doctors-wish-patients-knew-about-covid-19-herd-immunity#:~:text=Some%20epidemiologists%20have%20estimated%20that,already%20killed%20over%20620%2C000%20Americans.) (pre-delta, at least!) as the requite immunization level required for herd immunity to "halt the pandemic." That said, our method is applicable to other outcomes as well, and one might imagine using it to score a given PUMA on the possibility of a hospitalization rate above X%, or a death rate above Y%.
 
-The risk scoring method we developed is predicated on (regularized, lasso) logistic regression, used most often for classification tasks because predictions can be interpreted as class probabilities. Regularization further prevents over-fitting of the model. 
+The risk scoring method we developed is predicated on regularized logistic regression, used most often for classification tasks because predictions can be interpreted as class probabilities. Regularization further prevents over-fitting of the model. 
 
-First, we defined outcomes as 1 for below 70% vaccination and 0 for equal to or above 70% vaccination and converted our set of predictors to matrix form.
+First, we defined our binary outcome: 1 for below 70% vaccination, and 0 for equal to or above 70% vaccination. Then, we converted our set of predictors to matrix form.
 
 ```{r defining predictors and outcomes}
 # 1 indicates BELOW 70% vaccination rate
@@ -289,7 +286,7 @@ x = model.matrix(below_herd_vax ~ ., logistic_df)[,-1]
 y = logistic_df$below_herd_vax
 ```
 
-We then trained a glmnet model on our training data using 5-fold cross-validation repeated 100 times given the large number of predictors compared to our mere 55 PUMA samples, and because we were interested in predicting the risk score of vaccination rate for each PUMA in our data set (see code below).
+We proceeded to train a glmnet lasso model on our training data using 5-fold cross-validation repeated 100 times given the large number of predictors compared to our mere 55 PUMA samples, and because we were interested in predicting the risk score of vaccination rate for each PUMA in our data set:
 
 ```{r loading in new libraries, message = FALSE, echo = FALSE}
 library(caret) # Note: new libraries are loaded here due to potential function masking from the `caret` library
@@ -312,7 +309,7 @@ lasso_model <- train(below_herd_vax ~ ., data = logistic_df,
                      family = "binomial")
 ```
 
-Through our lasso regression, we found an optimal lambda tuning parameter of 0.0102, and generated a model prediction accuracy of 0.886 (~87%). Generally, however, obtaining the kappa value averaged over the simulated confusion matrices is a more useful metric for prediction given unbalanced classes (of our 55 PUMAs, 41 achieve vaccination rate >= 70%, and only 14 do not).
+Through our lasso regression, we found an optimal lambda tuning parameter of 0.0102, and generated a model prediction accuracy of 0.886 (~89%). Generally, however, obtaining the kappa value averaged over the simulated confusion matrices is a more useful metric for prediction given unbalanced classes (of our 55 PUMAs, only 14 actually achieved vaccination rate >= 70% at time of data entry, while 41 did not).
 
 ### Confusion Matrix
 ```{r resulting confusion matrix}
@@ -375,16 +372,18 @@ cm = caret::confusionMatrix(table(sub_lasso$pred, sub_lasso$obs))
 draw_confusion_matrix(cm)
 ```
 
-Our optimal model’s averaged kappa was 0.63, which is considered reasonably decent, but again suggests that the limited number of in-sample data points may result in model over-fitting.
-
-Notably, feature selection from our lasso regression discovered that the most important predictors of risk for sub-70% vaccination were insurance composition, employment composition, poverty composition, and welfare composition in a given PUMA – largely aligned with key correlates of vaccination noted in our exploratory analysis.
+Our optimal model’s averaged kappa was 0.63, which is considered [reasonably decent, or "moderate,"](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3900052/), but again suggests that the limited number of in-sample data points may result in model over-fitting.
 
 ### Feature Selection 
+Notably, feature selection from our lasso regression discovered that the most important predictors of risk for sub-70% vaccination were insurance composition, employment composition, poverty composition, and welfare composition in a given PUMA – largely aligned with key correlates of vaccination noted in our exploratory analysis.
 ```{r plotting predictors against lambda}
+# Set grid for lambda values
 lambda  <- seq(0.0001, 1, length = 100)
 
+# Select best lambda
 lambda_opt = lasso_model$bestTune$lambda
 
+# Plot coefficient estimates as lambda varies
 result_plot <- broom::tidy(lasso_model$finalModel) %>% 
   select(term, lambda, estimate) %>% 
   complete(term, lambda, fill = list(estimate = 0) ) %>% 
@@ -398,10 +397,12 @@ result_plot <- broom::tidy(lasso_model$finalModel) %>%
 result_plot
 ```
 
+### Risk Score Prediction 
+
 Again, we wanted to move beyond binary classification to develop a risk score. Generally, in logistic regression, when a data point is predicted with probability > 0.5 to be a “1,” the model classifies it as a 1, and otherwise as a 0. We obtained risk scores not only by classifying PUMAs as above or below 70% vaccination rate using our prediction model, but by obtaining the exact probability of a given data point being a 1. For instance, if a PUMA has an 85% chance of being below 70% vaccination rate according to our classifier, its risk score would be 85, even though our model would binarily predict it to be a “1” rather than a “0.”
 
-### Risk Score Prediction 
 ```{r visualizing risk scores by PUMA, message = FALSE, warning = FALSE}
+# Finalize risk predictions
 lambda <- lasso_model$bestTune$lambda
 lasso_fit = glmnet(x, y, lambda = lambda, family = "binomial")
 risk_predictions = (round((predict(lasso_fit, x, type = "response"))*100, 1))
@@ -412,10 +413,12 @@ puma <- nyc_puma_summary %>%
 vax <- logistic_df %>% 
   select(below_herd_vax)
 
+# Bind predictions and actuals for graphing / risk scores
 risk_prediction <- 
   bind_cols(puma, vax, as.vector(risk_predictions)) %>%
   rename(risk_prediciton = ...3)
 
+# Plot risk predictions
 risk_prediction %>%
   mutate(puma = fct_reorder(puma, risk_prediciton, .desc = TRUE)) %>%
   ggplot(aes(x = puma, y = risk_prediciton, fill = below_herd_vax)) + 
@@ -424,7 +427,7 @@ risk_prediction %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(title = "Predicting Risk Score of Vaccination Rate across PUMA",
        x = "PUMA", y = "Predicted Risk Score", fill = "Actual Vax Status") + 
-  scale_fill_viridis(discrete = TRUE, labels = c("Below 70%", "Above 70%"))
+  scale_fill_viridis(discrete = TRUE, labels = c("Above 70%", "Below 70%"))
 ```
 
 ## Clustering
@@ -495,7 +498,7 @@ fviz_dist(distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4
 k_scaled = kmeans(for_clustering, centers = 3)
 
 # Visualize cluster plot with reduction to two dimensions
-fviz_cluster(k_scaled, data = for_clustering)
+fviz_cluster(k_scaled, data = for_clustering, palette = "Set2")
 
 # Bind with outcomes and color clusters
 full_df = for_clustering %>% 
@@ -510,14 +513,18 @@ Because we settled on setting the number of clusters at three relatively arbitra
 
 ```{r}
 # Check where elbow occurs using WSS method
-fviz_nbclust(for_clustering, kmeans, method = "wss")
+fviz_nbclust(for_clustering, kmeans, method = "wss") + 
+  theme_bw()
 
 # Check for optimal number of clusters using silhouette method
-fviz_nbclust(for_clustering, kmeans, method = "silhouette")
+fviz_nbclust(for_clustering, kmeans, method = "silhouette") + 
+  theme_bw()
 
 # Check number of clusters that minimize gap statistic
 gap_stat = clusGap(for_clustering, FUN = kmeans, nstart = 25, K.max = 20, B = 50)
-fviz_gap_stat(gap_stat)
+
+fviz_gap_stat(gap_stat) + 
+  theme_bw()
 ```
 
 The elbow in our WSS plot indicates that three clusters may be optimal, whereas the silhouette plot shows an average silhouette width optimized at two clusters. Finally, the gap plot shows that clustering is actually optimized when the number of clusters equals 1 – i.e. when no clustering occurs. The relative lack of concordance between these assessments of clustering quality is no surprise given the fact that our model is fit on only 55 predictors. For completeness, we re-modeled our clustering of predictors with only k = 2 clusters, and again tried to visualize where these clusters of PUMAs were distributed on the hospitalization/vaccination rate axes:
@@ -537,7 +544,7 @@ fviz_dist(distance, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4
 k_scaled2 = kmeans(for_clustering, centers = 2)
 
 # Visualize cluster plot with reduction to two dimensions
-fviz_cluster(k_scaled2, data = for_clustering)
+fviz_cluster(k_scaled2, data = for_clustering, palette = "Set2")
 
 # Bind with outcomes and color clusters
 full_df = for_clustering %>% 
