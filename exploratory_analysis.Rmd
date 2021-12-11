@@ -701,12 +701,12 @@ borough_cat_comparisons = function(predict, outcome) {
         theme(legend.position = "none") + 
         labs(
           x = "",
-          y = "Proportion in Borough",
-          fill = ""
+          y = "Proportion in Borough"
         ) + 
         scale_y_continuous(labels = scales::percent_format()) + 
         scale_x_discrete(labels = c("num_people" = "Overall", "num_vax" = "Vaccinated")) + 
-        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0),
+              legend.title = element_blank())
       
     stack = b %>% 
       ggplot(aes(
@@ -719,19 +719,19 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Vaccinated",
-          fill = ""
+          y = "Number of People Vaccinated"
         ) + 
-        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0),
+              legend.title = element_blank())
       
       vary1 = b %>% 
       ggplot(aes(x = borough, y = vax_rate)) + 
       geom_point(aes(color = predict)) + 
-        labs(
+      labs(
           x = "Borough",
-          y = "% Vaccinated",
-          fill = ""
-        )
+          y = "% Vaccinated"
+        ) +
+      theme(legend.title = element_blank())
       
       total = (stack + compare) / vary1
       
@@ -777,19 +777,18 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Hospitalized",
-          fill = ""
+          y = "Number of People Hospitalized"
         ) + 
         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
       vary1 = b %>%
       ggplot(aes(x = borough, y = hosp_rate / 1000)) + 
       geom_point(aes(color = predict)) + 
-        labs(
+      labs(
           x = "Borough",
-          y = "% Hospitalized",
-          fill = ""
-        )
+          y = "% Hospitalized"
+        ) +
+      theme(legend.title = element_blank())
       
       total = (stack + compare) / vary1
       
@@ -817,8 +816,7 @@ borough_cat_comparisons = function(predict, outcome) {
         theme(legend.position = "none") + 
         labs(
           x = "",
-          y = "Proportion in Borough",
-          fill = ""
+          y = "Proportion in Borough"
         ) + 
         scale_y_continuous(labels = scales::percent_format()) + 
         scale_x_discrete(labels = c("num_people" = "Overall", "num_death" = "Deceased"))  + 
@@ -835,19 +833,18 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Deceased",
-          fill = ""
+          y = "Number of People Deceased"
         ) + 
         theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
       vary1 = b %>%
       ggplot(aes(x = borough, y = death_rate / 1000)) + 
       geom_point(aes(color = predict)) + 
-        labs(
+      labs(
           x = "Borough",
-          y = "% Deceased",
-          fill = ""
-        )
+          y = "% Deceased"
+        ) +
+      theme(legend.title = element_blank())
       
       total = (stack + compare) / vary1
       total + plot_annotation(
@@ -2001,6 +1998,7 @@ first_predict + second_predict + third_predict
 ```
 
 Similarly, we explored how key outcomes varied across categories of a few seemingly important predictor variables for each outcome observed in our correlation matrix. We found in the analysis below that all outcomes generally improve with higher income -- again, confirming our correlation matrix findings. Education also generally appears protective of poor health outcomes from COVID-19. A couple of other interesting findings include:
+
 * Individuals with public health insurance perform similarly to those with no insurance at all
 * Individuals with unknown citizenship status tend to have lower death rates, which we hypothesize may be the result of under-reporting perhaps due to stigma and/or potential skepticism of city authorities that may result in US citizenship documentation issues
 
