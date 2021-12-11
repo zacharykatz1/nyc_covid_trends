@@ -186,7 +186,7 @@ __Note:__ the main effect for both `language_english` and `education_bachelors_d
 
 ## Diagnostics
 
-We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extend our model satisfies the assumptions of OLS.
+We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extent our model satisfies the assumptions of OLS. Note that our choice to standardize our predictors does not effect our analysis of residuals, which are invariant to linear transformations of the data.
 
 ```{r regression_diagnostics, fig.height = 8, fig.width = 8}
 # prepare model for regression diagnostics
@@ -223,17 +223,16 @@ best_model_tidy <- fit(lm_spec,
 )
 
 # run regression diagnostics
-check_model(
-    best_model_tidy 
-  , check = c("linearity", "homogeneity", "qq", "normality", "outliers")
-)
+check_model(best_model_tidy, check = c("linearity", "outliers", "qq", "normality"))
 ```
 
-Linearity:
-It is to be observed that the relationship between independent and dependent  variables is fairly linear in our model. Thus,  we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables. 
+  * Linearity: If a linear model has been properly specified, the residuals $\hat{\varepsilon}_s$ should be mean zero and uncorrelated with the fitted values $\hat{y}_s$. Together, these imply that the best fit line of the residuals regressed on the fitted values should have an intercept and slope of zero. As we can see in the top-left chart, the data satisfy this condition.
 
-Equal Variance (homoscedasticity): 
+  * Homoscedasticity: 
 Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity. 
+
+  * Preclusion of Outliers: 
+According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other. 
 
 Normality of residuals: 
 According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model. 

@@ -701,7 +701,7 @@ health_insurance_public:personal_income
 </div>
 <div id="diagnostics" class="section level2">
 <h2>Diagnostics</h2>
-<p>We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extend our model satisfies the assumptions of OLS.</p>
+<p>We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extent our model satisfies the assumptions of OLS. Note that our choice to standardize our predictors does not effect our analysis of residuals, which are invariant to linear transformations of the data.</p>
 <pre class="r"><code># prepare model for regression diagnostics
 lm_spec &lt;- linear_reg() %&gt;%
   set_mode(&quot;regression&quot;) %&gt;%
@@ -736,13 +736,13 @@ best_model_tidy &lt;- fit(lm_spec,
 )
 
 # run regression diagnostics
-check_model(
-    best_model_tidy 
-  , check = c(&quot;linearity&quot;, &quot;homogeneity&quot;, &quot;qq&quot;, &quot;normality&quot;, &quot;outliers&quot;)
-)</code></pre>
+check_model(best_model_tidy, check = c(&quot;linearity&quot;, &quot;outliers&quot;, &quot;qq&quot;, &quot;normality&quot;))</code></pre>
 <p><img src="statistical_analysis_files/figure-html/regression_diagnostics-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
-<p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
+<ul>
+<li><p>Linearity: If a linear model has been properly specified, the residuals <span class="math inline">\(\hat{\varepsilon}_s\)</span> should be mean zero and uncorrelated with the fitted values <span class="math inline">\(\hat{y}_s\)</span>. Together, these imply that the best fit line of the residuals regressed on the fitted values should have an intercept and slope of zero. As we can see in the top-left chart, the data satisfy this condition.</p></li>
+<li><p>Homoscedasticity: Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p></li>
+<li><p>Preclusion of Outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p></li>
+</ul>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
 <p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
 <pre class="r"><code># construct table of statistics to assess goodness of fit and reliability
