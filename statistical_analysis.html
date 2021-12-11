@@ -740,12 +740,12 @@ check_model(best_model_tidy, check = c(&quot;linearity&quot;, &quot;outliers&quo
 <p><img src="statistical_analysis_files/figure-html/regression_diagnostics-1.png" width="768" style="display: block; margin: auto;" /></p>
 <ul>
 <li><p>Linearity: If a linear model has been properly specified, the residuals <span class="math inline">\(\hat{\varepsilon}_s\)</span> should be mean zero and uncorrelated with the fitted values <span class="math inline">\(\hat{y}_s\)</span>. Together, these imply that the best fit line of the residuals regressed on the fitted values should have an intercept and slope of zero. As we can see in the top-left chart, the data satisfy this condition.</p></li>
-<li><p>Homoscedasticity: Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p></li>
-<li><p>Preclusion of Outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p></li>
+<li><p>Homoscedasticity: We further expect that the covariance matrix of vector <span class="math inline">\(\hat{\varepsilon}\)</span> assumes the form <span class="math inline">\(\sigma^2 I\)</span> for some <span class="math inline">\(\sigma^2 &gt; 0\)</span>. That is, the variance of our residuals should be constant across all fitted values. Again referring to the top-left chart, we can see that - save three outliers - the residuals tend to be evenly dispersed about the reference line.</p></li>
+<li><p>Preclusion of Outliers: Though outliers can always exist in small samples, we require that no single outlier contributes too much variation by itself. Because all of the points in the top-right chart fall within the dashed curves, we can conclude that this assumption is satisfied.</p></li>
+<li><p>Normality: Finally, we test the normality of our residuals. Outside of one outlier, the bottom-left QQ plot for normailty exhibits a strong linear trend, as desired. Moreover, the empirical distribution of the residuals in the bottom-right chart closely follows a normal distribution centered at zero.</p></li>
 </ul>
-<p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
-<p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
-<pre class="r"><code># construct table of statistics to assess goodness of fit and reliability
+<p>We have done our due diligence! In general, our linear model seems to be appropriate for the data. We know turn toward the more exciting statistics related to model performance.</p>
+<pre class="r"><code># construct table of statistics to assess performance
 best_model %&gt;%
   # summarize model output
   summary() %&gt;% 
@@ -758,7 +758,7 @@ best_model %&gt;%
   relocate(model) %&gt;%
   # map to a kable table
   kbl(
-    caption     = &quot;Key Statistics for Assessment of Fit and Reliability&quot;
+    caption     = &quot;Key Statistics for Model Performance&quot;
     , col.names = c(
         &quot;Model&quot;, &quot;R-squared&quot;, &quot;Adj. R-squared&quot;
       , &quot;Sigma&quot;, &quot;F-statistic&quot;, &quot;p-value&quot;, &quot;df&quot;, &quot;Residual df&quot;, &quot;N&quot;
@@ -771,7 +771,7 @@ best_model %&gt;%
   column_spec(1, bold = T)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Key Statistics for Assessment of Fit and Reliability
+Key Statistics for Model Performance
 </caption>
 <thead>
 <tr>
@@ -865,7 +865,9 @@ Full Model
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>ols_mallows_cp(best_model, full_model) %&gt;%
+<pre class="r"><code># output mallows&#39;s cp
+ols_mallows_cp(best_model, full_model) %&gt;%
+  # map to tibble
   as_tibble() %&gt;%
   # map to a kable table
   kbl(col.names = &quot;Mallows&#39;s Cp&quot;, digits = 2) %&gt;%
@@ -889,8 +891,8 @@ Mallows’s Cp
 </tr>
 </tbody>
 </table>
-<p>Adjusted R-squared: We compared our model to the full model which includes all main effects of our model with all possible second-order interaction terms of main effects. It is obvious that the full model has higher R-squared (0.797) than that of our model (0.669). However, our model has a higher adjusted R-squared (0.593) than that of the full model (0.579).</p>
-<p>Mallows’ Cp: Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp) from our model and the full model. The Cp value is 9.5 and it is less than the number of our model parameters (11). Therefore, we claim that our regression model has little or no bias.</p>
+<p>To assess performance, we construct the smallest natural model in which our selected model is nested. In particular, the derived full model contains <em>all</em> possible main effects and interaction terms of the seven predictors of our selected model. Naturally, by the monotonicity of the <span class="math inline">\(R^2\)</span> statistic, the full model has a higher coefficient of determination (0.80) than that of our best model (0.67). However, when it comes to out-of-sample prediction, the adjusted <span class="math inline">\(R^2\)</span> statistic is much more critical. As we can see, the full model - which has nearly three times the predictors as our best model - has a lower adjusted <span class="math inline">\(R^2\)</span> (0.58) than our best model (0.59). This is evidence that our parsimonious model retains predictive power even after adjusting for the overfitting present in the full model.</p>
+<p>We further employ Mallows’s <span class="math inline">\(C_p\)</span> criterion to assess the presence of bias in our model relative to the full model. We have a total of <span class="math inline">\(p = 10\)</span> parameters in our best model, so our Mallows’s test statistic of 9.53 satisfies the criterion <span class="math inline">\(C_p \leq p\)</span>. We went to great lengths to construct our adjusted group means, so it is reassuring that this test provides evidence that our model is not subject to bias.</p>
 </div>
 
 
