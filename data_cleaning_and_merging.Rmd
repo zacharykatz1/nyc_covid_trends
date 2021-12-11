@@ -20,6 +20,8 @@ The Integrated Public Use Microdata Series (IPUMS USA) consists of individual-le
 
 While data from IPUMS is recorded at the individual-level, each interview is coded to a particular Public Use Microdata Area (PUMA) geography where the housing unit was located at the time of interview.
 
+![Zcta Puma Map](assets/img/zcta_puma_map.jpg)
+
 ### New York City Department of Health and Mental Hygiene [(NYC DOHMH)](https://github.com/nychealth)
 
 The New York City Department of Health and Mental Hygiene (NYC DOHMH) is one of the oldest public health agencies in the United States. Among other responsibilities, the DOHMH monitors the spread of infectious disease in NYC. The Department of Health classified the beginning of the COVID-19 pandemic as February 29, 2020, the date of the first laboratory-confirmed case. Since then, the DOHMH has recorded and reported COVID-19 data on a daily, weekly, or monthly basis. These data include cases, hospitalizations, and deaths by borough, modified Zip Code tabulation area (ZCTA), and demographic factors. As NYC has administered vaccinations for COVID-19, these data have been recorded and made available by borough, ZCTA, and demography. This project uses COVID-19 hospitalization rates, death rates, and vaccination rates by ZCTA in NYC.
@@ -105,3 +107,8 @@ nyc_hh_summary = cleaned_data %>%
 ```
 
 This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis of our exploratory analysis.
+
+
+
+
+
