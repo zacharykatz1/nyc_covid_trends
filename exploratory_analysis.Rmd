@@ -699,10 +699,12 @@ borough_cat_comparisons = function(predict, outcome) {
         theme(legend.position = "none") + 
         labs(
           x = "",
-          y = "Proportion in Borough"
+          y = "Proportion in Borough",
+          fill = ""
         ) + 
         scale_y_continuous(labels = scales::percent_format()) + 
-        scale_x_discrete(labels = c("num_people" = "Overall", "num_vax" = "Vaccinated"))
+        scale_x_discrete(labels = c("num_people" = "Overall", "num_vax" = "Vaccinated")) + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
     stack = b %>% 
       ggplot(aes(
@@ -715,15 +717,18 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Vaccinated"
-        )
+          y = "Number of People Vaccinated",
+          fill = ""
+        ) + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
       vary1 = b %>% 
       ggplot(aes(x = borough, y = vax_rate)) + 
       geom_point(aes(color = predict)) + 
         labs(
           x = "Borough",
-          y = "% Vaccinated"
+          y = "% Vaccinated",
+          fill = ""
         )
       
       total = (stack + compare) / vary1
@@ -752,10 +757,12 @@ borough_cat_comparisons = function(predict, outcome) {
         theme(legend.position = "none") + 
         labs(
           x = "",
-          y = "Proportion in Borough"
+          y = "Proportion in Borough",
+          fill = ""
         ) + 
         scale_y_continuous(labels = scales::percent_format()) + 
-        scale_x_discrete(labels = c("num_people" = "Overall", "num_hosp" = "Hospitalized"))
+        scale_x_discrete(labels = c("num_people" = "Overall", "num_hosp" = "Hospitalized")) + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
     stack = b %>%
       ggplot(aes(
@@ -768,15 +775,18 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Hospitalized"
-        )
+          y = "Number of People Hospitalized",
+          fill = ""
+        ) + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
       vary1 = b %>%
       ggplot(aes(x = borough, y = hosp_rate / 1000)) + 
       geom_point(aes(color = predict)) + 
         labs(
           x = "Borough",
-          y = "% Hospitalized"
+          y = "% Hospitalized",
+          fill = ""
         )
       
       total = (stack + compare) / vary1
@@ -805,10 +815,12 @@ borough_cat_comparisons = function(predict, outcome) {
         theme(legend.position = "none") + 
         labs(
           x = "",
-          y = "Proportion in Borough"
+          y = "Proportion in Borough",
+          fill = ""
         ) + 
         scale_y_continuous(labels = scales::percent_format()) + 
-        scale_x_discrete(labels = c("num_people" = "Overall", "num_deceased" = "Deceased"))
+        scale_x_discrete(labels = c("num_people" = "Overall", "num_death" = "Deceased"))  + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
     stack = b %>%
       ggplot(aes(
@@ -821,15 +833,18 @@ borough_cat_comparisons = function(predict, outcome) {
       theme(legend.position = "none") + 
         labs(
           x = "Borough",
-          y = "Number of People Deceased"
-        )
+          y = "Number of People Deceased",
+          fill = ""
+        ) + 
+        theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
       
       vary1 = b %>%
       ggplot(aes(x = borough, y = death_rate / 1000)) + 
       geom_point(aes(color = predict)) + 
         labs(
           x = "Borough",
-          y = "% Deceased"
+          y = "% Deceased",
+          fill = ""
         )
       
       total = (stack + compare) / vary1
@@ -846,6 +861,8 @@ borough_cat_comparisons = function(predict, outcome) {
 ### Outcomes by PUMA
 
 We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a 5x difference)** by PUMA (see [NYC Map of PUMAs and Community Districts](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf)), **death rates range from just over 0.05% all the way to above 0.6% (a 12x difference!)**, and **vaccination rates range from as low as ~30% to above 100%** in one PUMA (as an artifact of migration between PUMA -- a known issue in NYC DOHMH data). Excluding this vaccination outlier, the PUMAs with higher vaccination rates tend to have 75-85% of their residents vaccinated.
+
+
 
 ```{r outcomes all PUMAs, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -937,6 +954,11 @@ puma_level_data %>%
          legend = list(title = list(text = 'Borough')))
 ```
 
+
+
+
+
+
 ``` {r worst PUMA outcomes, echo = FALSE, message = FALSE, warning = FALSE}
 
 # Set colors for each borough
@@ -955,7 +977,8 @@ PUMA_hosp_highest10 = puma_level_data %>%
     x = "PUMA",
     y = "% Hospitalized (highest)"
   ) + 
-  scale_fill_manual(values = boroughColors)
+  scale_fill_manual(values = boroughColors) + 
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
 
 # PUMAs with highest death rates
 PUMA_death_highest10 = puma_level_data %>% 
@@ -970,7 +993,8 @@ PUMA_death_highest10 = puma_level_data %>%
     x = "PUMA",
     y = "% Deceased (highest)"
   ) + 
-  scale_fill_manual(values = boroughColors)
+  scale_fill_manual(values = boroughColors) + 
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
 
 # PUMAs with lowest vax rates
 PUMA_vax_lowest10 = puma_level_data %>% 
@@ -985,7 +1009,8 @@ PUMA_vax_lowest10 = puma_level_data %>%
     x = "PUMA",
     y = "% Vaccinated (lowest)"
   ) + 
-  scale_fill_manual(values = boroughColors)
+  scale_fill_manual(values = boroughColors) + 
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
 
 # "Worst" PUMAs
 worst_pumas = (PUMA_hosp_highest10 + PUMA_death_highest10) / PUMA_vax_lowest10
@@ -1012,7 +1037,8 @@ PUMA_hosp_lowest10 = puma_level_data %>%
     x = "PUMA",
     y = "% Hospitalized (lowest)"
   ) +
-  scale_fill_manual(values = boroughColors)
+  scale_fill_manual(values = boroughColors) + 
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
 
 # PUMAs with lowest death rates
 PUMA_death_lowest10 = puma_level_data %>% 
@@ -1027,7 +1053,8 @@ PUMA_death_lowest10 = puma_level_data %>%
     x = "PUMA",
     y = "% Deceased (lowest)"
   ) +
-  scale_fill_manual(values = boroughColors)
+  scale_fill_manual(values = boroughColors) + 
+  theme(axis.text.x = element_text(angle = -60, vjust = 0.5, hjust=0))
 
 # PUMAs with highest vax rates
 PUMA_vax_highest10 = puma_level_data %>% 
@@ -1289,6 +1316,7 @@ deaths_density = PUMA_outcomes %>%
   ) +
   geom_vline(aes(xintercept=median(outcome_rate)),
             color="red", linetype="dashed") + 
+  geom_text(aes(median(outcome_rate), 4, label = "PUMA Median"), hjust = -0.1, vjust = -35, color = "red")  + 
   scale_fill_manual(values = boroughColors)
 
 deaths_by_borough = deaths_box + deaths_density
@@ -1334,7 +1362,8 @@ vax_density = PUMA_outcomes %>%
   ) +
   geom_vline(aes(xintercept=median(outcome_rate)),
             color="red", linetype="dashed") + 
-  scale_fill_manual(values = boroughColors) +
+  geom_text(aes(median(outcome_rate), 4, label = "PUMA Median"), hjust = 0, vjust = 0, color = "red")  + 
+  scale_fill_manual(values = boroughColors) + 
   ylim(0, 0.1)
 
 vax_by_borough = vax_box + vax_density
@@ -1634,7 +1663,7 @@ death_income =
   ) + 
   geom_point(aes(color = borough)) + 
   geom_smooth(se = FALSE, method = "lm", color = "red", aes(weight = total_people)) + 
-  stat_cor(method = "pearson", label.x = 40000, label.y = 0.75) + 
+  stat_cor(method = "pearson", label.x = 40000, label.y = 0.60) + 
   labs(
     x = "Median Personal Income ($)",
     y = "% Deceased"
@@ -1651,7 +1680,7 @@ death_college =
   ) + 
   geom_point(aes(color = borough)) + 
   geom_smooth(se = FALSE, method = "lm", color = "red", aes(weight = total_people)) + 
-  stat_cor(method = "pearson", label.x = 50, label.y = 0.75) + 
+  stat_cor(method = "pearson", label.x = 50, label.y = 0.60) + 
   labs(
     x = "% with College Education",
     y = "% Deceased"
@@ -1668,7 +1697,7 @@ death_citizenship =
   ) + 
   geom_point(aes(color = borough)) + 
   geom_smooth(se = FALSE, method = "lm", color = "red", aes(weight = total_people)) + 
-  stat_cor(method = "pearson", label.x = 22, label.y = 0.75) + 
+  stat_cor(method = "pearson", label.x = 22, label.y = 0.60) + 
   labs(
     x = "% with US Citizenship",
     y = "% Deceased"
@@ -2224,7 +2253,14 @@ borough_cat_comparisons(race, "vax")  + plot_annotation(
   subtitle = "Categorized by Race" 
 )
 
+
+
+
+
 # REMOVED Vax by sex
+
+
+
 
 # Vax by age
 borough_cat_comparisons(age_class, "vax") + plot_annotation(
@@ -2242,9 +2278,9 @@ borough_cat_comparisons(household_income_class, "vax") + plot_annotation(
 )
 ```
 
-The following heatmaps similarly indicate such variations across PUMAs within a given borough, which appear less significant for sex than for race especially. 
+The following heatmaps similarly indicate such variations across PUMAs within a given borough, which appear more significant for race than for age and sex. 
 
-```{r borough predictor heatmap hosp, echo = FALSE, message = FALSE, warning = FALSE}
+```{r borough predictor heatmap hosp, echo = FALSE, message = FALSE, warning = FALSE, fig.asp = 1.2}
 # Hospitalizations
 # Race x Borough
 race_hosp_borough = heatmap_two_var(race, borough, "hosp") + 
@@ -2283,7 +2319,7 @@ hosp_heat + theme(legend.position = "bottom") +
   plot_layout(guides = "collect")
 ```
 
-```{r borough predictor heatmap death, echo = FALSE, message = FALSE, warning = FALSE}
+```{r borough predictor heatmap death, echo = FALSE, message = FALSE, warning = FALSE, fig.asp = 1.2}
 # Deaths
 # Race x Borough
 race_death_borough = heatmap_two_var(race, borough, "death") + 
@@ -2322,7 +2358,7 @@ death_heat + theme(legend.position = "bottom") +
   plot_layout(guides = "collect")
 ```
 
-```{r borough predictor heatmap vax, out.height = "150%", echo = FALSE, message = FALSE, warning = FALSE}
+```{r borough predictor heatmap vax, out.height = "150%", echo = FALSE, message = FALSE, warning = FALSE, fig.asp = 1.2}
 # Vaccinations
 # Race x Borough
 race_vax_borough = heatmap_two_var(race, borough, "vax") + 
