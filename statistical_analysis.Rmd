@@ -15,16 +15,9 @@ library(performance)
 library(olsrr)
 library(kableExtra)
 
-
 outcome_by_year <- 
   read_csv("./data/outcome_puma_by_year.csv") %>%
   rename(puma = puma10)
-
-unbiased_data <-
-  # pull in unbiased group means for inputs
-  read_csv("./data/unbiased_group_means.csv") %>%
-  # merge with health outcomes
-  merge(outcome_by_year, by = "puma")
 
 # standardize inputs for consistent interpretation
 standardized_data <-
@@ -63,10 +56,10 @@ In order to address (1), we employ heteroscedasticity-robust White standard erro
 
 More interesting is the challenge presented in (2). For each $s \in S$, suppose we observe $i \in \{ 1, \ldots, n_s \}$ individual-level interviews. It is natural to consider the group mean
 	$$ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. $$
-However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean $\bar{X}_s$ as an estimator of $\xi_s$ will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means $\tilde{X}_s$. In particular, let $ \hat{\Sigma}_{\xi \xi}$ and $\hat{\Sigma}_{\nu \nu}$ denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by
+However, as shown in [Croon and Veldhoven](https://psycnet.apa.org/fulltext/2007-03329-003.pdf) (2007), it is generally the case that using the observed group mean $\bar{X}_s$ as an estimator of $\xi_s$ will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means $\tilde{X}_s$. In particular, let $\hat{\Sigma}_{\xi \xi}$ and $\hat{\Sigma}_{\nu \nu}$ denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by
 	$$ \tilde{X}_s \equiv \bar{X}' (I - W_s) + \bar{X}_s' W_s, \quad \text{where} $$
 	$$ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} $$
-and $I$ denotes the identity matrix.
+and $I$ denotes the identity matrix. Intuitively, the weight matrix $W_s$ acts as a shrinkage estimator, shrinking the observed group mean $\bar{X}_s$ in the direction of the citywide mean $\bar{X}$. Observe that as the between-group variation dominates relative to the within-group variation, $W_s$ converges to the identity matrix $I$, and hence the adjusted group mean $\tilde{X}_s$ converges to the observed group mean $\bar{X}_s$. That is, the better we can see the signal through the noise, the less we need to penalize the observed means.
 
 ## Regression Dianostics
 
