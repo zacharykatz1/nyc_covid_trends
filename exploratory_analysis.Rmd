@@ -2405,3 +2405,5 @@ vax_heat = race_vax_borough / sex_vax_borough / age_vax_borough
 vax_heat + theme(legend.position = "bottom") + 
   plot_layout(guides = "collect")
 ```
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
