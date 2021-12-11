@@ -866,7 +866,7 @@ We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a
 
 
 
-```{r outcomes all PUMAs, echo = FALSE, message = FALSE, warning = FALSE}
+```{r outcomes all PUMAs, echo = TRUE, message = FALSE, warning = FALSE}
 
 # Hospitalization rates across PUMAs, colored by borough
 puma_level_data  %>% 
@@ -876,6 +876,8 @@ puma_level_data  %>%
   plot_ly(y = ~covid_hosp_rate, 
           x = ~puma, 
           color = ~borough, 
+          width = 900,
+          height = 600, 
           type = "scatter",
           mode = "markers", 
           colors = "viridis",
@@ -889,7 +891,8 @@ puma_level_data  %>%
             tickangle = 60,
             zerolinecolor = '#ffff',
             zerolinewidth = 2,
-            gridcolor = 'ffff'),
+            gridcolor = 'ffff',
+            autotick = F),
           yaxis = list(
             title = "% Hospitalized", 
             zerolinecolor = '#ffff',
@@ -905,6 +908,8 @@ puma_level_data  %>%
   plot_ly(y = ~covid_death_rate, 
           x = ~puma, 
           color = ~borough, 
+          width = 900,
+          height = 600, 
           type = "scatter",
           mode = "markers", 
           colors = "viridis",
@@ -918,7 +923,8 @@ puma_level_data  %>%
             tickangle = 60,
             zerolinecolor = '#ffff',
             zerolinewidth = 2,
-            gridcolor = 'ffff'),
+            gridcolor = 'ffff',
+            autotick = F),
           yaxis = list(
             title = "% Death", 
             zerolinecolor = '#ffff',
@@ -934,6 +940,8 @@ puma_level_data %>%
   plot_ly(y = ~covid_vax_rate, 
           x = ~puma, 
           color = ~borough, 
+          width = 900,
+          height = 600, 
           type = "scatter",
           mode = "markers", 
           colors = "viridis",
@@ -947,7 +955,8 @@ puma_level_data %>%
             tickangle = 60,
             zerolinecolor = '#ffff',
             zerolinewidth = 2,
-            gridcolor = 'ffff'),
+            gridcolor = 'ffff',
+            autotick = F),
           yaxis = list(
             title = "% Death", 
             zerolinecolor = '#ffff',
