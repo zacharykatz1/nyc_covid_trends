@@ -383,6 +383,7 @@ div.tocify {
 
 <div id="regression-methodology" class="section level2">
 <h2>Regression Methodology</h2>
+<<<<<<< HEAD
 <pre class="r"><code>outcome_by_year &lt;- 
   read_csv(&quot;./data/outcome_puma_by_year.csv&quot;) %&gt;%
   rename(puma = puma10)
@@ -391,6 +392,9 @@ unbiased_data &lt;- read_csv(&quot;./data/unbiased_group_means.csv&quot;) %&gt;%
   merge(outcome_by_year, by = &quot;puma&quot;)
 
 best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
+=======
+<pre class="r"><code>best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
                    education_bachelors_degree +
                    birthplace_us + health_insurance_public + language_english + 
                    personal_income + employment_not_in_labor_force +
@@ -430,6 +434,10 @@ check_model(best_model_tidy,
 <p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
 <p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
+<<<<<<< HEAD
+=======
+<p>Residuals are uncorrelated: On the basis of the autocorrelation plot, it is to be observed that the lags do not have significant effect because they are within the bounds.</p>
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
 <pre class="r"><code>model_summary &lt;-
   summary(best_model) %&gt;% 
   broom::glance() %&gt;%
@@ -445,7 +453,11 @@ names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
 
 kbl(model_summary) %&gt;%
   kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+<<<<<<< HEAD
   column_spec(1:9, bold = T) %&gt;%
+=======
+  column_spec(1:6, bold = T) %&gt;%
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
   row_spec(1:2, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>

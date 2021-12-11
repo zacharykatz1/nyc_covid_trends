@@ -14,18 +14,22 @@ library(tidymodels)
 library(performance)
 library(olsrr)
 library(kableExtra)
-```
 
-## Regression Methodology
-
+<<<<<<< HEAD
 ```{r, message = FALSE, warning = FALSE}
+=======
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
 outcome_by_year <- 
   read_csv("./data/outcome_puma_by_year.csv") %>%
   rename(puma = puma10)
 
 unbiased_data <- read_csv("./data/unbiased_group_means.csv") %>%
   merge(outcome_by_year, by = "puma")
+```
 
+## Regression Methodology
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
 best_model <- lm(puma_hosp_rate_2020  ~ language_spanish + 
                    education_bachelors_degree +
                    birthplace_us + health_insurance_public + language_english + 
@@ -56,7 +60,11 @@ However, as shown in Croon and Veldhoven (2007), it is generally the case that u
 and $I$ denotes the identity matrix.
 
 ## Regression Dianostics
+<<<<<<< HEAD
 ```{r, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
+=======
+```{r echo = TRUE, fig.height=6.2, fig.width= 8, message=FALSE, warning=FALSE}
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
 lm_spec <- linear_reg() %>%
   set_mode("regression") %>%
   set_engine("lm")
@@ -90,7 +98,11 @@ Influential points among outliers:
 According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other. 
 
 
+<<<<<<< HEAD
 ```{r, message = FALSE, warning = FALSE}
+=======
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
 model_summary <-
   summary(best_model) %>% 
   broom::glance() %>%
@@ -122,7 +134,11 @@ Mallows’ Cp:
 Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp) from our model and the full model.  The Cp value is 9.5 and it is less than the number of our model parameters (11).  Therefore, we claim that our regression model has little or no bias.
 
 ## Model Summary
+<<<<<<< HEAD
 ```{r, message = FALSE, warning = FALSE}
+=======
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+>>>>>>> 37d7784683f21f814d03e444ce62407cab9c88c6
 summary <-
   summary(best_model) %>%
   broom::tidy() 
