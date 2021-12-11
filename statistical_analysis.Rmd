@@ -45,14 +45,14 @@ best_model <- lm(puma_hosp_rate_2020  ~ language_spanish +
                    personal_income + employment_not_in_labor_force +
                    health_insurance_public:personal_income +
                    education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
+                   language_english:birthplace_us, data = standardized_data)
 
 full_model <-  lm(puma_hosp_rate_2020  ~ 
                    (language_spanish + 
                    education_bachelors_degree +
                    birthplace_us + health_insurance_public + language_english + 
                    personal_income + employment_not_in_labor_force)^2, 
-                  data = unbiased_data)
+                  data = standardized_data)
 ```
 
 Let $S$ denote the set of PUMAs in NYC. We consider the latent variable model
@@ -82,7 +82,7 @@ best_model_tidy <- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish +
                    personal_income + employment_not_in_labor_force +
                    health_insurance_public:personal_income +
                    education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
+                   language_english:birthplace_us, data = standardized_data)
 
 
 check_model(best_model_tidy, 

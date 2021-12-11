@@ -389,14 +389,14 @@ div.tocify {
                    personal_income + employment_not_in_labor_force +
                    health_insurance_public:personal_income +
                    education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
+                   language_english:birthplace_us, data = standardized_data)
 
 full_model &lt;-  lm(puma_hosp_rate_2020  ~ 
                    (language_spanish + 
                    education_bachelors_degree +
                    birthplace_us + health_insurance_public + language_english + 
                    personal_income + employment_not_in_labor_force)^2, 
-                  data = unbiased_data)</code></pre>
+                  data = standardized_data)</code></pre>
 <p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
 <p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
 <p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let $ _{}$ and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix.</p>
@@ -413,7 +413,7 @@ best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish +
                    personal_income + employment_not_in_labor_force +
                    health_insurance_public:personal_income +
                    education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = unbiased_data)
+                   language_english:birthplace_us, data = standardized_data)
 
 
 check_model(best_model_tidy, 
@@ -592,10 +592,10 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-220.2133509
+220.2134
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-617.7947374
+617.79474
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 0.3564507
@@ -609,10 +609,10 @@ p.value
 language_spanish
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-1446.4493296
+426.0189
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-282.5600256
+83.22166
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 5.1190869
@@ -626,10 +626,10 @@ language_spanish
 education_bachelors_degree
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--1385.5187502
+-270.9179
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-1203.7289731
+235.37158
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 -1.1510222
@@ -643,10 +643,10 @@ education_bachelors_degree
 birthplace_us
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--2324.3753968
+-1481.2919
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-550.8204008
+351.03014
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 -4.2198426
@@ -660,10 +660,10 @@ birthplace_us
 health_insurance_public
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--3613.9699118
+-1373.8290
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-759.9559804
+288.89271
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 -4.7554990
@@ -677,10 +677,10 @@ health_insurance_public
 language_english
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--365.2360915
+-190.8314
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-538.8169036
+281.52519
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 -0.6778482
@@ -694,10 +694,10 @@ language_english
 personal_income
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
--0.0266398
+-1417.7933
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0080444
+428.12821
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 -3.3116091
@@ -711,10 +711,10 @@ personal_income
 employment_not_in_labor_force
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-4344.6354192
+2141.4881
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-956.3880935
+471.40749
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 4.5427536
@@ -728,10 +728,10 @@ employment_not_in_labor_force
 health_insurance_public:personal_income
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0812034
+1642.8728
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0192287
+389.02763
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 4.2230234
@@ -745,10 +745,10 @@ health_insurance_public:personal_income
 education_bachelors_degree:personal_income
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0554423
+576.9626
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0186699
+194.28891
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 2.9696115
@@ -762,10 +762,10 @@ education_bachelors_degree:personal_income
 birthplace_us:language_english
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-2145.2515921
+714.3132
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-907.5966218
+302.20616
 </td>
 <td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
 2.3636619
