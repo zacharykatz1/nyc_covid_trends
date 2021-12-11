@@ -49,7 +49,7 @@ scale_fill_discrete   = scale_fill_viridis_d
 
 ## Methodology
 
-For our statistical analysis, we consider a linear regression. In particular, let $S$ denote the set of PUMAs in NYC, and let $y_s$ denote our outcome of interest. We consider the latent variable model
+For our statistical analysis, we consider a linear regression. In particular, let $S$ denote the set of PUMAs in NYC, and let $y_s$ denote our outcome of interest for PUMA $s \in S$. We consider the latent variable model
 	$$ y_s = \xi_s' \beta + \varepsilon_s $$
 for each $s \in S$, where $\xi_s$ is a vector of PUMA-level means of data from the census and $\beta$ is a vector of parameters. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means $\xi_s$.
 
@@ -147,7 +147,8 @@ best_model %>%
   broom::tidy() %>%
   # map to a kable table
   kbl(
-      col.names   = c("Predictor", "Estimate", "SE", "t-statistic", "p-value")
+      caption     = "Effect of Selected Predictors on the 2020 Hospitalization Rate"
+    , col.names   = c("Predictor", "Estimate", "SE", "t-statistic", "p-value")
     , digits      = c(1, rep(0, 2), 2, 4)
     , format.args = list(big.mark = ',')
   ) %>%
@@ -163,13 +164,13 @@ Note that this is an _unweighted_ standardization. We do not employ population w
 
 Proceeding to the interpretation of our findings, we consider predictors in order of their featured complexity in the model. For example, only the main effect of `language_spanish` is estimated, whereas `personal_income` is present in two interaction terms.
 
-  * `language_spanish`: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.
+  * `employment_not_in_labor_force`: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000. As one might expect, the unemployment rate is positively associated with th hospitalization rate.
 
-  * `employment_not_in_labor_force`: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000.
+  * `language_spanish`: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.
 
   * `birthplace_us`: given some realization of `language_english`, the estimated effect of being born in the US on the hospitalization rate is given by
   $$ -1,481 + 714 \times \text{language_english}. $$
-That is, an increase in one standard deviation of the fraction of residents born in the US predicts a decrease in the hospitalization rate of 1,481 residents per 100,000, _but_ this effect is diminished in neighborhoods where the primary spoken language is English. That is, this predictor is less important in neighborhoods where most of the residents speak English.
+That is, an increase in one standard deviation of the fraction of residents born in the US predicts a decrease in the hospitalization rate of 1,481 residents per 100,000, _but_ this effect is diminished in neighborhoods where the primary spoken language is English. That is, this predictor is less important in neighborhoods where most of the residents speak English, which is intuitive.
 
   * `health_insurance_public`: given some realization of `personal_income`, the estimated effect of being born in the US on the hospitalization rate is given by
   $$ -1,374 + 1,643 \times \text{personal_income}. $$
@@ -179,11 +180,7 @@ That is, an increase in one standard deviation of the fraction of residents with
   $$ -1,418 + 1,643 \times \text{health_insurance_public} + 577 \times \text{education_bachelors}. $$
 That is, an increase in one standard deviation of personal income predicts a decrease in the hospitalization rate of 1,418 residents per 100,000, _but_ this effect is diminished in neighborhoods with higher rates of public health insurance and bachelors degrees. It is most likely that in neighborhoods with lower average personal incomes, access to public health insurance and education are better predictors of the hospitalization rate than personal income.
 
-Notes:
-
-  * `education_bachelors_degree`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).
-
-  * `birthplace_us`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).
+__Note:__ the main effect for both `language_english` and `education_bachelors_degree` are not statistically significant, and hence they should only be interpreted in the context of their interactions.
 
 
 
