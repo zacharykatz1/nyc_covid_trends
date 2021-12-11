@@ -110,7 +110,7 @@ model_summary <-
 
 Cp <- ols_mallows_cp(best_model, full_model)
 
-Cp <- as.tibble(Cp)
+Cp <- as_tibble(Cp)
 
 names(Cp) <- c("Mallows' Cp")
 
@@ -148,3 +148,27 @@ kbl(summary) %>%
 For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor $x$, let $s$ denote the sample standard deviation of the predictor. We define the partially standardized predictor to be
   $$ z \equiv \frac{x}{s}. $$
 Note that this is an _unweighted_ standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, not that we do not de-mean our data (i.e., subtract $\bar{x}$), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.
+
+Proceeding to the interpretation of our findings, we consider predictors in order of their featured complexity in the model. For example, only the main effect of `language_spanish` is estimated, whereas `personal_income` is present in two interaction terms.
+
+  * `language_spanish`: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.
+
+  * `employment_not_in_labor_force`: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000.
+
+  * `birthplace_us`: given some realization of `language_english`, the estimated effect of being born in the US on the hospitalization rate is given by
+  $$ -1,481 + 714 \times \text{language_english}. $$
+That is, an increase in one standard deviation of the fraction of residents born in the US predicts a decrease in the hospitalization rate of 1,481 residents per 100,000, _but_ this effect is diminished in neighborhoods where the primary spoken language is English. That is, this predictor is less important in neighborhoods where most of the residents speak English.
+
+  * `health_insurance_public`: given some realization of `personal_income`, the estimated effect of being born in the US on the hospitalization rate is given by
+  $$ -1,374 + 1,643 \times \text{personal_income}. $$
+That is, an increase in one standard deviation of the fraction of residents with public health insurance predicts a decrease in the hospitalization rate of 1,374 residents per 100,000, _but_ this effect is diminished in neighborhoods with higher average personal income. That is, while access to public health insurance is important, those with high income have the  privilege of being able to seek care regardless of their insurance status.
+
+  * `personal_income`: given some realization of `health_insurance_public` and `education_bachelors`, the estimated effect of personal income on the hospitalization rate is given by
+  $$ -1,418 + 1,643 \times \text{health_insurance_public} + 577 \times \text{education_bachelors}. $$
+That is, an increase in one standard deviation of personal income predicts a decrease in the hospitalization rate of 1,418 residents per 100,000, _but_ this effect is diminished in neighborhoods with higher rates of public health insurance and bachelors degrees. It is most likely that in neighborhoods with lower average personal incomes, access to public health insurance and education are better predictors of the hospitalization rate than personal income.
+
+Notes:
+
+  * `education_bachelors_degree`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).
+
+  * `language_english`: this predictor's main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to `personal_income`).

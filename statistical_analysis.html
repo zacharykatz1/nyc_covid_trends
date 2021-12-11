@@ -432,7 +432,7 @@ check_model(best_model_tidy,
 
 Cp &lt;- ols_mallows_cp(best_model, full_model)
 
-Cp &lt;- as.tibble(Cp)
+Cp &lt;- as_tibble(Cp)
 
 names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
 
@@ -777,6 +777,19 @@ birthplace_us:language_english
 </tbody>
 </table>
 <p>For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor <span class="math inline">\(x\)</span>, let <span class="math inline">\(s\)</span> denote the sample standard deviation of the predictor. We define the partially standardized predictor to be <span class="math display">\[ z \equiv \frac{x}{s}. \]</span> Note that this is an <em>unweighted</em> standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, not that we do not de-mean our data (i.e., subtract <span class="math inline">\(\bar{x}\)</span>), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.</p>
+<p>Proceeding to the interpretation of our findings, we consider predictors in order of their featured complexity in the model. For example, only the main effect of <code>language_spanish</code> is estimated, whereas <code>personal_income</code> is present in two interaction terms.</p>
+<ul>
+<li><p><code>language_spanish</code>: an increase in one standard deviation of the fraction of residents whose primary spoken language is Spanish predicts an increase in the hospitalization rate of 426 residents per 100,000.</p></li>
+<li><p><code>employment_not_in_labor_force</code>: an increase in one standard deviation of the unemployment rate predicts an increase in the hospitalization rate of 2,141 residents per 100,000.</p></li>
+<li><p><code>birthplace_us</code>: given some realization of <code>language_english</code>, the estimated effect of being born in the US on the hospitalization rate is given by <span class="math display">\[ -1,481 + 714 \times \text{language_english}. \]</span> That is, an increase in one standard deviation of the fraction of residents born in the US predicts a decrease in the hospitalization rate of 1,481 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods where the primary spoken language is English. That is, this predictor is less important in neighborhoods where most of the residents speak English.</p></li>
+<li><p><code>health_insurance_public</code>: given some realization of <code>personal_income</code>, the estimated effect of being born in the US on the hospitalization rate is given by <span class="math display">\[ -1,374 + 1,643 \times \text{personal_income}. \]</span> That is, an increase in one standard deviation of the fraction of residents with public health insurance predicts a decrease in the hospitalization rate of 1,374 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods with higher average personal income. That is, while access to public health insurance is important, those with high income have the privilege of being able to seek care regardless of their insurance status.</p></li>
+<li><p><code>personal_income</code>: given some realization of <code>health_insurance_public</code> and <code>education_bachelors</code>, the estimated effect of personal income on the hospitalization rate is given by <span class="math display">\[ -1,418 + 1,643 \times \text{health_insurance_public} + 577 \times \text{education_bachelors}. \]</span> That is, an increase in one standard deviation of personal income predicts a decrease in the hospitalization rate of 1,418 residents per 100,000, <em>but</em> this effect is diminished in neighborhoods with higher rates of public health insurance and bachelors degrees. It is most likely that in neighborhoods with lower average personal incomes, access to public health insurance and education are better predictors of the hospitalization rate than personal income.</p></li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li><p><code>education_bachelors_degree</code>: this predictor’s main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to <code>personal_income</code>).</p></li>
+<li><p><code>language_english</code>: this predictor’s main effect is not statistically significant, and hence it should only be interpreted in the context of its interactions (refer to <code>personal_income</code>).</p></li>
+</ul>
 </div>
 
 
