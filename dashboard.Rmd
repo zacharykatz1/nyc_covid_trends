@@ -10,11 +10,12 @@ output:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(nycgeo)
 library(plotly)
 library(lubridate)
 library(flexdashboard)
 library(janitor)
+
+
 hosp_by_month <- read_csv("./data/nyc_hosp_rate_zcta.csv")
 death_by_month <- read_csv("./data/nyc_death_rate_zcta.csv")
 ```
