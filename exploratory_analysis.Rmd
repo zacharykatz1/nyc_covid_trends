@@ -862,6 +862,8 @@ borough_cat_comparisons = function(predict, outcome) {
 
 We can observe that **hospitalization rates from as low as ~0.4% to nearly 2% (a 5x difference)** by PUMA (see [NYC Map of PUMAs and Community Districts](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf)), **death rates range from just over 0.05% all the way to above 0.6% (a 12x difference!)**, and **vaccination rates range from as low as ~30% to above 100%** in one PUMA (as an artifact of migration between PUMA -- a known issue in NYC DOHMH data). Excluding this vaccination outlier, the PUMAs with higher vaccination rates tend to have 75-85% of their residents vaccinated.
 
+
+
 ```{r outcomes all PUMAs, echo = FALSE, message = FALSE, warning = FALSE}
 
 # Hospitalization rates across PUMAs, colored by borough
@@ -951,6 +953,11 @@ puma_level_data %>%
             gridcolor = 'ffff'),
          legend = list(title = list(text = 'Borough')))
 ```
+
+
+
+
+
 
 ``` {r worst PUMA outcomes, echo = FALSE, message = FALSE, warning = FALSE}
 
