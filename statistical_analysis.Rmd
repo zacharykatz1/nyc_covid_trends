@@ -20,7 +20,19 @@ outcome_by_year <-
   read_csv("./data/outcome_puma_by_year.csv") %>%
   rename(puma = puma10)
 
-unbiased_data <- read_csv("./data/unbiased_group_means.csv") %>%
+unbiased_data <-
+  # pull in unbiased group means for inputs
+  read_csv("./data/unbiased_group_means.csv") %>%
+  # merge with health outcomes
+  merge(outcome_by_year, by = "puma")
+
+# standardize inputs for consistent interpretation
+standardized_data <-
+  # pull in unbiased group means for inputs
+  read_csv("./data/unbiased_group_means.csv") %>%
+  # apply the scale function to appropriate columns
+  mutate_at(-c(1, 2), ~ c(scale(., center = FALSE))) %>%
+  # merge with health outcomes
   merge(outcome_by_year, by = "puma")
 ```
 
