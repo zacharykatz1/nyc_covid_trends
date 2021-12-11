@@ -1,0 +1,3243 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Zachary Katz, Jimmy Kelliher, Tanvir Khan, Hun Lee, Tucker Morgan" />
+
+
+<title>P8105: Project Report</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Sections
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="index.html">Home</a>
+    </li>
+    <li>
+      <a href="data_cleaning_and_merging.html">Data Pre-Processing</a>
+    </li>
+    <li>
+      <a href="exploratory_analysis.html">Exploratory Analysis</a>
+    </li>
+    <li>
+      <a href="statistical_analysis.html">Statistical Analysis</a>
+    </li>
+    <li>
+      <a href="additional_prediction.html">Additional Prediction</a>
+    </li>
+    <li>
+      <a href="https://datasciencetk.shinyapps.io/COVID19-NYC-trends/">Interactive Map</a>
+    </li>
+    <li>
+      <a href="dashboard.html">Trend Over Time (Dashboard)</a>
+    </li>
+    <li>
+      <a href="project_report.html">Full Report</a>
+    </li>
+    <li>
+      <a href="ProjectCode.html">Project Code</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">P8105: Project Report</h1>
+<h4 class="author">Zachary Katz, Jimmy Kelliher, Tanvir Khan, Hun Lee, Tucker Morgan</h4>
+
+</div>
+
+
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>It’s difficult to overstate the extent to which the COVID-19 pandemic has tested the world’s public health infrastructure over the past two years. At the same time, the COVID-19 “experience” has manifested unequally – not just country to country, but city to city, and even borough to borough. As one of the most heterogeneous urban areas in the world, New York City provides a fascinating case study into the ways socioeconomic status may be associated with, or even mediate, disparities in health outcomes. (For instance, it’s already <a href="https://www.news-medical.net/news/20210903/Income-race-and-ethnical-mediated-inequities-in-COVID-19-vaccination-across-major-US-cities.aspx">well-documented</a> that income and race, along with socioeconomic privilege and political ideology, drive inequities in COVID vaccination rate across US cities.)</p>
+<p>Knowing that socioeconomic factors have historically been associated with health outcomes, we aim to examine relationships between a range of predictors (e.g. race/ethnicity, education, broadband internet access, household income / occupational income score, public vs. private health insurance) and COVID-19 health outcomes – namely, hospitalizations, deaths, and vaccinations.</p>
+</div>
+<div id="related-work" class="section level2">
+<h2>Related Work</h2>
+<p>In 2020, the COVID-19 pandemic was only one factor that attracted public attention to structural inequality. A confluence of recent events, from the Black Lives Matter movement to the election of New York City’s second Black mayor, has drawn the gaze of local researchers given the vast demographic and socioeconomic diversity concentrated in just one urban area. Our work builds on pre-existing analyses related to potential socioeconomic predictors and COVID-19 outcomes. For example, <a href="https://link.springer.com/article/10.1007/s10900-020-00944-3">Little et al.’s research</a> suggests an “unequal socioeconomic gradient in the demographic and clinical presentation of COVID-19 patients,” contributing to <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0257622">other extant analysis</a> into census tract-level associations with key outcomes like hospitalization. As <a href="https://www.nature.com/articles/d41586-021-00396-2">COVID-19’s endemicity</a> becomes all but inevitable and globalization increases the likelihood of future pandemics easily spread across borders and continents, a comprehensive understanding of the predictors of hospitalization, death, and vaccination rates for COVID-19 may aid the development of <a href="https://www.albany.edu/communicationsmarketing/covid-19-documents/Racial%20Disparities%20in%20COVID-19%20Bonus%20Briefing%20Paper%5B2%5D.pdf">effective intervention strategies</a> that limit disparate impact across all disease stages.</p>
+<p>While a number of studies have examined <a href="https://onlinelibrary.wiley.com/doi/10.1111/irv.12816">differential outcomes across NYC neighborhoods</a> (and have even, at times, attempted to approach <a href="https://www.nature.com/articles/s41467-021-24088-7">causal explanations</a>, such as <a href="https://academic.oup.com/aje/article/190/7/1234/6054607">subway utilization</a>, no ecological study to-date has explored the potential for a ~20-variable set of predictors to explain between-neighborhood variation across multiple COVID outcomes, including vaccination. Although prior work has explored disparities in <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7316038/">testing and positivity</a>, for example – and systemic meta-analyses have demonstrated disparities in COVID-19 outcomes by <a href="https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2785980">race, ethnicity, and socioeconomic status</a> – our study takes a modeling-forward approach to generate a multivariate regression model that explains outcomes at the PUMA, or census-tract, level. We also contribute a novel method of predictive risk scoring to highlight the possibility of a given PUMA failing to achieve a key outcome target – in this case, 70% vaccination rate. Although further work will be required to better understand the mechanisms by which various contributing factors are associated with key outcomes, this research highlights the diversity of outcomes across a relatively small geographic area, and thus the potential for greater health equity in the future.</p>
+</div>
+<div id="initial-questions" class="section level2">
+<h2>Initial Questions</h2>
+<p>Our initial questions are centered on how demographic factors in New York City trend with COVID-19 outcomes. Particularly, what are the key demographic correlates (e.g. race/ethnicity, education) of COVID-19 hospitalizations or vaccinations? Do PUMAs with more individuals on public health insurance fair equally well on key outcomes compared to those with more individuals on private health insurance? How does household income fit into the equation? Broadly, we aim to explore the myriad relationships between predictors and COVID-19 outcomes across New York City census tracts and boroughs.</p>
+<p>See the website that accompanies this report <a href="https://zacharykatz1.github.io/nyc_covid_trends/index.html">here</a> and the underlying website code <a href="https://github.com/zacharykatz1/nyc_covid_trends">here</a>.</p>
+</div>
+<div id="data-sources-and-cleaning" class="section level2">
+<h2>Data Sources and Cleaning</h2>
+<div id="data-sources" class="section level3">
+<h3>Data Sources</h3>
+<div id="integrated-public-use-microdata-series-ipums-usa" class="section level4">
+<h4>Integrated Public Use Microdata Series (IPUMS USA)</h4>
+<p>The <a href="https://usa.ipums.org/usa/">Integrated Public Use Microdata Series (IPUMS USA)</a> consists of individual-level data from samples of the US population drawn from the American Community Surveys (ACS) of 2000 - present as well as from fifteen federal censuses from 1850 to 2010. Each record in IPUMS is a person with numerically coded characteristics and “weight” variables indicating how many persons in the population are represented by each record. Samples were created at different times by different investigators, which lead to a variety of documentation conventions. However, IPUMS applies consistent coding and documentation across records to allow for effective analysis over time. A data extraction system exists to allow users to pull particular samples and variables from IPUMS. This project uses demographic and macroeconomic data from the American Community Survey (ACS) 2019 five-year estimate via IPUMS.</p>
+<p>While data from IPUMS is recorded at the individual-level, each interview is coded to a particular Public Use Microdata Area (PUMA) geography where the census interviewee’s housing unit was located at the time of interview.</p>
+</div>
+<div id="new-york-city-department-of-health-and-mental-hygiene-nyc-dohmh" class="section level4">
+<h4>New York City Department of Health and Mental Hygiene (NYC DOHMH)</h4>
+<p>The New York City Department of Health and Mental Hygiene (NYC DOHMH) is one of the oldest public health agencies in the United States. Among other responsibilities, the DOHMH <a href="https://github.com/nychealth">monitors the spread of infectious disease in NYC</a>. The Department of Health classified the beginning of the COVID-19 pandemic as February 29, 2020, the date of the first laboratory-confirmed case. Since then, the DOHMH has recorded and reported COVID-19 data on a daily, weekly, or monthly basis. These data include cases, hospitalizations, and deaths by borough, modified Zip Code tabulation area (ZCTA), and demographic factors. As NYC has administered vaccinations for COVID-19, these data have been recorded and made available by borough, ZCTA, and demography. This project uses COVID-19 hospitalization rates, death rates, and vaccination rates by ZCTA in NYC.</p>
+</div>
+<div id="baruch-college-city-university-of-new-york---geoportal" class="section level4">
+<h4>Baruch College, City University of New York - Geoportal</h4>
+<p>The <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">Baruch Geoportal</a>, maintained by the Newman Library at Baruch College, is a repository of geospatial resources that includes tabular data sets, tutorials, maps, and crosswalks. This project uses a crosswalk data set from Baruch Geoportal to apportion NYC ZCTAs to PUMAs, enabling analysis of PUMA-coded data from IPUMS alongside COVID-19 outcome data from DOHMH at similar levels of granularity.</p>
+</div>
+</div>
+<div id="data-cleaning" class="section level3">
+<h3>Data Cleaning</h3>
+<div id="pulling-data" class="section level4">
+<h4>Pulling Data</h4>
+<p>As mentioned above, monthly outcome data reported at the ZCTA-level geography were obtained from the NYC DOHMH. First, these data were summed over the time interval March 2020 - Sept 2021 to obtain one cumulative incidence measure per ZCTA. However, the predictor variables from IPUMS were coded to the PUMA-level geography, and so we used the Baruch ZCTA-PUMA crosswalk data set to convert our data into common geographical units.</p>
+<p>The following columns were used to convert ZCTA-level outcome data to PUMA-level data:</p>
+<ul>
+<li><p><code>zcta10</code>: ZCTA unique identifier</p></li>
+<li><p><code>puma10</code>: PUMA unique identifier</p></li>
+<li><p><code>per_in_puma</code>: percentage of the specified ZCTA located within the specified PUMA</p></li>
+<li><p><code>per_of_puma</code>: percentage of the specified PUMA occupied by the specified ZCTA</p></li>
+</ul>
+<p>The following shows the mathematical expression used to convert from ZCTA-level outcome data <span class="math inline">\((Z_i)\)</span> to PUMA-level outcome data <span class="math inline">\((P_j)\)</span>:</p>
+<p><span class="math display">\[
+\sum_{i = 1}^{n} Z_{i} \cdot \text{per_in_puma}_{ij} \cdot \text{per_of_puma}_{ij} = P_j
+\]</span></p>
+<p>This bridged us towards one cumulative incidence measure per PUMA (per 100,000 people for hospitalizations and deaths, and per 100 people for vaccinations).</p>
+<p>We proceeded to clean our demographic dataset from IPUMS, which originally contained over 350,000 interviews from the NYC area:</p>
+<pre class="r"><code># Cleaning
+jimzip &lt;- function(csv_file, path) {
+  # create full path to csv file
+  full_csv &lt;- paste0(path, &quot;/&quot;, csv_file)
+  # append &quot;.zip&quot; to csv file
+  zip_file &lt;- paste0(full_csv, &quot;.zip&quot;)
+  # unzip file
+  unzip(zip_file)
+  # read csv
+  data_extract &lt;- read_csv(csv_file)
+  # be sure to remove file once unzipped (it will live in working directory)
+  on.exit(file.remove(csv_file))
+  # output data
+  data_extract
+}
+
+# Apply function to filtered census data CSV
+census_data &lt;- jimzip(&quot;census_filtered.csv&quot;, &quot;./data&quot;)
+
+# Merging the Outcome Data
+
+# Read in PUMA outcomes data
+health_data &lt;-
+  read_csv(&quot;./data/outcome_puma.csv&quot;)
+
+# Merge census data with PUMA outcomes data
+merged_data &lt;- merge(census_data, health_data, by = &quot;puma&quot;)
+
+# Deprecate census data alone
+rm(census_data)
+
+## Cleaning the Data
+
+# Clean the merged census and outcomes data
+# Each row represents one 
+cleaned_data = 
+  merged_data %&gt;% 
+  # Remove variables less useful for analysis or redundant (high probability of collinearity with remaining variables)
+  select(-serial, -cluster, -strata, -multyear, -ancestr1, -ancestr2, -labforce, -occ, -ind, -incwage, -occscore, -pwpuma00, -ftotinc, -hcovpub) %&gt;% 
+  # Remove duplicate rows, if any
+  distinct() %&gt;% 
+  # Rename variables
+  rename(
+    borough = countyfip,
+    has_broadband = cihispeed,
+    birthplace = bpl,
+    education = educd,
+    employment = empstat,
+    personal_income = inctot,
+    work_transport = tranwork,
+    household_income = hhincome,
+    on_foodstamps = foodstmp,
+    family_size = famsize,
+    num_children = nchild,
+    US_citizen = citizen,
+    puma_vacc_rate = puma_vacc_per,
+    on_welfare = incwelfr,
+    poverty_threshold = poverty
+  ) %&gt;% 
+  # Recode variables according to data dictionary
+  mutate(
+    # Researched mapping for county
+    borough = recode(
+      borough,
+      &quot;5&quot; = &quot;Bronx&quot;,
+      &quot;47&quot; = &quot;Brooklyn&quot;,
+      &quot;61&quot; = &quot;Manhattan&quot;,
+      &quot;81&quot; = &quot;Queens&quot;,
+      &quot;85&quot; = &quot;Staten Island&quot;
+    ),
+    rent = ifelse(
+      rent == 9999, 0,
+      rent
+    ),
+    household_income = ifelse(
+      household_income %in% c(9999998,9999999), NA,
+      household_income
+    ),
+    on_foodstamps = recode(
+      on_foodstamps,
+      &quot;1&quot; = &quot;No&quot;,
+      &quot;2&quot; = &quot;Yes&quot;
+    ),
+    has_broadband = case_when(
+      has_broadband == &quot;20&quot; ~ &quot;No&quot;,
+      has_broadband != &quot;20&quot; ~ &quot;Yes&quot;
+    ),
+    sex = recode(
+      sex,
+      &quot;1&quot; = &quot;Male&quot;,
+      &quot;2&quot; = &quot;Female&quot;
+    ),
+    # Collapse Hispanic observation into race observation
+    race = case_when(
+      race == &quot;1&quot; ~ &quot;White&quot;,
+      race == &quot;2&quot; ~ &quot;Black&quot;,
+      race == &quot;3&quot; ~ &quot;American Indian&quot;,
+      race %in% c(4,5,6) ~ &quot;Asian and Pacific Islander&quot;,
+      race == 7 &amp; hispan %in% c(1,2,3,4) ~ &quot;Hispanic&quot;,
+      race == 7 &amp; hispan %in% c(0,9) ~ &quot;Other&quot;,
+      race %in% c(8,9) ~ &quot;2+ races&quot;
+    ),
+    birthplace = case_when(
+      birthplace %in% 1:120 ~&quot;US&quot;,
+      birthplace %in% 121:950 ~ &quot;Non-US&quot;,
+      birthplace == 999 ~&quot;Unknown&quot;
+    ),
+    US_citizen = case_when(
+      US_citizen %in% c(1,2) ~ &quot;Yes&quot;,
+      US_citizen %in% 3:8 ~&quot;No&quot;,
+      US_citizen %in% c(0,9) ~ &quot;Unknown&quot;
+    ),
+    # Chose languages based on highest frequency observed
+    language = case_when(
+      language == &quot;1&quot; ~ &quot;English&quot;,
+      language == &quot;12&quot; ~ &quot;Spanish&quot;,
+      language == &quot;43&quot; ~ &quot;Chinese&quot;,
+      language == &quot;0&quot; ~ &quot;Unknown&quot;,
+      language == &quot;31&quot; ~ &quot;Hindi&quot;,
+      !language %in% c(1,12,43,0,31) ~ &quot;Other&quot;
+    ),
+    # Collapse multiple health insurance variables into single variable
+    health_insurance = case_when(
+      hcovany == 1 ~ &quot;None&quot;,
+      hcovany == 2 &amp;&amp; hcovpriv == 2 ~ &quot;Private&quot;,
+      hcovany == 2 &amp;&amp; hcovpriv == 1 ~ &quot;Public&quot;
+    ),
+    education = case_when(
+      education %in% 2:61 ~ &quot;Less Than HS Graduate&quot;,
+      education %in% 62:64 ~ &quot;HS Graduate&quot;,
+      education %in% 65:100 ~ &quot;Some College&quot;,
+      education %in% 110:113 ~ &quot;Some College&quot;,
+      education == 101 ~ &quot;Bachelor&#39;s Degree&quot;,
+      education %in% 114:116 ~ &quot;Post-Graduate Degree&quot;,
+      education %in% c(0,1,999) ~ &quot;Unknown&quot;
+    ),
+    employment = case_when(
+      employment %in% c(0,3) ~ &quot;Not in labor force&quot;,
+      employment == 1 ~ &quot;Employed&quot;,
+      employment == 2 ~ &quot;Unemployed&quot;
+    ),
+    personal_income = ifelse(
+      personal_income %in% c(9999998,9999999), NA,
+      personal_income
+    ),
+    household_income = ifelse(
+      household_income %in% c(9999998,9999999), NA,
+      household_income
+    ),
+    on_welfare = case_when(
+      on_welfare &gt; 0 ~ &quot;Yes&quot;,
+      on_welfare == 0 ~ &quot;No&quot;
+    ), 
+    poverty_threshold = case_when(
+      poverty_threshold &gt;= 100 ~ &quot;Above&quot;,
+      poverty_threshold &lt; 100 ~ &quot;Below&quot;
+    ),
+    work_transport = case_when(
+      work_transport %in% c(31:37, 39) ~ &quot;Public Transit&quot;,
+      work_transport %in% c(10:20, 38) ~ &quot;Private Vehicle&quot;,
+      work_transport == 50 ~ &quot;Bicycle&quot;,
+      work_transport == 60 ~ &quot;Walking&quot;,
+      work_transport == 80 ~ &quot;Worked From Home&quot;,
+      work_transport %in% c(0, 70) ~ &quot;Other&quot;
+    )
+  ) %&gt;% 
+  mutate(education = fct_relevel(education, &quot;Less Than HS Graduate&quot;, &quot;HS Graduate&quot;, &quot;Some College&quot;, &quot;Bachelor&#39;s Degree&quot;, &quot;Post-Graduate Degree&quot;, &quot;Unknown&quot;)) %&gt;% 
+  # Eliminate columns no longer needed after transformation
+  select(-hispan, -hcovany, -hcovpriv) %&gt;% 
+  # Relocate new columns
+  relocate(health_insurance, .before = personal_income) %&gt;% 
+  relocate(poverty_threshold, .before = work_transport) %&gt;% 
+  relocate(on_welfare, .before = poverty_threshold) %&gt;% 
+  relocate(perwt, .before = hhwt) %&gt;% 
+  # Create factor variables where applicable
+  mutate(across(.cols = c(puma, borough, on_foodstamps, has_broadband, sex, race, birthplace, US_citizen, language, health_insurance, education, employment, on_welfare, poverty_threshold, work_transport), as.factor)) %&gt;% 
+  # Ensure consistent use of percentages
+  mutate(
+    puma_death_rate = puma_death_rate / 1000,
+    puma_hosp_rate = puma_hosp_rate / 1000
+  )
+
+# View first few rows
+cleaned_data %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+puma
+</th>
+<th style="text-align:right;">
+perwt
+</th>
+<th style="text-align:right;">
+hhwt
+</th>
+<th style="text-align:left;">
+borough
+</th>
+<th style="text-align:right;">
+rent
+</th>
+<th style="text-align:right;">
+household_income
+</th>
+<th style="text-align:left;">
+on_foodstamps
+</th>
+<th style="text-align:left;">
+has_broadband
+</th>
+<th style="text-align:right;">
+family_size
+</th>
+<th style="text-align:right;">
+num_children
+</th>
+<th style="text-align:left;">
+sex
+</th>
+<th style="text-align:right;">
+age
+</th>
+<th style="text-align:left;">
+race
+</th>
+<th style="text-align:left;">
+birthplace
+</th>
+<th style="text-align:left;">
+US_citizen
+</th>
+<th style="text-align:left;">
+language
+</th>
+<th style="text-align:left;">
+education
+</th>
+<th style="text-align:left;">
+employment
+</th>
+<th style="text-align:left;">
+health_insurance
+</th>
+<th style="text-align:right;">
+personal_income
+</th>
+<th style="text-align:left;">
+on_welfare
+</th>
+<th style="text-align:left;">
+poverty_threshold
+</th>
+<th style="text-align:left;">
+work_transport
+</th>
+<th style="text-align:right;">
+puma_death_rate
+</th>
+<th style="text-align:right;">
+puma_hosp_rate
+</th>
+<th style="text-align:right;">
+puma_vacc_rate
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+166870
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+Non-US
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+English
+</td>
+<td style="text-align:left;">
+Post-Graduate Degree
+</td>
+<td style="text-align:left;">
+Employed
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+83435
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Public Transit
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+1018
+</td>
+<td style="text-align:right;">
+123192
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+Non-US
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+Some College
+</td>
+<td style="text-align:left;">
+Employed
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+107920
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Private Vehicle
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:right;">
+125000
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+US
+</td>
+<td style="text-align:left;">
+Unknown
+</td>
+<td style="text-align:left;">
+Spanish
+</td>
+<td style="text-align:left;">
+Some College
+</td>
+<td style="text-align:left;">
+Employed
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+125000
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Public Transit
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+140588
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+64
+</td>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+Non-US
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Chinese
+</td>
+<td style="text-align:left;">
+Post-Graduate Degree
+</td>
+<td style="text-align:left;">
+Not in labor force
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+11264
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+1058
+</td>
+<td style="text-align:right;">
+52876
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+Non-US
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Spanish
+</td>
+<td style="text-align:left;">
+Some College
+</td>
+<td style="text-align:left;">
+Employed
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+32373
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Public Transit
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Bronx
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+26101
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+64
+</td>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+US
+</td>
+<td style="text-align:left;">
+Unknown
+</td>
+<td style="text-align:left;">
+English
+</td>
+<td style="text-align:left;">
+Post-Graduate Degree
+</td>
+<td style="text-align:left;">
+Employed
+</td>
+<td style="text-align:left;">
+Private
+</td>
+<td style="text-align:right;">
+26101
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Above
+</td>
+<td style="text-align:left;">
+Private Vehicle
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+<td style="text-align:right;">
+1.064625
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+</tr>
+</tbody>
+</table>
+<p>Because our outcomes data was minimially aggregated at the PUMA level and could not be disaggregated further, we decided it would be prudent to create a second cleaned data set for which each observation corresponded to a given PUMA, rather than a given census observation. To do so, we needed to use <code>perwt</code> (person weight, describing the number of persons in the coded area for whom the interview was representative) and <code>hhwt</code> (household weight, which plays a similar role but by household rather than by person in each geographic area) to weight our key census variables at the aggregated PUMA level.</p>
+<pre class="r"><code># Example data frame with weightings for summary stats over each PUMA
+nyc_puma_summary = cleaned_data %&gt;% 
+  # Note: do we need to filter to one individual per household for household weightings?
+  group_by(puma) %&gt;%
+  summarize(
+    total_people = sum(perwt),
+    median_household_income = weighted.median(household_income, hhwt, na.rm = TRUE),
+    perc_foodstamps = sum(hhwt[on_foodstamps == &quot;Yes&quot;]) * 100 / sum(hhwt),
+    perc_broadband = sum(hhwt[has_broadband == &quot;Yes&quot;]) * 100 / sum(hhwt),
+    perc_male = sum(perwt[sex == &quot;Male&quot;]) * 100 / sum(perwt),
+    median_age = weighted.median(age, perwt, na.rm = TRUE),
+    perc_white = sum(perwt[race == &quot;White&quot;]) * 100 / sum(perwt),
+    perc_foreign_born = sum(perwt[birthplace == &quot;Non-US&quot;]) * 100 / sum(perwt),
+    perc_citizen = sum(perwt[US_citizen == &quot;Yes&quot;]) * 100 / sum(perwt),
+    perc_english = sum(perwt[language == &quot;English&quot;]) * 100 / sum(perwt),
+    perc_college = sum(perwt[education %in% c(&quot;Some College&quot;, &quot;Bachelor&#39;s Degree&quot;, &quot;Post-Graduate Degree&quot;)]) * 100 / sum(perwt),
+    perc_unemployed = sum(perwt[employment == &quot;Unemployed&quot;]) * 100 / sum(perwt),
+    perc_insured = sum(perwt[health_insurance %in% c(&quot;Private&quot;, &quot;Public&quot;)]) * 100 / sum(perwt),
+    median_personal_income = weighted.median(personal_income, perwt, na.rm = TRUE),
+    perc_welfare = sum(perwt[on_welfare == &quot;Yes&quot;]) * 100 / sum(perwt),
+    perc_poverty = sum(perwt[poverty_threshold == &quot;Below&quot;]) * 100 / sum(perwt),
+    perc_public_transit = sum(perwt[work_transport == &quot;Public Transit&quot;]) * 100 / sum(perwt),
+    covid_hosp_rate = median(puma_hosp_rate),
+    covid_vax_rate = median(puma_vacc_rate),
+    covid_death_rate = median(puma_death_rate)
+  )
+
+# View first few rows of PUMA-summarized data frame
+nyc_puma_summary %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+puma
+</th>
+<th style="text-align:right;">
+total_people
+</th>
+<th style="text-align:right;">
+median_household_income
+</th>
+<th style="text-align:right;">
+perc_foodstamps
+</th>
+<th style="text-align:right;">
+perc_broadband
+</th>
+<th style="text-align:right;">
+perc_male
+</th>
+<th style="text-align:right;">
+median_age
+</th>
+<th style="text-align:right;">
+perc_white
+</th>
+<th style="text-align:right;">
+perc_foreign_born
+</th>
+<th style="text-align:right;">
+perc_citizen
+</th>
+<th style="text-align:right;">
+perc_english
+</th>
+<th style="text-align:right;">
+perc_college
+</th>
+<th style="text-align:right;">
+perc_unemployed
+</th>
+<th style="text-align:right;">
+perc_insured
+</th>
+<th style="text-align:right;">
+median_personal_income
+</th>
+<th style="text-align:right;">
+perc_welfare
+</th>
+<th style="text-align:right;">
+perc_poverty
+</th>
+<th style="text-align:right;">
+perc_public_transit
+</th>
+<th style="text-align:right;">
+covid_hosp_rate
+</th>
+<th style="text-align:right;">
+covid_vax_rate
+</th>
+<th style="text-align:right;">
+covid_death_rate
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+3701
+</td>
+<td style="text-align:right;">
+110016
+</td>
+<td style="text-align:right;">
+69000
+</td>
+<td style="text-align:right;">
+24.49306
+</td>
+<td style="text-align:right;">
+89.50725
+</td>
+<td style="text-align:right;">
+46.88500
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+46.53050
+</td>
+<td style="text-align:right;">
+34.50407
+</td>
+<td style="text-align:right;">
+20.26887
+</td>
+<td style="text-align:right;">
+41.74120
+</td>
+<td style="text-align:right;">
+47.96393
+</td>
+<td style="text-align:right;">
+3.449498
+</td>
+<td style="text-align:right;">
+93.91725
+</td>
+<td style="text-align:right;">
+22357.09
+</td>
+<td style="text-align:right;">
+20.21706
+</td>
+<td style="text-align:right;">
+22.66943
+</td>
+<td style="text-align:right;">
+24.79821
+</td>
+<td style="text-align:right;">
+1.0646245
+</td>
+<td style="text-align:right;">
+55.79213
+</td>
+<td style="text-align:right;">
+0.3982366
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3702
+</td>
+<td style="text-align:right;">
+151067
+</td>
+<td style="text-align:right;">
+68610
+</td>
+<td style="text-align:right;">
+28.24215
+</td>
+<td style="text-align:right;">
+82.93904
+</td>
+<td style="text-align:right;">
+45.12435
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+14.06925
+</td>
+<td style="text-align:right;">
+42.97100
+</td>
+<td style="text-align:right;">
+27.86909
+</td>
+<td style="text-align:right;">
+66.47183
+</td>
+<td style="text-align:right;">
+39.83729
+</td>
+<td style="text-align:right;">
+4.534412
+</td>
+<td style="text-align:right;">
+92.58276
+</td>
+<td style="text-align:right;">
+20859.00
+</td>
+<td style="text-align:right;">
+22.08623
+</td>
+<td style="text-align:right;">
+18.60036
+</td>
+<td style="text-align:right;">
+21.55732
+</td>
+<td style="text-align:right;">
+1.1782180
+</td>
+<td style="text-align:right;">
+47.19203
+</td>
+<td style="text-align:right;">
+0.2688261
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3703
+</td>
+<td style="text-align:right;">
+119529
+</td>
+<td style="text-align:right;">
+77588
+</td>
+<td style="text-align:right;">
+15.90074
+</td>
+<td style="text-align:right;">
+86.60915
+</td>
+<td style="text-align:right;">
+46.66734
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+41.20088
+</td>
+<td style="text-align:right;">
+22.69324
+</td>
+<td style="text-align:right;">
+16.91138
+</td>
+<td style="text-align:right;">
+58.42432
+</td>
+<td style="text-align:right;">
+45.13131
+</td>
+<td style="text-align:right;">
+3.577374
+</td>
+<td style="text-align:right;">
+94.11273
+</td>
+<td style="text-align:right;">
+25030.00
+</td>
+<td style="text-align:right;">
+16.73067
+</td>
+<td style="text-align:right;">
+16.28140
+</td>
+<td style="text-align:right;">
+19.85292
+</td>
+<td style="text-align:right;">
+1.3040106
+</td>
+<td style="text-align:right;">
+58.33806
+</td>
+<td style="text-align:right;">
+0.4052719
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3704
+</td>
+<td style="text-align:right;">
+126664
+</td>
+<td style="text-align:right;">
+64662
+</td>
+<td style="text-align:right;">
+23.88688
+</td>
+<td style="text-align:right;">
+81.56041
+</td>
+<td style="text-align:right;">
+47.66311
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+32.72911
+</td>
+<td style="text-align:right;">
+37.88685
+</td>
+<td style="text-align:right;">
+23.03812
+</td>
+<td style="text-align:right;">
+41.10165
+</td>
+<td style="text-align:right;">
+40.30664
+</td>
+<td style="text-align:right;">
+4.141666
+</td>
+<td style="text-align:right;">
+92.33879
+</td>
+<td style="text-align:right;">
+20362.00
+</td>
+<td style="text-align:right;">
+20.17700
+</td>
+<td style="text-align:right;">
+18.97698
+</td>
+<td style="text-align:right;">
+23.55681
+</td>
+<td style="text-align:right;">
+0.6861973
+</td>
+<td style="text-align:right;">
+29.38498
+</td>
+<td style="text-align:right;">
+0.2092428
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3705
+</td>
+<td style="text-align:right;">
+171016
+</td>
+<td style="text-align:right;">
+36500
+</td>
+<td style="text-align:right;">
+50.66455
+</td>
+<td style="text-align:right;">
+87.59563
+</td>
+<td style="text-align:right;">
+46.19509
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+15.45177
+</td>
+<td style="text-align:right;">
+33.49043
+</td>
+<td style="text-align:right;">
+16.46103
+</td>
+<td style="text-align:right;">
+33.31033
+</td>
+<td style="text-align:right;">
+28.35290
+</td>
+<td style="text-align:right;">
+5.289563
+</td>
+<td style="text-align:right;">
+91.41484
+</td>
+<td style="text-align:right;">
+11264.00
+</td>
+<td style="text-align:right;">
+29.20428
+</td>
+<td style="text-align:right;">
+39.26943
+</td>
+<td style="text-align:right;">
+23.03995
+</td>
+<td style="text-align:right;">
+0.8255382
+</td>
+<td style="text-align:right;">
+33.17926
+</td>
+<td style="text-align:right;">
+0.2018467
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3706
+</td>
+<td style="text-align:right;">
+131986
+</td>
+<td style="text-align:right;">
+43490
+</td>
+<td style="text-align:right;">
+46.18132
+</td>
+<td style="text-align:right;">
+82.15610
+</td>
+<td style="text-align:right;">
+48.26724
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+19.37099
+</td>
+<td style="text-align:right;">
+46.80496
+</td>
+<td style="text-align:right;">
+20.58855
+</td>
+<td style="text-align:right;">
+20.86812
+</td>
+<td style="text-align:right;">
+29.15536
+</td>
+<td style="text-align:right;">
+5.606655
+</td>
+<td style="text-align:right;">
+89.18219
+</td>
+<td style="text-align:right;">
+15000.00
+</td>
+<td style="text-align:right;">
+25.09812
+</td>
+<td style="text-align:right;">
+32.16402
+</td>
+<td style="text-align:right;">
+28.97883
+</td>
+<td style="text-align:right;">
+0.7723878
+</td>
+<td style="text-align:right;">
+32.95661
+</td>
+<td style="text-align:right;">
+0.1812561
+</td>
+</tr>
+</tbody>
+</table>
+<p>This cleaned and aggregated data set has 55 rows, one for each PUMA, and is the basis for much of the exploratory analysis that follows.</p>
+</div>
+</div>
+</div>
+<div id="exploratory-analysis" class="section level2">
+<h2>Exploratory Analysis</h2>
+<div id="overview-of-outcome-variables" class="section level3">
+<h3>Overview of Outcome Variables</h3>
+<p>Ultimately, we ended the data cleaning process with two data sets at different levels of aggregation: one at the census interview level, and another at the PUMA level. Most of our exploratory analysis focused on evaluating predictors and outcomes by PUMA, although the interview-level data was still helpful for us to determine outcome disparities across predictors city-wide.</p>
+<p>We began by seeking a better understanding of how each of our three key outcomes – hospitalization rate, death rate, and vaccination rate – differ by PUMA.</p>
+<p><img src="project_report_files/figure-html/outcomes%20all%20PUMAs-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>When PUMAs are ranked from lowest outcome rate to highest outcome rate, and colored by borough, we find the following, as visualized in the graphs below:</p>
+<ul>
+<li>Hospitalization rate ranges from &lt;0.5% to nearly 2%, with the plurality of high hospitalization rates occurring in Queens PUMAs and the plurality of low hospitalization rates occurring in Manhattan and Brooklyn PUMAs</li>
+<li>Death rate ranges from ~0.05% to ~0.6%, with the plurality of high death rates occurring in Queens PUMAs and the plurality of low death rates occurring in Manhattan and Brooklyn PUMAs</li>
+<li>Vaccination rate ranges from nearly 30% to over 100% (due to migrations between PUMAs), with all of the highest vaccination rates occurring in Manhattan and Queens, and all of the lowest vaccination rates occurring in Brooklyn and the Bronx</li>
+</ul>
+<p>Although our regression modeling explores the relationship between particular variable pairings more fully to check for collinearity, we also were interested in observing how associated our key outcome variables were.</p>
+<p><img src="project_report_files/figure-html/key%20outcome%20associations-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/outcome%20correlations-1.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/outcome%20correlations-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We found that hospitalization and death rate were significantly correlated, whereas vaccination had limited correlation with both hospitalization (0.187) and death (0.075) at the PUMA level. Interestingly, the correlation between our key outcome variables was effectively modified by borough; for example, vaccination and hospitalization were significantly correlated in the Bronx (0.930), whereas hospitalization and death were not significantly correlated in Staten Island (0.526).</p>
+</div>
+<div id="outcomes-by-borough" class="section level3">
+<h3>Outcomes by Borough</h3>
+<p>After exploring outcomes at the PUMA level, we were keen to dive more deeply into disparities by borough. Beyond simply confirming with boxplots the distribution of key outcomes across PUMAs in a given borough (e.g. hospitalization and death distributed towards higher rates in Queens and Bronx PUMAs, vaccination distributed towards higher rates in Queens and Manhattan), we were also curious to see what would happen if we took the median city-wide PUMA for each outcome, and binarily divided the PUMAs in each borough into those above or below that median. Although we’re working with a small sample of only 55 PUMAs, which makes our borough percentages highly sensitive to single-PUMA changes, we find – to take one example – that ~79% of PUMAs in Queens are above the city-wide median PUMA on death rate, but ~86% of PUMAs in Queens are above the city-wide median PUMA on vaccination rate.</p>
+<p><img src="project_report_files/figure-html/outcomes%20by%20borough-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="outcomes-by-demographic-combinations" class="section level3">
+<h3>Outcomes by Demographic Combinations</h3>
+<p>For each unique combination of age group, race, and sex, we wanted to determine which demographic category performed best and worst on each key outcome, and populated the following tables:</p>
+<pre class="r"><code># Lowest hospitalization rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;hosp_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest hospitalization rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Hospitalized&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Lowest hospitalization rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Hospitalized
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+21-30
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+0.88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+21-30
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+41-50
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+41-50
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+0.93
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest hospitalization rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;hosp_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest hospitalization rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Hospitalized&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Highest hospitalization rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Hospitalized
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+American Indian
+</td>
+<td style="text-align:left;">
+81-90
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+1.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+61-70
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+1.22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+1.21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+41-50
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+1.20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+61-70
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+1.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+91-100
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+1.17
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lowest death rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;death_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest death rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Deceased&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Lowest death rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Deceased
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+21-30
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+21-30
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+81-90
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+41-50
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest death rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;death_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest death rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Deceased&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Highest death rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Deceased
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2+ races
+</td>
+<td style="text-align:left;">
+91-100
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+91-100
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+American Indian
+</td>
+<td style="text-align:left;">
+81-90
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+41-50
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+71-80
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+0.32
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Lowest vax rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;vax_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(outcome_rate) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Lowest vaccination rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Vaccinated&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Lowest vaccination rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Vaccinated
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+American Indian
+</td>
+<td style="text-align:left;">
+71-80
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+49.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+&lt;11
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+49.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+11-20
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+49.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+&lt;11
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.52
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Highest vax rates
+race_age_sex %&gt;% 
+  filter(outcome == &quot;vax_rate&quot;) %&gt;% 
+  mutate(
+    outcome_rate = outcome_rate
+  ) %&gt;% 
+  arrange(desc(outcome_rate)) %&gt;% 
+  select(race, age_class, sex, outcome_rate) %&gt;% 
+  head() %&gt;% 
+  knitr::kable(
+    caption = &quot;Highest vaccination rates&quot;,
+    col.names = c(&quot;Race&quot;, &quot;Age&quot;, &quot;Sex&quot;, &quot;% Vaccinated&quot;),
+    digits = 2
+  )</code></pre>
+<table>
+<caption>
+Highest vaccination rates
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Race
+</th>
+<th style="text-align:left;">
+Age
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+% Vaccinated
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+91-100
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+66.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+71-80
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+65.90
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+71-80
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+65.73
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+65.62
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Asian and Pacific Islander
+</td>
+<td style="text-align:left;">
+31-40
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+65.58
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2+ races
+</td>
+<td style="text-align:left;">
+81-90
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+65.48
+</td>
+</tr>
+</tbody>
+</table>
+<p>Overall, hospitalization and death rates were lowest (best) among white males and females under age 30, whereas vaccination rates were highest (best) among Asian and Pacific Islander males and females. Older American Indian individuals, along with younger and middle-aged Black individuals, tended to have the lowest vaccination rates, while mixed race, American Indian, and “other” racial groups tended to have higher hospitalization and death rates.</p>
+</div>
+<div id="associations-between-individual-predictors-and-outcomes" class="section level3">
+<h3>Associations Between Individual Predictors and Outcomes</h3>
+<p>After exploring disparities in key outcomes across PUMAs and boroughs, we turn towards our large set of predictors, and begin by trying to determine which predictors to focus on using a correlation matrix (with outcomes). In the plot below, we include text only on those tiles that are highly significant, with p &lt; 0.01.</p>
+<p><img src="project_report_files/figure-html/correlations%20predictors%20vs%20outcomes-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Interestingly, we find:</p>
+<ul>
+<li>The variables highly positively correlated with hospitalization rate at the PUMA level are percent US citizens and percent foreign born; the variables highly negatively correlated with hospitalization rate at the PUMA level are percent white, percent using public transit to get to work, percent with health insurance, percent English-speaking at home, percent with college education, percent with broadband access, and median personal and household incomes.</li>
+<li>The variables highly positively correlated with death rate at the PUMA level, are percent US citizens and percent foreign born; the variables highly negatively correlated with death rate at the PUMA level are percent using public transit to get to work, percent with health insurance, percent college educated, and median personal and household incomes.</li>
+<li>The variables highly positively correlated with vaccination rate at the PUMA level are percent white, percent male, percent college educated, percent with broadband access, median age, and median personal and household incomes; the variables highly negatively correlated with vaccination rate at the PUMA level are percent on welfare, percent unemployed, percent below the poverty threshold, and percent on food stamps</li>
+</ul>
+<p>All in all, there are a couple of interesting trends observed in this correlation matrix. First, income seems strongly associated with all three outcome variables. In addition, the variables strongly associated with hospitalization rate also tend to be strongly associated with death rate, which is not much of a surprise given the high correlation already observed between hospitalization and death rate across PUMAs. Finally, we note that many signifiers of socioeconomic status – including poverty level, welfare, unemployment, and food stamp utilization – seem highly correlated with vaccination, but not with hospitalization and death. Given that vaccination is a more “active” outcome (requiring deliberate action) here than hospitalization or death, which are both the result of (in all likelihood) “passive” or indeliberate transmission, the association of socioeconomic factors with vaccination begin to indicate the potential impact from significant structural inequalities at play, hindering healthcare access among the poor.</p>
+<p>We then selected each of the four variables with highest correlation (positive or negative) to each outcome, excluding obvious redundancies (like personal income and household income), and explored specific association trends between predictor and outcome, colored by borough.</p>
+<p><img src="project_report_files/figure-html/PUMA%20hospitalization%20rate%20vs%20predictor-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/PUMA%20death%20rate%20vs%20predictor-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/PUMA%20vax%20rate%20vs%20predictor-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Beyond the predictors significantly associated with each outcome, we wanted to focus as well on how outcomes varied by levels of key socioeconomic variables – namely, race, age group, and sex. Because we lack individual outcome data (i.e. each census observation within a given PUMA has the same PUMA-level hospitalization, death, and vaccination rate), we assumed for this analysis that all persons in a given PUMA had equal likelihood of a particular outcome (hospitalization, death, or vaccination) being true, with the likelihood corresponding to the PUMA outcome rate.</p>
+<p><img src="project_report_files/figure-html/hospitalization%20rate%20by%20demo-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/death%20rate%20by%20demo-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/vax%20rate%20by%20demo-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Some key findings include:</p>
+<ul>
+<li>Males and females appear similar on each outcome</li>
+<li>Hospitalization and death rates tend to be higher after middle age compared to those below middle age, whereas vaccination rate shows a general increase with each age group</li>
+<li>In general, white individuals have a lower likelihood of hospitalization and death, but a higher likelihood – along with Asian and Pacific Islanders – of vaccination, whereas other groups of color and Native Americans seem to have higher hospitalization and death rates, but lower vaccination rates</li>
+</ul>
+<p>Similarly, we examined how key outcomes varied across categories of a few seemingly important predictor variables for each outcome observed in our correlation matrix:</p>
+<p><img src="project_report_files/figure-html/hosp%20rate%20by%20ses-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/death%20rate%20by%20ses-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/vax%20rate%20by%20ses-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, there were a few interesting findings here, such as:</p>
+<ul>
+<li>We observe a monotonic decrease in hospitalization and death rate as household income increases, but a monotonic increase in vaccination rate as household income increases as well</li>
+<li>Individuals with public health insurance tend to perform similarly on key outcomes to those with no health insurance at all, with both groups worse than those who have private health insurance</li>
+<li>Individuals with college and graduate education tend to perform better on key outcomes than those without any college education</li>
+<li>Those with unknown citizenship status, which may signify being “undocumented,” tend to have lower death rates – perhaps indicative of under-reporting due to fear of immigration control / policing, i.e. attention on the person or family</li>
+<li>As already noted, those on welfare and foodstamps, as well as unemployed, are significantly less likely to be vaccinated against COVID-19</li>
+</ul>
+</div>
+<div id="associations-between-predictors-and-outcomes-by-borough" class="section level3">
+<h3>Associations Between Predictors and Outcomes by Borough</h3>
+<p>To build on the work above, we wanted to observe disparities within boroughs, knowing that different boroughs have different demographic compositions and that the ideal visualizations would allow us to understand how outcomes vary conditioned on borough demographic composition. Each of the following visualizations has three panels: number of people with outcome, categorized by borough and colored by predictor level; % of people with outcome in each borough, colored by predictor level, compared to the overall composition of the borough by predictor level; and percent with outcome variable, in each borough, plotted by level of predictor.</p>
+<p><img src="project_report_files/figure-html/hospitalization%20borough%20disparities-1.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/hospitalization%20borough%20disparities-2.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/hospitalization%20borough%20disparities-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/death%20borough%20disparities-1.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/death%20borough%20disparities-2.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/death%20borough%20disparities-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="project_report_files/figure-html/vax%20borough%20disparities-1.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/vax%20borough%20disparities-2.png" width="672" style="display: block; margin: auto;" /><img src="project_report_files/figure-html/vax%20borough%20disparities-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The most interesting finding here is that Manhattan seems to have the most significant racial disparities on hospitalization rate and death rate, along with age disparities on hospitalization rate, and racial and age disparities in vaccination rate. In general, the level of inequality on key outcomes across demographics in Manhattan tends to be higher than in other boroughs.</p>
+</div>
+</div>
+<div id="regression-methodology" class="section level2">
+<h2>Regression Methodology</h2>
+<pre class="r"><code>outcome_by_year &lt;- 
+  read_csv(&quot;./data/outcome_puma_by_year.csv&quot;) %&gt;%
+  rename(puma = puma10)
+
+unbiased_data &lt;- read_csv(&quot;./data/unbiased_group_means.csv&quot;) %&gt;%
+  merge(outcome_by_year, by = &quot;puma&quot;)
+
+best_model &lt;- lm(puma_hosp_rate_2020  ~ language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force +
+                   health_insurance_public:personal_income +
+                   education_bachelors_degree:personal_income +
+                   language_english:birthplace_us, data = unbiased_data)
+
+full_model &lt;-  lm(puma_hosp_rate_2020  ~ 
+                   (language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force)^2, 
+                  data = unbiased_data)</code></pre>
+<p>Let <span class="math inline">\(S\)</span> denote the set of PUMAs in NYC. We consider the latent variable model <span class="math display">\[ y_s = \xi_s&#39; \beta + \varepsilon_s \]</span> for each <span class="math inline">\(s \in S\)</span>, where <span class="math inline">\(\xi_s\)</span> a vector of PUMA-level means of data from the census. There are two challenges in considering such a model: (1) we know historically that NYC neighborhoods, particularly those within boroughs, are subject to spatial correlation; and (2) because the census data is recorded at the interview level, we do not observe the group-level means <span class="math inline">\(\xi_s\)</span>.</p>
+<p>In order to address (1), we employ heteroscedasticity-robust White standard errors to deal with the potential threat of spatial correlation. We find that all of our coefficient estimates retain their significance under the adjusted standard errors, and hence we leave this check on robustness to the appendix.</p>
+<p>More interesting is the challenge presented in (2). For each <span class="math inline">\(s \in S\)</span>, suppose we observe <span class="math inline">\(i \in \{ 1, \ldots, n_s \}\)</span> individual-level interviews. It is natural to consider the group mean <span class="math display">\[ \bar{X}_s \equiv \frac{1}{n_s} \sum_{i = 1}^{n_s} X_{is}. \]</span> However, as shown in Croon and Veldhoven (2007), it is generally the case that using the observed group mean <span class="math inline">\(\bar{X}_s\)</span> as an estimator of <span class="math inline">\(\xi_s\)</span> will lead to biased regression coefficients. Thus, we address (2) by following the procedure outlined by Croon and Veldhoven to re-weight our group means and obtain adjusted group means <span class="math inline">\(\tilde{X}_s\)</span>. In particular, let <span class="math inline">\(\hat{\Sigma}_{\xi \xi}\)</span> and <span class="math inline">\(\hat{\Sigma}_{\nu \nu}\)</span> denote the usual ANOVA estimates of the between- and within-group variation matrices, respectively. The adjusted group means are then given by <span class="math display">\[ \tilde{X}_s \equiv \bar{X}&#39; (I - W_s) + \bar{X}_s&#39; W_s, \quad \text{where} \]</span> <span class="math display">\[ W_s \equiv \left( \hat{\Sigma}_{\xi \xi} + \hat{\Sigma}_{\nu \nu} / n_s \right)^{-1} \hat{\Sigma}_{\xi \xi} \]</span> and <span class="math inline">\(I\)</span> denotes the identity matrix.</p>
+</div>
+<div id="regression-diagnostics" class="section level2">
+<h2>Regression Diagnostics</h2>
+<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;%
+  set_mode(&quot;regression&quot;) %&gt;%
+  set_engine(&quot;lm&quot;)
+
+best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish + 
+                   education_bachelors_degree +
+                   birthplace_us + health_insurance_public + language_english + 
+                   personal_income + employment_not_in_labor_force +
+                   health_insurance_public:personal_income +
+                   education_bachelors_degree:personal_income +
+                   language_english:birthplace_us, data = unbiased_data)
+
+
+check_model(best_model_tidy, 
+            check = c(&quot;linearity&quot;, &quot;qq&quot;, &quot;normality&quot;, &quot;outliers&quot;, &quot;homogeneity&quot;))</code></pre>
+<p><img src="project_report_files/figure-html/regression%20diagnostics-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
+<p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
+<p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
+<p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
+<pre class="r"><code>model_summary &lt;-
+  summary(best_model) %&gt;% 
+  broom::glance() %&gt;%
+  bind_rows(summary(full_model) %&gt;% broom::glance()) %&gt;%
+  mutate(model = c(&quot;Best Model&quot;, &quot;Full Model&quot;)) %&gt;%
+  relocate(model)
+
+Cp &lt;- ols_mallows_cp(best_model, full_model)
+
+Cp &lt;- as.tibble(Cp)
+
+names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
+
+kbl(model_summary) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1:9, bold = T) %&gt;%
+  row_spec(1:2, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+model
+</th>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+Best Model
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.6690404
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5938223
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+139.5090
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+8.894674
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000001
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+10
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+44
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+55
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+Full Model
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.7976532
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5797413
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+141.9066
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+3.660439
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0006785
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+28
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+26
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+55
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kbl(Cp) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1, bold = T) %&gt;%
+  row_spec(1, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Mallows’ Cp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+9.525754
+</td>
+</tr>
+</tbody>
+</table>
+<p>Adjusted R-squared: We compared our model to the full model which includes all main effects of our model with all possible second-order interaction terms of main effects. It is obvious that the full model has higher R-squared (0.797) than that of our model (0.669). However, our model has a higher adjusted R-squared (0.593) than that of the full model (0.579).</p>
+<p>Mallows’ Cp: Based on Mallows’ Cp criterion, we want our model to have Cp value less than or equal to the number of parameters, indicating little or no bias in the regression model. we obtained our Cp from our model and the full model. The Cp value is 9.5 and it is less than the number of our model parameters (11). Therefore, we claim that our regression model has little or no bias.</p>
+</div>
+<div id="model-summary" class="section level2">
+<h2>Model Summary</h2>
+<pre class="r"><code>summary &lt;-
+  summary(best_model) %&gt;%
+  broom::tidy() 
+
+kbl(summary) %&gt;%
+  kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
+  column_spec(1:5, bold = T) %&gt;%
+  row_spec(1:11, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+(Intercept)
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+220.2133509
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+617.7947374
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.3564507
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.7232067
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+language_spanish
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+1446.4493296
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+282.5600256
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+5.1190869
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+education_bachelors_degree
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-1385.5187502
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+1203.7289731
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-1.1510222
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.2559398
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+birthplace_us
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-2324.3753968
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+550.8204008
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-4.2198426
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0001203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+health_insurance_public
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-3613.9699118
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+759.9559804
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-4.7554990
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+language_english
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-365.2360915
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+538.8169036
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-0.6778482
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.5014171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-0.0266398
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0080444
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+-3.3116091
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0018597
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+employment_not_in_labor_force
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4344.6354192
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+956.3880935
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4.5427536
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0000429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+health_insurance_public:personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0812034
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0192287
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+4.2230234
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0001191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+education_bachelors_degree:personal_income
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0554423
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0186699
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2.9696115
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0048135
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+birthplace_us:language_english
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2145.2515921
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+907.5966218
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+2.3636619
+</td>
+<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+0.0225765
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="predictive-risk-scoring-clustering" class="section level2">
+<h2>Predictive Risk Scoring &amp; Clustering</h2>
+<div id="risk-scoring" class="section level3">
+<h3>Risk Scoring</h3>
+<p>Following our regression work, we decided to make our insights more actionable by developing a novel scoring method capable of indicating whether a PUMA is at relatively lower or higher risk of achieving some COVID-19-related outcome. To demonstrate the method, we developed a risk score for whether a PUMA is likely to have achieved or not achieved a vaccination rate of 70% among residents, corresponding to the level of population immunity generally considered requisite to “halt the pandemic.” That said, our method is applicable to other outcomes as well, and one might imagine using it to score a given PUMA on the possibility of a hospitalization rate above X%, or a death rate above Y%. We only chose to begin with vaccination rate given our inability to develop a linear regression for this particular outcome, as opposed to hospitalization and death rates.</p>
+<p>The risk scoring method we developed is predicated on (regularized, lasso) logistic regression, used most often for classification tasks because predictions can be interpreted as class probabilities. Regularization further prevents over-fitting of the model. After defining our outcome as 1 for below 70% vaccination and 0 for equal to or above 70% vaccination, we converted our set of predictors to matrix form, and then trained a glmnet model on our training data using 5-fold cross-validation repeated 100 times given the large number of predictors compared to our mere 55 PUMA samples, and because we were interested in predicting the risk score of vaccination rate for each PUMA in our data set. Through our lasso regression, we found an optimal lambda tuning parameter of 0.0102, and generated a model prediction accuracy of 0.886 (~87%). Generally, however, obtaining the kappa value averaged over the simulated confusion matrices is a more useful metric for prediction given unbalanced classes (of our 55 PUMAs, 41 achieve vaccination rate &gt;= 70%, and only 14 do not); Our optimal model’s averaged kappa was 0.63, which is considered reasonably decent, but again suggests that the limited number of in-sample data points may result in model over-fitting.</p>
+<pre class="r"><code># 1 indicates BELOW 70% vaccination rate
+logistic_df = nyc_puma_summary %&gt;% 
+  mutate(
+    below_herd_vax = as.factor(ifelse(covid_vax_rate &gt;= 70, 0, 1))
+  ) %&gt;% 
+  select(-puma, -total_people, -covid_hosp_rate, -covid_death_rate, -covid_vax_rate)
+
+# Define predictors matrix
+x = model.matrix(below_herd_vax ~ ., logistic_df)[,-1]
+
+# Define outcomes
+y = logistic_df$below_herd_vax</code></pre>
+<pre class="r"><code>library(caret) # Note: new libraries are loaded here due to potential function masking from the `caret` library
+library(mlbench)</code></pre>
+<pre class="r"><code>set.seed(777)
+vax_cv &lt;- trainControl(method = &quot;repeatedcv&quot;, number = 5, repeats = 100, 
+                       savePredictions = T
+                       )
+
+# Goal is to find optimal lambda
+lasso_model &lt;- train(below_herd_vax ~ ., data = logistic_df,
+                     method = &quot;glmnet&quot;,
+                     trControl = vax_cv,
+                     tuneGrid = expand.grid(
+                       .alpha = 1,
+                       .lambda = seq(0.0001, 1, length = 100)),
+                     family = &quot;binomial&quot;)</code></pre>
+<pre class="r"><code>coef &lt;- coef(lasso_model$finalModel, lasso_model$bestTune$lambda)
+
+sub_lasso &lt;-
+  subset(lasso_model$pred, lasso_model$pred$lambda == lasso_model$bestTune$lambda)
+
+# Use function for better visualization of confusion matrix
+# Credit to https://stackoverflow.com/questions/23891140/r-how-to-visualize-confusion-matrix-using-the-caret-package/42940553
+
+draw_confusion_matrix &lt;- function(cm) {
+
+  layout(matrix(c(1,1,2)))
+  par(mar=c(2,2,2,2))
+  plot(c(100, 345), c(300, 450), type = &quot;n&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;, xaxt=&#39;n&#39;, yaxt=&#39;n&#39;)
+  title(&#39;55 PUMAs Across 100 Simulations (n=5500)&#39;, cex.main=2)
+
+  # create the matrix 
+  rect(150, 430, 240, 370, col=&#39;#fde725&#39;)
+  text(195, 435, &#39;Above 70% Vax&#39;, cex=1.2)
+  rect(250, 430, 340, 370, col=&#39;#440154&#39;)
+  text(295, 435, &#39;Below 70% Vax&#39;, cex=1.2)
+  text(125, 370, &#39;Predicted&#39;, cex=1.3, srt=90, font=2)
+  text(245, 450, &#39;Actual&#39;, cex=1.3, font=2)
+  rect(150, 305, 240, 365, col=&#39;#440154&#39;)
+  rect(250, 305, 340, 365, col=&#39;#fde725&#39;)
+  text(140, 400, &#39;Above 70% Vax&#39;, cex=1.2, srt=90)
+  text(140, 335, &#39;Below 70% Vax&#39;, cex=1.2, srt=90)
+
+  # add in the cm results 
+  res &lt;- as.numeric(cm$table)
+  text(195, 400, res[1], cex=1.6, font=2, col=&#39;black&#39;)
+  text(195, 335, res[2], cex=1.6, font=2, col=&#39;white&#39;)
+  text(295, 400, res[3], cex=1.6, font=2, col=&#39;white&#39;)
+  text(295, 335, res[4], cex=1.6, font=2, col=&#39;black&#39;)
+
+  # add in the specifics 
+  plot(c(100, 0), c(100, 0), type = &quot;n&quot;, xlab=&quot;&quot;, ylab=&quot;&quot;, main = &quot;DETAILS&quot;, xaxt=&#39;n&#39;, yaxt=&#39;n&#39;)
+  text(10, 85, names(cm$byClass[1]), cex=1.2, font=2)
+  text(10, 70, round(as.numeric(cm$byClass[1]), 3), cex=1.2)
+  text(30, 85, names(cm$byClass[2]), cex=1.2, font=2)
+  text(30, 70, round(as.numeric(cm$byClass[2]), 3), cex=1.2)
+  text(50, 85, names(cm$byClass[5]), cex=1.2, font=2)
+  text(50, 70, round(as.numeric(cm$byClass[5]), 3), cex=1.2)
+  text(70, 85, names(cm$byClass[6]), cex=1.2, font=2)
+  text(70, 70, round(as.numeric(cm$byClass[6]), 3), cex=1.2)
+  text(90, 85, names(cm$byClass[7]), cex=1.2, font=2)
+  text(90, 70, round(as.numeric(cm$byClass[7]), 3), cex=1.2)
+
+  # add in the accuracy information 
+  text(30, 35, names(cm$overall[1]), cex=1.5, font=2)
+  text(30, 20, round(as.numeric(cm$overall[1]), 3), cex=1.4)
+  text(70, 35, names(cm$overall[2]), cex=1.5, font=2)
+  text(70, 20, round(as.numeric(cm$overall[2]), 3), cex=1.4)
+}  
+
+cm = caret::confusionMatrix(table(sub_lasso$pred, sub_lasso$obs))
+
+draw_confusion_matrix(cm)</code></pre>
+<p><img src="project_report_files/figure-html/resulting%20confusion%20matrix-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Notably, feature selection from our lasso regression discovered that the most important predictors of risk for sub-70% vaccination were insurance composition, employment composition, poverty composition, and welfare composition in a given PUMA – largely aligned with key correlates of vaccination noted in our exploratory analysis.</p>
+<pre class="r"><code>lambda  &lt;- seq(0.0001, 1, length = 100)
+
+lambda_opt = lasso_model$bestTune$lambda
+
+result_plot &lt;- broom::tidy(lasso_model$finalModel) %&gt;% 
+  select(term, lambda, estimate) %&gt;% 
+  complete(term, lambda, fill = list(estimate = 0) ) %&gt;% 
+  filter(term != &quot;(Intercept)&quot;) %&gt;% 
+  ggplot(aes(x = log(lambda, 10), y = estimate, group = term, color = term)) + 
+  geom_path() + 
+  geom_vline(xintercept = log(lambda_opt, 10), color = &quot;blue&quot;, size = 1.2) +
+  theme(legend.position = &quot;none&quot;) +
+  labs(y = &quot;Coefficient Estimate&quot;, title = &quot;Coefficient Estimates for Varying Values of Lambda&quot;)
+
+result_plot</code></pre>
+<p><img src="project_report_files/figure-html/plotting%20predictors%20against%20lambda-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, we wanted to move beyond binary classification to develop a risk score. Generally, in logistic regression, when a data point is predicted with probability &gt; 0.5 to be a “1,” the model classifies it as a 1, and otherwise as a 0. We obtained risk scores not only by classifying PUMAs as above or below 70% vaccination rate using our prediction model, but by obtaining the exact probability of a given data point being a 1. For instance, if a PUMA has an 85% chance of being below 70% vaccination rate according to our classifier, its risk score would be 85, even though our model would binarily predict it to be a “1” rather than a “0.”</p>
+<pre class="r"><code>lambda &lt;- lasso_model$bestTune$lambda
+lasso_fit = glmnet(x, y, lambda = lambda, family = &quot;binomial&quot;)
+risk_predictions = (round((predict(lasso_fit, x, type = &quot;response&quot;))*100, 1))
+
+puma &lt;- nyc_puma_summary %&gt;% 
+  select(puma)
+
+vax &lt;- logistic_df %&gt;% 
+  select(below_herd_vax)
+
+risk_prediction &lt;- 
+  bind_cols(puma, vax, as.vector(risk_predictions)) %&gt;%
+  rename(risk_prediciton = ...3)
+
+risk_prediction %&gt;%
+  mutate(puma = fct_reorder(puma, risk_prediciton, .desc = TRUE)) %&gt;%
+  ggplot(aes(x = puma, y = risk_prediciton, fill = below_herd_vax)) + 
+  geom_bar(stat  = &quot;identity&quot;) + 
+  geom_hline(yintercept = 50, linetype = &quot;dashed&quot;, color = &quot;red&quot;) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  labs(title = &quot;Predicting Risk Score of Vaccination Rate across PUMA&quot;,
+       x = &quot;PUMA&quot;, y = &quot;Predicted Risk Score&quot;, fill = &quot;Actual Vax Status&quot;) + 
+  scale_fill_viridis(discrete = TRUE, labels = c(&quot;Below 70%&quot;, &quot;Above 70%&quot;))</code></pre>
+<p><img src="project_report_files/figure-html/visualizing%20risk%20scores%20by%20PUMA-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="clustering" class="section level3">
+<h3>Clustering</h3>
+<p>We were also curious how statistical learning techniques would cluster our PUMAs based on predictors, and how those clusters might correspond to performance on key outcomes. We separated our data into a tibble of predictors only and a tibble of outcomes only, then fit three clusters – just to try it – on our predictors alone. We proceeded to plot each PUMA on hospitalization rate vs vaccination rate (choosing to forego death rate, in this case, given its collinearity and likely redundancy of hospitalization rate), then colored each data point by predicted clustering.</p>
+<pre class="r"><code># Define tibble of predictors only
+predictors = nyc_puma_summary %&gt;% 
+  select(-puma, -total_people, -covid_hosp_rate, -covid_vax_rate, -covid_death_rate)
+
+# Define tibble of outcomes only
+outcomes = nyc_puma_summary %&gt;% 
+  select(covid_hosp_rate, covid_death_rate, covid_vax_rate)
+
+# Define tibble of pumas only
+pumas = nyc_puma_summary %&gt;% 
+  select(puma)
+
+# Fit 3 clusters on predictors
+kmeans_fit = 
+  kmeans(x = predictors, centers = 3)
+
+# Add clusters to data frame of predictors and bind with PUMA and outcomes data
+predictors = 
+  broom::augment(kmeans_fit, predictors)
+
+# Bind columns
+full_df = cbind(pumas, outcomes, predictors)
+
+# Summary df
+summary_df = full_df %&gt;% 
+  group_by(.cluster) %&gt;% 
+  summarize(
+    median_hosp = median(covid_hosp_rate),
+    median_death = median(covid_death_rate),
+    median_vax = median(covid_vax_rate)
+  )
+
+# Plot predictor clusters against outcomes
+# Example: try hospitalization vs vaccination
+ggplot(data = full_df, aes(x = covid_hosp_rate, y = covid_vax_rate, color = .cluster)) + 
+  geom_point() + 
+  geom_point(data = summary_df, aes(x = median_hosp, y = median_vax), color = &quot;black&quot;, size = 4) +
+  geom_point(data = summary_df, aes(x = median_hosp, y = median_vax, color = .cluster), size = 2.75) +
+  labs(x = &quot;COVID Hospitalization Rate&quot;, y = &quot;COVID Vaccination Rate&quot;, title = &quot;COVID Hospitalization vs Vaccination Rates for each PUMA&quot;, color = &quot;Cluster&quot;)</code></pre>
+<p><img src="project_report_files/figure-html/initial%20clustering-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Generally, our three clusters included:</p>
+<ul>
+<li>One cluster with relatively low hospitalization rate (~5%) and relatively high vaccination rate (~75%)</li>
+<li>Two clusters with relatively identical average hospitalization rate (~10%), but one with substantially higher vaccination rate (nearly 60%) than the other (nearly 50%)</li>
+</ul>
+<p>For fun, we also evaluated Euclidean distance between our observed PUMAs, and alternatively mapped PUMAs onto their respective clusters after reducing our predictors to two key (principal) component dimensions.</p>
+<pre class="r"><code># Scale predictors
+for_clustering = predictors %&gt;% 
+  select(-.cluster) %&gt;% 
+  na.omit() %&gt;% 
+  scale()
+
+# Evaluate Euclidean distances between observations
+distance = get_dist(for_clustering)
+fviz_dist(distance, gradient = list(low = &quot;#00AFBB&quot;, mid = &quot;white&quot;, high = &quot;#FC4E07&quot;))</code></pre>
+<p><img src="project_report_files/figure-html/scaled%20clustering-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Cluster with three centers
+k_scaled = kmeans(for_clustering, centers = 3)
+
+# Visualize cluster plot with reduction to two dimensions
+fviz_cluster(k_scaled, data = for_clustering)</code></pre>
+<p><img src="project_report_files/figure-html/scaled%20clustering-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Bind with outcomes and color clusters
+full_df = for_clustering %&gt;% 
+  as_tibble() %&gt;% 
+  cbind(outcomes, pumas) %&gt;% 
+  mutate(
+    cluster = k_scaled$cluster
+  )</code></pre>
+<p>Because we settled on setting the number of clusters at three relatively arbitrarily, we decided to evaluate the clustering quality using both WSS, silhouette, and gap methods.</p>
+<pre class="r"><code># Check where elbow occurs using WSS method
+fviz_nbclust(for_clustering, kmeans, method = &quot;wss&quot;)</code></pre>
+<p><img src="project_report_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Check for optimal number of clusters using silhouette method
+fviz_nbclust(for_clustering, kmeans, method = &quot;silhouette&quot;)</code></pre>
+<p><img src="project_report_files/figure-html/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Check number of clusters that minimize gap statistic
+gap_stat = clusGap(for_clustering, FUN = kmeans, nstart = 25, K.max = 20, B = 50)
+fviz_gap_stat(gap_stat)</code></pre>
+<p><img src="project_report_files/figure-html/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The elbow in our WSS plot indicates that three clusters may be optimal, whereas the silhouette plot shows an average silhouette width optimized at two clusters. Finally, the gap plot shows that clustering is actually optimized when the number of clusters equals 1 – i.e. when no clustering occurs. The relative lack of concordance between these assessments of clustering quality is no surprise given the fact that our model is fit on only 55 predictors. For completeness, we re-modeled our clustering of predictors with only k = 2 clusters, and again tried to visualize where these clusters of PUMAs were distributed on the hospitalization/vaccination rate axes:</p>
+<pre class="r"><code># Scale predictors
+for_clustering = predictors %&gt;% 
+  select(-.cluster) %&gt;% 
+  na.omit() %&gt;% 
+  scale()
+
+# Evaluate Euclidean distances between observations
+distance = get_dist(for_clustering)
+fviz_dist(distance, gradient = list(low = &quot;#00AFBB&quot;, mid = &quot;white&quot;, high = &quot;#FC4E07&quot;))</code></pre>
+<p><img src="project_report_files/figure-html/scaled%20-%20two%20clusters-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Cluster with two centers
+k_scaled2 = kmeans(for_clustering, centers = 2)
+
+# Visualize cluster plot with reduction to two dimensions
+fviz_cluster(k_scaled2, data = for_clustering)</code></pre>
+<p><img src="project_report_files/figure-html/scaled%20-%20two%20clusters-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Bind with outcomes and color clusters
+full_df = for_clustering %&gt;% 
+  as_tibble() %&gt;% 
+  cbind(outcomes, pumas) %&gt;% 
+  mutate(
+    cluster = k_scaled2$cluster
+  )</code></pre>
+<p>With two clusters, our low hospitalization/high vaccination cluster remains, but our two mid-level hospitalization rate clusters are condensed into one cluster.</p>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<div id="project-obstacles" class="section level3">
+<h3>Project Obstacles</h3>
+<p>The primary obstacles at the outset of the project were related to data pre-processing, getting our disparate data sources to play nice with each other. As mentioned elsewhere, our outcome variables were obtained at the ZCTA-level geography while our predictor variables were obtained at the interview-level and coded to PUMA geographies. We were able to use a ZCTA-PUMA crosswalk data set from Baruch College and a bit of math to merge these data sets for further analysis.</p>
+<p>Another obstacle was to aggregate the interview-level data to the PUMA-level geography and to tidy the IPUMS variables according to the census data dictionary. For instance, factor variables like education and race were coded numerically, but these data needed to have descriptive factor levels for analysis. This process is described in more detail in the Data Sources and Cleaning section.</p>
+<p>These data presented a unique regression challenge as well. First, NYC neighborhoods, particularly within boroughs, have historically been subject to spatial correlation. This required the use of heteroscedasticity-robust White standard errors. A larger issue was that group-level means were not observed in our data set; the census data was recorded at the interview level. We used a procedure outlined by Croon and Veldhoven (2007) to address this issue in our regression model.</p>
+</div>
+<div id="findings" class="section level3">
+<h3>Findings</h3>
+<p>In our exploratory analysis we looked at COVID-19 hospitalizations, deaths, and vaccinations across boroughs, PUMAs, and demographic combinations.</p>
+<p>When looking at outcomes across boroughs, we saw that PUMA geographies in Queens and the Bronx tended to be above the median NYC PUMA for COVID-19 hospitalization and death rates. Interestingly, PUMA geographies in Queens were among the most highly vaccinated areas in NYC as well.</p>
+<p>In general, we did not see notable differences of COVID-19 outcomes between males and females. When looking at demographic categories, we found that hospitalization and death rates were lowest among white males and females under 30 and that vaccination rates were highest among Asian and Pacific Islander males and females. The lowest vaccination rates were among older American Indian individuals and younger and middle-aged Black individuals.</p>
+<p>In an analysis of correlations between predictors and outcomes across PUMA geographies, we found income to be strongly associated with COVID-19 hospitalizations (negative association), deaths (negative association), and vaccinations (positive association). We found that many indicators of socioeconomic status – including poverty level, welfare, unemployment, and food stamp utilization – seem highly negatively correlated with vaccination, but not with hospitalization and death. These findings may indicate the potential impact from significant structural inequalities that hinder healthcare access among the poor, given that vaccination is a more “active” outcome (requiring deliberate action) here than hospitalization or death, which are both the result of (in all likelihood) “passive” or indeliberate transmission.</p>
+<p>Lastly, we saw that among boroughs, Manhattan had the most significant disparities of outcomes across demographic groups like race and age.</p>
+<p>In our (logistic) regression modeling, we claim that the mean hospitalization rate in 2020 (outcome) is a linear combination of 10 predictor variables. We found <code>language_spanish</code> and <code>employment_not_in_labor_force</code> to be positively associated with mean hospitalization rates in 2020. We found <code>education_bachelors_degree</code>, <code>birthplace_us</code>, <code>health_insurance_public</code>, <code>language_english</code>, and <code>personal_income</code> to be negatively associated with hospitalization rate. We found statistically significant (p &lt; 0.05) interactions between <code>health_insurance_public</code> and <code>personal_income</code>, <code>education_bachelors_degree</code> and <code>personal_income</code>, and <code>birthplace_us</code> and <code>language_english</code>.</p>
+</div>
+<div id="next-steps" class="section level3">
+<h3>Next Steps</h3>
+<p>Based on our analysis, future research could be performed to better understand the associations we found between socioeconomic status and barriers to healthcare access, shown in the correlations between economic predictors and hospitalization, mortality, and vaccination outcomes. These relationships and the potential causal mechanisms are important to understand in the efforts to emerge from the current COVID-19 pandemic and for future pandemics that we may face.</p>
+<p>How can we ensure that diverse populations have access and take advantage of healthcare solutions? Future research can help understand “how to turn vaccines into vaccinations” to quote <a href="https://www.cnn.com/2021/12/09/opinions/infectious-disease-expert-warned-covid-19-deaths-bergen/index.html">Dr. Michael Osterholm</a>.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
