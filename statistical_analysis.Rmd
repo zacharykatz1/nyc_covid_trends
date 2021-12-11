@@ -143,3 +143,7 @@ kbl(summary) %>%
   column_spec(1:5, bold = T) %>%
   row_spec(1:11, bold = T, color = "white", background = "black")
 ```
+
+For the sake of interpretation, all predictors above have been partially standardized. That is, for each predictor $x$, let $s$ denote the sample standard deviation of the predictor. We define the partially standardized predictor to be
+  $$ z \equiv \frac{x}{s}. $$
+Note that this is an _unweighted_ standardization. We do not employ population weights at this stage, as we have already weighted our data to address the issue of bias in our latent variable model. This standardization is solely for ease of interpretation. Moreover, not that we do not de-mean our data (i.e., subtract $\bar{x}$), as several predictors are aggregations of binary variables, which are necessarily non-negative. By de-meaning such predictors, negative values are introduced, thereby muddying the interpretation of their coefficients.
