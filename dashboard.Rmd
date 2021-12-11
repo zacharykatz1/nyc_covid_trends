@@ -10,7 +10,6 @@ output:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(nycgeo)
 library(plotly)
 library(lubridate)
 library(flexdashboard)
