@@ -701,152 +701,190 @@ health_insurance_public:personal_income
 </div>
 <div id="diagnostics" class="section level2">
 <h2>Diagnostics</h2>
-<pre class="r"><code>lm_spec &lt;- linear_reg() %&gt;%
+<p>We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extend our model satisfies the assumptions of OLS.</p>
+<pre class="r"><code># prepare model for regression diagnostics
+lm_spec &lt;- linear_reg() %&gt;%
   set_mode(&quot;regression&quot;) %&gt;%
   set_engine(&quot;lm&quot;)
 
-best_model_tidy &lt;- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force +
-                   health_insurance_public:personal_income +
-                   education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = standardized_data)
+# store optimal linear model
+best_model_tidy &lt;- fit(lm_spec,
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income +
+    # language-birthplace interaction
+    language_english:birthplace_us + 
+    # education-income interaction
+    education_bachelors_degree:personal_income +
+    # insurance-income interaction
+    health_insurance_public:personal_income
+  , data = standardized_data
+)
 
-
-check_model(best_model_tidy, 
-            check = c(&quot;linearity&quot;, &quot;homogeneity&quot;,&quot;qq&quot;,&quot;normality&quot;, &quot;outliers&quot;))</code></pre>
+# run regression diagnostics
+check_model(
+    best_model_tidy 
+  , check = c(&quot;linearity&quot;, &quot;homogeneity&quot;, &quot;qq&quot;, &quot;normality&quot;, &quot;outliers&quot;)
+)</code></pre>
 <p><img src="statistical_analysis_files/figure-html/regression_diagnostics-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>Linearity: It is to be observed that the relationship between independent and dependent variables is fairly linear in our model. Thus, we claim that the mean of the hospitalization rate in 2020 (outcome) is a linear combination of the model parameters and the predictor variables.</p>
 <p>Equal Variance (homoscedasticity): Based on the residual vs fitted plot, it is to be observed that the points in the plot are randomly dispersed around the horizontal line at 0 without showing a certain trend. This implies no violation of homoscedasticity.</p>
 <p>Normality of residuals: According to the normality probability plot, it is to be observed most of the points fall along the line. Therefore, we claim that residuals are normally distributed in our model.</p>
 <p>Influential points among outliers: According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other.</p>
-<pre class="r"><code>model_summary &lt;-
-  summary(best_model) %&gt;% 
+<pre class="r"><code># construct table of statistics to assess goodness of fit and reliability
+best_model %&gt;%
+  # summarize model output
+  summary() %&gt;% 
+  # extract key statistics
   broom::glance() %&gt;%
+  # bind rows for each model
   bind_rows(summary(full_model) %&gt;% broom::glance()) %&gt;%
   mutate(model = c(&quot;Best Model&quot;, &quot;Full Model&quot;)) %&gt;%
-  relocate(model)
-
-Cp &lt;- ols_mallows_cp(best_model, full_model)
-
-Cp &lt;- as_tibble(Cp)
-
-names(Cp) &lt;- c(&quot;Mallows&#39; Cp&quot;)
-
-kbl(model_summary) %&gt;%
+  # relocate row names to first column
+  relocate(model) %&gt;%
+  # map to a kable table
+  kbl(
+    caption     = &quot;Key Statistics for Assessment of Fit and Reliability&quot;
+    , col.names = c(
+        &quot;Model&quot;, &quot;R-squared&quot;, &quot;Adj. R-squared&quot;
+      , &quot;Sigma&quot;, &quot;F-statistic&quot;, &quot;p-value&quot;, &quot;df&quot;, &quot;Residual df&quot;, &quot;N&quot;
+    )
+    , digits    = c(1, 2, 2, 0, 2, 5, 0, 0, 0)
+  ) %&gt;%
+  # further map to a more professional-looking table
   kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
-  column_spec(1:9, bold = T) %&gt;%
-  row_spec(1:2, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+  # make variable names bold
+  column_spec(1, bold = T)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Key Statistics for Assessment of Fit and Reliability
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
-model
+Model
 </th>
 <th style="text-align:right;">
-r.squared
+R-squared
 </th>
 <th style="text-align:right;">
-adj.r.squared
+Adj. R-squared
 </th>
 <th style="text-align:right;">
-sigma
+Sigma
 </th>
 <th style="text-align:right;">
-statistic
+F-statistic
 </th>
 <th style="text-align:right;">
-p.value
+p-value
 </th>
 <th style="text-align:right;">
 df
 </th>
 <th style="text-align:right;">
-df.residual
+Residual df
 </th>
 <th style="text-align:right;">
-nobs
+N
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:left;font-weight: bold;">
 Best Model
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.6690404
+<td style="text-align:right;">
+0.67
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.5938223
+<td style="text-align:right;">
+0.59
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-139.5090
+<td style="text-align:right;">
+140
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-8.894674
+<td style="text-align:right;">
+8.89
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0000001
+<td style="text-align:right;">
+0.00000
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 10
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 44
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 55
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:left;font-weight: bold;">
 Full Model
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.7976532
+<td style="text-align:right;">
+0.80
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.5797413
+<td style="text-align:right;">
+0.58
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-141.9066
+<td style="text-align:right;">
+142
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-3.660439
+<td style="text-align:right;">
+3.66
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-0.0006785
+<td style="text-align:right;">
+0.00068
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 28
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 26
 </td>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
+<td style="text-align:right;">
 55
 </td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>kbl(Cp) %&gt;%
+<pre class="r"><code>ols_mallows_cp(best_model, full_model) %&gt;%
+  as_tibble() %&gt;%
+  # map to a kable table
+  kbl(col.names = &quot;Mallows&#39;s Cp&quot;, digits = 2) %&gt;%
+  # further map to a more professional-looking table
   kable_paper(&quot;striped&quot;, full_width = F) %&gt;%
-  column_spec(1, bold = T) %&gt;%
-  row_spec(1, bold = T, color = &quot;white&quot;, background = &quot;black&quot;)</code></pre>
+  # make variable names bold
+  column_spec(1, bold = T)</code></pre>
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:right;">
-Mallows’ Cp
+Mallows’s Cp
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;font-weight: bold;font-weight: bold;color: white !important;background-color: black !important;">
-9.525754
+<td style="text-align:right;font-weight: bold;">
+9.53
 </td>
 </tr>
 </tbody>

@@ -72,7 +72,7 @@ __A word of caution:__ If the reader is considering such a macro-micro model for
 
 Because death rates are relatively unreliable, and because vaccination rates are percentages that often attain their upper bound (i.e., 100%), our primary model employs hospitalization rates by PUMA as its dependent variable. Moreover, because the vaccine changed the dynamic of other health outcomes, we further restrict to hospitalizations up and until December 31, 2020. Below is a summary of our key finding from our optimal linear model.
 
-```{r fetch_data}
+```{r regression_output}
 # pull in health outcomes to be merged
 outcome_by_year <- 
   # read in health outcomes by year
@@ -186,26 +186,47 @@ __Note:__ the main effect for both `language_english` and `education_bachelors_d
 
 ## Diagnostics
 
-```{r regression_diagnostics, fig.height=6.2, fig.width= 8}
+We now seek to validate our model and assess its goodness of fit. We begin by assessing to what extend our model satisfies the assumptions of OLS.
 
+```{r regression_diagnostics, fig.height = 8, fig.width = 8}
+# prepare model for regression diagnostics
 lm_spec <- linear_reg() %>%
   set_mode("regression") %>%
   set_engine("lm")
 
-best_model_tidy <- fit(lm_spec, puma_hosp_rate_2020 ~ language_spanish + 
-                   education_bachelors_degree +
-                   birthplace_us + health_insurance_public + language_english + 
-                   personal_income + employment_not_in_labor_force +
-                   health_insurance_public:personal_income +
-                   education_bachelors_degree:personal_income +
-                   language_english:birthplace_us, data = standardized_data)
+# store optimal linear model
+best_model_tidy <- fit(lm_spec,
+  puma_hosp_rate_2020 ~
+    # unemployment rate
+    employment_not_in_labor_force +
+    # fraction of spanish speakers
+    language_spanish +
+    # fraction of english speakers
+    language_english +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those with bachelors degree
+    education_bachelors_degree +
+    # fraction of those born in the us
+    birthplace_us +
+    # fraction of those using public health insurance
+    health_insurance_public +
+    # average personal income
+    personal_income +
+    # language-birthplace interaction
+    language_english:birthplace_us + 
+    # education-income interaction
+    education_bachelors_degree:personal_income +
+    # insurance-income interaction
+    health_insurance_public:personal_income
+  , data = standardized_data
+)
 
-
-check_model(best_model_tidy, 
-            check = c("linearity", "homogeneity","qq","normality", "outliers"))
-
-
-
+# run regression diagnostics
+check_model(
+    best_model_tidy 
+  , check = c("linearity", "homogeneity", "qq", "normality", "outliers")
+)
 ```
 
 Linearity:
@@ -220,31 +241,40 @@ According to the normality probability plot, it is to be observed most of the po
 Influential points among outliers: 
 According to residuals vs leverage plot, it is to be observed all points are inside the contour lines. Hence, there are no influential observations. Therefore, we claim that the residuals are independent of each other. 
 
-
 ```{r}
-
-model_summary <-
-  summary(best_model) %>% 
+# construct table of statistics to assess goodness of fit and reliability
+best_model %>%
+  # summarize model output
+  summary() %>% 
+  # extract key statistics
   broom::glance() %>%
+  # bind rows for each model
   bind_rows(summary(full_model) %>% broom::glance()) %>%
   mutate(model = c("Best Model", "Full Model")) %>%
-  relocate(model)
-
-Cp <- ols_mallows_cp(best_model, full_model)
-
-Cp <- as_tibble(Cp)
-
-names(Cp) <- c("Mallows' Cp")
-
-kbl(model_summary) %>%
+  # relocate row names to first column
+  relocate(model) %>%
+  # map to a kable table
+  kbl(
+    caption     = "Key Statistics for Assessment of Fit and Reliability"
+    , col.names = c(
+        "Model", "R-squared", "Adj. R-squared"
+      , "Sigma", "F-statistic", "p-value", "df", "Residual df", "N"
+    )
+    , digits    = c(1, 2, 2, 0, 2, 5, 0, 0, 0)
+  ) %>%
+  # further map to a more professional-looking table
   kable_paper("striped", full_width = F) %>%
-  column_spec(1:9, bold = T) %>%
-  row_spec(1:2, bold = T, color = "white", background = "black")
+  # make variable names bold
+  column_spec(1, bold = T)
 
-kbl(Cp) %>%
+ols_mallows_cp(best_model, full_model) %>%
+  as_tibble() %>%
+  # map to a kable table
+  kbl(col.names = "Mallows's Cp", digits = 2) %>%
+  # further map to a more professional-looking table
   kable_paper("striped", full_width = F) %>%
-  column_spec(1, bold = T) %>%
-  row_spec(1, bold = T, color = "white", background = "black")
+  # make variable names bold
+  column_spec(1, bold = T)
 ```
 
 Adjusted R-squared: 
