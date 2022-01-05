@@ -2585,7 +2585,7 @@ In an analysis of correlations between predictors and outcomes across PUMA geogr
 
 Lastly, we saw that among boroughs, Manhattan had the most significant disparities of outcomes across demographic groups like race and age.
 
-In our (logistic) regression modeling, we claim that the mean hospitalization rate in 2020 (outcome) is a linear combination of 10 predictor variables. We found `language_spanish` and `employment_not_in_labor_force` to be positively associated with mean hospitalization rates in 2020. We found `education_bachelors_degree`, `birthplace_us`, `health_insurance_public`, `language_english`, and `personal_income` to be negatively associated with hospitalization rate. We found statistically significant (p < 0.05) interactions between `health_insurance_public` and `personal_income`, `education_bachelors_degree` and `personal_income`, and `birthplace_us` and `language_english`.
+In our (linear) regression modeling, we claim that the mean hospitalization rate in 2020 (outcome) is a linear combination of 10 predictor variables. We found `language_spanish` and `employment_not_in_labor_force` to be positively associated with mean hospitalization rates in 2020. We found `education_bachelors_degree`, `birthplace_us`, `health_insurance_public`, `language_english`, and `personal_income` to be negatively associated with hospitalization rate. We found statistically significant (p < 0.05) interactions between `health_insurance_public` and `personal_income`, `education_bachelors_degree` and `personal_income`, and `birthplace_us` and `language_english`.
 
 ### Next Steps
 
